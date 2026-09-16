@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd server && npm install",
+  "devCommand": "cd server && npm run dev",
+  "installCommand": "cd server && npm install",
+  "framework": "express",
+  "env": {
+    "NODE_ENV": "production",
+    "DATABASE_URL": "file:./dev.db"
+  }
+}

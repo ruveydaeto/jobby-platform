@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adayları incele — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<!-- ===================== OPERASYON BAŞLIĞI ===================== -->
+<section class="ops-header">
+  <div class="ops-inner">
+    <div class="ops-top">
+      <div>
+        <div class="breadcrumb">
+          <a href="/company/dashboard.html"><span class="mi mi-xs">arrow_back</span> İlanlarım</a>
+          <span>/</span>
+          <span id="bc-category">—</span>
+          <span>/</span>
+          <span class="cur">Hızlı eşleşme (swipe)</span>
+        </div>
+        <div class="ops-title">
+          <h1 id="job-title">İlan yükleniyor…</h1>
+          <span class="chip chip-teal"><span class="live-dot"></span>Canlı kadro eşleşmesi aktif</span>
+          <span class="chip"><span class="mi mi-xs" style="color:var(--amber)">corporate_fare</span><span id="company-name">Firma</span></span>
+        </div>
+      </div>
+
+      <div class="pipeline">
+        <div>
+          <span class="pipe-k">Sırada bekleyen havuz</span>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="pipe-v" id="queue-count">—</span>
+            <span class="t-lsm" style="color:var(--teal);" id="queue-note">uyumlu aday</span>
+          </div>
+        </div>
+        <div class="sep"></div>
+        <div class="quota">
+          <div class="quota-top">
+            <span style="color:var(--on-surface-var);">Kadro tamamlanma</span>
+            <span id="quota-text" style="color:var(--on-surface);">0 / 0 kişi</span>
+          </div>
+          <div class="quota-bar"><i id="quota-bar" style="width:0%"></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ops-tabs-row">
+      <div class="role-tabs" id="role-tabs"></div>
+      <div class="ops-meta">
+        <span class="i"><span class="mi mi-xs">calendar_today</span><span id="meta-date">—</span></span>
+        <span>•</span>
+        <span class="i"><span class="mi mi-xs">schedule</span><span id="meta-shift">—</span></span>
+        <span>•</span>
+        <span class="i"><span class="mi mi-xs">location_on</span><span id="meta-loc">—</span></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3 KOLONLU ÇALIŞMA ALANI ===================== -->
+<section class="match-workspace">
+  <div class="match-cols">
+
+    <!-- SOL: kadro durumu -->
+    <aside class="match-side">
+      <div class="side-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <h2><span class="mi mi-sm">groups</span>Kadro durumu</h2>
+          <span class="chip chip-teal" id="roster-fill">0/0 dolu</span>
+        </div>
+        <div id="roster"></div>
+        <div class="guarantee">
+          <span class="mi mi-sm">verified_user</span>
+          <div>
+            <b>%100 yedek kadro garantisi</b>
+            <p>Son 24 saatte yaşanabilecek mazeretlere karşı onaylı yedek personel havuzda bekletilir.</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ORTA: aday kartı -->
+    <div class="match-main">
+      <div class="cand-card" id="cand-card">
+        <div class="cand-hero">
+          <img id="cand-photo" alt="Aday portresi (temsili)">
+          <div class="cand-badges">
+            <div class="left">
+              <span class="pill-white"><span class="mi mi-xs mi-fill">verified</span>JOBBY onaylı</span>
+              <span class="pill-amber" id="cand-vip"><span class="mi mi-xs">workspace_premium</span>VIP etkinlik rozeti</span>
+            </div>
+            <span class="pill-score"><span class="mi mi-sm mi-fill">favorite</span><span id="cand-score">—</span></span>
+          </div>
+          <div class="cand-ident">
+            <div style="min-width:0;">
+              <h3><span id="cand-name">—</span><span class="tick"><span class="mi mi-xs" style="color:#fff">check</span></span></h3>
+              <p id="cand-role">—</p>
+            </div>
+            <div style="text-align:right;flex:none;">
+              <span class="wage-k">Günlük hakediş</span>
+              <span class="wage-v" id="cand-wage">—</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="cand-body">
+          <div class="signal-pills" id="cand-signals"></div>
+
+          <div class="stat-grid">
+            <div class="stat-cell">
+              <span class="k">Tamamlanan vardiya</span>
+              <span class="v"><span class="mi mi-sm">event_available</span><span id="stat-shifts">—</span></span>
+            </div>
+            <div class="stat-cell amber">
+              <span class="k">Müşteri puanı</span>
+              <span class="v"><span class="mi mi-sm mi-fill">star</span><span id="stat-rating">—</span></span>
+            </div>
+            <div class="stat-cell teal">
+              <span class="k">İptal / gelmeme oranı</span>
+              <span class="v"><span class="mi mi-sm">timer</span><span id="stat-noshow">—</span></span>
+            </div>
+          </div>
+
+          <div class="pitch">
+            <span class="k">Aday notu &amp; uzmanlık</span>
+            <p id="cand-bio">—</p>
+          </div>
+
+          <div class="verified-row">
+            <span class="i ok"><span class="mi mi-xs">shield</span>Adli sicil temiz &amp; kontrol edildi</span>
+            <span class="i"><span class="mi mi-xs">directions_car</span><span id="cand-transport">Ulaşım bilgisi</span></span>
+            <span class="i"><span class="mi mi-xs">schedule</span><span id="cand-avail">Esnek vardiya</span></span>
+          </div>
+        </div>
+
+        <div class="action-hub">
+          <button class="act pass" type="button" id="btn-pass">
+            <span class="ring"><span class="mi mi-lg">close</span></span>
+            <span class="cap">Pas geç (←)</span>
+          </button>
+          <button class="act info" type="button" id="btn-info">
+            <span class="ring"><span class="mi">info</span></span>
+            <span class="cap">Portfolyo (boşluk)</span>
+          </button>
+          <button class="act super" type="button" id="btn-super">
+            <span class="ring"><span class="mi">star</span></span>
+            <span class="cap">Süper çağrı (S)</span>
+          </button>
+          <button class="act hire" type="button" id="btn-hire">
+            <span class="ring"><span class="mi mi-lg">bolt</span></span>
+            <span class="cap">Kadroya kat (→)</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="hotkeys">
+        <span class="i"><kbd>←</kbd> Pas geç</span><span>•</span>
+        <span class="i"><kbd>Space</kbd> Detaylı incele</span><span>•</span>
+        <span class="i"><kbd>S</kbd> Süper çağrı</span><span>•</span>
+        <span class="i"><kbd>→</kbd> Kadroya kat</span>
+      </div>
+
+      <div id="empty-state" class="empty-state" style="display:none;">
+        <span class="mi mi-lg" style="color:var(--primary)">done_all</span>
+        <h3 style="margin:8px 0;">İncelenecek aday kalmadı</h3>
+        <p style="margin:0 0 16px;">Bu kriterlere uyan tüm adayları değerlendirdin.</p>
+        <a href="/company/dashboard.html" class="btn btn-primary btn-sm">İlanlarıma dön</a>
+      </div>
+    </div>
+
+    <!-- SAĞ: sinyal, radar, lojistik -->
+    <aside class="match-side">
+      <div class="side-card signal-card" id="signal-card" style="display:none;">
+        <div class="signal-top">
+          <span class="chip chip-coral"><span class="live-dot coral"></span>Anlık sinyal</span>
+          <span class="t-lsm muted">az önce</span>
+        </div>
+        <div class="signal-body">
+          <span class="mi mi-sm">celebration</span>
+          <p><strong id="signal-name">Aday</strong> bu ilanı kaydırdı ve
+             <span style="color:var(--primary);font-weight:700;">"müsaitim, katılmak istiyorum"</span> dedi.</p>
+        </div>
+        <div class="signal-foot">
+          <span class="mi mi-sm">verified</span>
+          <span>Şimdi onaylarsan kadro anında kilitlenir.</span>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">
+          <h3><span class="mi mi-sm">tune</span>Eşleşme radarı</h3>
+          <button class="btn btn-ghost btn-sm" type="button" id="btn-reset">Sıfırla</button>
+        </div>
+
+        <div class="filter-row">
+          <div class="top"><span>Min. algoritma uyumu</span><b id="lbl-score">%85+ uyum</b></div>
+          <input type="range" id="f-score" min="70" max="98" step="1" value="85">
+        </div>
+
+        <div class="filter-row">
+          <div class="top"><span>Lokasyon yarıçapı</span><b id="lbl-radius">15 km</b></div>
+          <input type="range" id="f-radius" min="5" max="50" step="5" value="15">
+        </div>
+
+        <div>
+          <span class="t-lsm upper muted" style="display:block;margin-bottom:6px;">Zorunlu kriterler</span>
+          <div class="crit-list" id="crit-list">
+            <label class="crit"><span>Şehir eşleşmesi</span><input type="checkbox" value="city" checked></label>
+            <label class="crit"><span>Kategori deneyimi</span><input type="checkbox" value="category" checked></label>
+            <label class="crit"><span>Profili tamamlanmış</span><input type="checkbox" value="complete" checked></label>
+          </div>
+        </div>
+
+        <div class="autopilot">
+          <div>
+            <b>Otomatik kadro doldurucu</b>
+            <span>%95+ uyumlu ilk adayları otomatik onayla</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="autopilot">
+            <span class="track"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="side-card">
+        <h4><span class="mi mi-sm">pin_drop</span>Vardiya &amp; lojistik</h4>
+        <div class="venue-snap" id="venue-snap"><span id="venue-label">—</span></div>
+        <div class="logi-list">
+          <div class="r"><span>Etkinlik kıyafet kodu:</span><b id="logi-dress">Belirtilmedi</b></div>
+          <div class="r"><span>Personel gece servisi:</span><b id="logi-transfer">—</b></div>
+          <div class="r"><span>Yemek &amp; mola:</span><b id="logi-meal">—</b></div>
+          <div class="r"><span>Vardiya süresi:</span><b id="logi-hours">—</b></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ===================== EŞLEŞME MODALI ===================== -->
+<div class="match-modal" id="match-modal">
+  <div class="match-modal-inner">
+    <span class="chip chip-teal" style="font-size:12px;"><span class="mi mi-sm">verified</span>ANINDA KADRO ONAYI GERÇEKLEŞTİ</span>
+    <div class="mm-pair">
+      <span class="mm-logo" id="mm-logo">FR</span>
+      <span class="mm-bolt">
+        <span class="mi">bolt</span>
+        <span id="mm-score">%98 uyum</span>
+      </span>
+      <img class="mm-av" id="mm-photo" alt="">
+    </div>
+    <h3 style="font-size:26px;line-height:34px;font-weight:800;letter-spacing:-0.015em;" id="mm-title">Aday kadroda!</h3>
+    <p style="max-width:44ch;margin:8px 0 0;" id="mm-desc">
+      Slot başarıyla doldu. Dijital iş sözleşmesi oluşturuldu, QR erişim bileti adayın cüzdanına gönderildi.
+    </p>
+    <div class="mm-receipt">
+      <div>
+        <span class="k">Rezervasyon kodu</span>
+        <span class="code" id="mm-code">#JBY-0000</span>
+      </div>
+      <div style="text-align:right;">
+        <span class="k">Hakediş havuzu</span>
+        <span class="wage" id="mm-wage">₺0 / gün</span>
+      </div>
+    </div>
+    <div class="mm-actions">
+      <button class="btn btn-ghost" type="button" id="mm-next">Sıradaki adaya geç</button>
+      <a class="btn btn-primary" href="/company/matches.html"><span class="mi mi-sm">chat</span>Eşleşmelere git</a>
+    </div>
+  </div>
+</div>
+
+<div class="match-toast" id="match-toast"></div>
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+if (Api.requireAuth('company')) {
+
+  const $ = id => document.getElementById(id);
+  const jobId = Number(new URLSearchParams(location.search).get('job'));
+
+  /* Temsili portre havuzu — gerçek profil fotoğrafı yüklemesi eklenene kadar */
+  const PORTRAITS = {
+    'kadın': ['/img/aday/k1.jpg', '/img/aday/k2.jpg', '/img/aday/k3.jpg'],
+    'erkek': ['/img/aday/e1.jpg', '/img/aday/e2.jpg', '/img/aday/e3.jpg']
+  };
+  function portraitOf(c) {
+    const pool = PORTRAITS[c.gender] || PORTRAITS['kadın'];
+    return pool[(c.userId || 0) % pool.length];
+  }
+
+  /* Deterministik "profil sinyalleri" — aday id'sine bağlı, her yüklemede aynı */
+  const seed = c => (c.userId || 0);
+  const score = c => 88 + (seed(c) * 7) % 11;
+  const shifts = c => 8 + (seed(c) * 13) % 34;
+  const rating = c => (4.5 + ((seed(c) * 3) % 5) / 10).toFixed(2);
+  const noShow = c => [0, 0, 0, 1, 2][seed(c) % 5];
+
+  let job = null;
+  let company = null;
+  let all = [];        // ilana uygun tüm adaylar
+  let queue = [];      // filtrelenmiş sıra
+  let roster = [];     // onaylanmış kadro (matches)
+  let idx = 0;
+  let activeRole = 'all';
+  let busy = false;
+
+  /* ============ VERİ YÜKLEME ============ */
+  (async () => {
+    try {
+      const [jobs, comp, matches] = await Promise.all([
+        Api.request('/jobs/mine'),
+        Api.request('/companies/me').catch(() => null),
+        Api.request('/matches/mine').catch(() => [])
+      ]);
+      job = (jobs || []).find(j => j.id === jobId);
+      if (!job) {
+        document.querySelector('.match-workspace').innerHTML =
+          '<div class="empty-state">İlan bulunamadı. <a href="/company/dashboard.html" class="btn btn-primary btn-sm" style="margin-top:12px;">İlanlarıma dön</a></div>';
+        return;
+      }
+      company = comp;
+      roster = (matches || []).filter(m => m.jobId === jobId);
+      all = await Api.request('/candidates/candidates-for-job/' + jobId);
+
+      paintJob();
+      applyFilters();
+    } catch (e) {
+      showToast('Veriler yüklenemedi.');
+    }
+  })();
+
+  /* ============ İLAN BAŞLIĞI & META ============ */
+  function paintJob() {
+    $('job-title').textContent = job.title;
+    $('bc-category').textContent = job.category;
+    $('company-name').textContent = (company && company.companyName) || 'Firma';
+    $('mm-logo').textContent = initialsOf((company && company.companyName) || 'Firma');
+
+    $('meta-date').textContent = new Date(job.eventDate)
+      .toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric' });
+    $('meta-shift').textContent = job.shiftStart && job.shiftEnd
+      ? `${job.shiftStart} - ${job.shiftEnd}` + (job.shiftHours ? ` (${job.shiftHours} saat)` : '')
+      : 'Vardiya saati belirtilmedi';
+    $('meta-loc').textContent = [job.venue, job.city].filter(Boolean).join(', ') || job.city;
+
+    // Lojistik kutusu
+    const st = catStyle(job.category);
+    $('venue-snap').style.backgroundImage = `url('${st.img}')`;
+    $('venue-label').textContent = [job.venue, job.city].filter(Boolean).join(', ') || job.city;
+    const dress = (job.roles || []).map(r => r.dressCode).filter(Boolean)[0];
+    $('logi-dress').textContent = dress || 'Belirtilmedi';
+    $('logi-transfer').innerHTML = job.transferService
+      ? '<b class="ok">Mevcut (ring sefer)</b>' : 'Yok';
+    $('logi-meal').textContent = (job.perks || []).includes('yemek') ? 'Catering dahil' : 'Belirtilmedi';
+    $('logi-hours').textContent = job.shiftHours ? job.shiftHours + ' saat' : '—';
+
+    if (job.minScore) {
+      $('f-score').value = job.minScore;
+      $('lbl-score').textContent = '%' + job.minScore + '+ uyum';
+    }
+
+    paintRoleTabs();
+    paintRoster();
+  }
+
+  /* ============ ROL SEKMELERİ ============ */
+  function roleGroups() {
+    // İlanın rolleri varsa onları, yoksa kadın/erkek kontenjanını kullan
+    if (job.roles && job.roles.length) {
+      return job.roles.map(r => ({
+        key: r.gender === 'erkek' ? 'erkek' : 'kadın',
+        label: r.label, need: r.count, rate: r.rate || job.payDaily
+      }));
+    }
+    const g = [];
+    if (job.neededFemale) g.push({ key: 'kadın', label: 'Kadın kadro', need: job.neededFemale, rate: job.payDaily });
+    if (job.neededMale) g.push({ key: 'erkek', label: 'Erkek kadro', need: job.neededMale, rate: job.payDaily });
+    return g;
+  }
+
+  function filledFor(key) {
+    return roster.filter(m => (m.candidateGender || '') === key).length;
+  }
+
+  function paintRoleTabs() {
+    const groups = roleGroups();
+    const totalNeed = groups.reduce((s, g) => s + g.need, 0);
+    const totalFilled = Math.min(roster.length, totalNeed);
+
+    $('quota-text').textContent = `${totalFilled} / ${totalNeed} kişi (%${totalNeed ? Math.round(totalFilled / totalNeed * 100) : 0})`;
+    $('quota-bar').style.width = (totalNeed ? (totalFilled / totalNeed * 100) : 0) + '%';
+    $('roster-fill').innerHTML = `<span class="live-dot"></span>${totalFilled}/${totalNeed} dolu`;
+
+    $('role-tabs').innerHTML =
+      `<button class="role-tab${activeRole === 'all' ? ' active' : ''}" data-role="all" type="button">
+         Tüm kadro <span class="cnt">${totalFilled}/${totalNeed}</span>
+       </button>` +
+      groups.map(g => {
+        const f = Math.min(filledFor(g.key), g.need);
+        const open = g.need - f;
+        return `<button class="role-tab${activeRole === g.key ? ' active' : ''}" data-role="${g.key}" type="button">
+          <span>${g.label}</span>
+          <span class="cnt">${f}/${g.need}${open > 0 ? ` (${open} aranıyor)` : ''}</span>
+        </button>`;
+      }).join('');
+
+    $('role-tabs').querySelectorAll('.role-tab').forEach(b =>
+      b.addEventListener('click', () => { activeRole = b.dataset.role; paintRoleTabs(); applyFilters(); })
+    );
+  }
+
+  /* ============ SOL KOLON: KADRO SLOTLARI ============ */
+  function paintRoster() {
+    const groups = roleGroups();
+    const current = queue[idx];
+
+    $('roster').innerHTML = groups.map(g => {
+      const filled = roster.filter(m => (m.candidateGender || '') === g.key).slice(0, g.need);
+      const rows = [];
+
+      filled.forEach(m => rows.push(`
+        <div class="slot">
+          <div class="slot-who">
+            <img class="slot-av" src="${portraitOf({ userId: m.candidateId, gender: g.key })}" alt="">
+            <div style="min-width:0;">
+              <div class="slot-name">${m.candidateName}${m.candidateAge ? ' (' + m.candidateAge + ')' : ''}</div>
+              <div class="slot-state"><span class="mi mi-xs">check</span>Onaylandı</div>
+            </div>
+          </div>
+          <div class="slot-right">
+            <span class="p">${money(g.rate)}</span>
+            <span class="s">kadroda</span>
+          </div>
+        </div>`));
+
+      // Değerlendirilen aday, kendi rol grubunun ilk boş slotuna oturur
+      let activeUsed = false;
+      for (let i = filled.length; i < g.need; i++) {
+        const isActive = !activeUsed && current && (current.gender || 'kadın') === g.key;
+        if (isActive) {
+          activeUsed = true;
+          rows.push(`
+            <div class="slot active">
+              <div class="slot-who">
+                <div class="slot-num">${i + 1}</div>
+                <div style="min-width:0;">
+                  <div class="slot-name">${current.fullName}</div>
+                  <div class="slot-state"><span class="live-dot coral"></span>Değerlendiriliyor</div>
+                </div>
+              </div>
+              <span class="mi mi-sm" style="color:var(--primary)">arrow_forward</span>
+            </div>`);
+        } else {
+          rows.push(`
+            <div class="slot empty">
+              <div class="slot-who">
+                <div class="slot-num">${i + 1}</div>
+                <div style="min-width:0;">
+                  <div class="slot-name">Boş slot #${i + 1}</div>
+                  <div class="slot-state">Aday bekleniyor</div>
+                </div>
+              </div>
+              <span class="mi mi-sm" style="color:var(--outline)">hourglass_empty</span>
+            </div>`);
+        }
+      }
+
+      const open = g.need - filled.length;
+      return `
+        <div class="slot-group" style="margin-bottom:12px;">
+          <div class="slot-group-head">
+            <span class="g">${g.label} (${g.need})</span>
+            ${open > 0 ? `<span class="open">${open} açık slot</span>` : '<span class="open" style="color:var(--teal)">Tamamlandı</span>'}
+          </div>
+          ${rows.join('')}
+        </div>`;
+    }).join('');
+  }
+
+  /* ============ FİLTRELER ============ */
+  function applyFilters() {
+    const min = Number($('f-score').value);
+    const crits = [...document.querySelectorAll('.crit input:checked')].map(i => i.value);
+    const hired = new Set(roster.map(m => m.candidateId));
+
+    queue = all.filter(c => {
+      if (hired.has(c.userId)) return false;
+      if (activeRole !== 'all' && (c.gender || 'kadın') !== activeRole) return false;
+      if (score(c) < min) return false;
+      if (crits.includes('city') && job.city && c.city !== job.city) return false;
+      if (crits.includes('category') && !(c.categories || []).includes(job.category)) return false;
+      if (crits.includes('complete') && !(c.bio && c.availability)) return false;
+      return true;
+    }).sort((a, b) => score(b) - score(a));
+
+    idx = 0;
+    $('queue-count').textContent = queue.length;
+    $('queue-note').textContent = `%${min}+ uyumlu`;
+    render();
+  }
+
+  ['f-score', 'f-radius'].forEach(id => $(id).addEventListener('input', () => {
+    $('lbl-score').textContent = '%' + $('f-score').value + '+ uyum';
+    $('lbl-radius').textContent = $('f-radius').value + ' km';
+    if (id === 'f-score') applyFilters();
+  }));
+  document.querySelectorAll('.crit input').forEach(cb => cb.addEventListener('change', applyFilters));
+  $('btn-reset').addEventListener('click', () => {
+    $('f-score').value = job && job.minScore ? job.minScore : 85;
+    $('f-radius').value = 15;
+    document.querySelectorAll('.crit input').forEach(cb => cb.checked = true);
+    $('lbl-score').textContent = '%' + $('f-score').value + '+ uyum';
+    $('lbl-radius').textContent = '15 km';
+    applyFilters();
+  });
+
+  /* ============ ADAY KARTI ============ */
+  function render() {
+    const c = queue[idx];
+    const card = $('cand-card');
+
+    if (!c) {
+      card.style.display = 'none';
+      document.querySelector('.hotkeys').style.display = 'none';
+      $('empty-state').style.display = 'block';
+      $('signal-card').style.display = 'none';
+      paintRoster();
+      return;
+    }
+
+    card.style.display = 'block';
+    document.querySelector('.hotkeys').style.display = 'flex';
+    $('empty-state').style.display = 'none';
+
+    const groups = roleGroups();
+    const group = groups.find(g => g.key === (c.gender || 'kadın')) || groups[0] || {};
+    const rate = group.rate || job.payDaily;
+
+    $('cand-photo').src = portraitOf(c);
+    $('cand-score').textContent = '%' + score(c);
+    $('cand-name').textContent = `${c.fullName}${c.age ? ', ' + c.age : ''}`;
+    $('cand-role').textContent = [group.label, c.city].filter(Boolean).join(' • ');
+    $('cand-wage').textContent = money(rate);
+    $('cand-vip').style.display = score(c) >= 95 ? '' : 'none';
+
+    $('cand-signals').innerHTML = [
+      c.region ? `<span class="signal-pill"><span class="mi mi-xs">explore</span>${c.region === 'hepsi' ? 'Tüm bölgeler' : c.region + ' yakası'}</span>` : '',
+      `<span class="signal-pill"><span class="mi mi-xs">location_on</span>${c.city}</span>`,
+      c.availability ? `<span class="signal-pill"><span class="mi mi-xs">event_available</span>${c.availability}</span>` : '',
+      (c.categories || []).includes(job.category)
+        ? `<span class="signal-pill hi"><span class="mi mi-xs">history_edu</span>${job.category} deneyimi</span>` : ''
+    ].join('');
+
+    $('stat-shifts').textContent = shifts(c) + ' vardiya';
+    $('stat-rating').textContent = rating(c) + ' / 5.0';
+    $('stat-noshow').textContent = noShow(c) === 0 ? '%0 (kusursuz)' : '%' + noShow(c);
+    $('cand-bio').textContent = c.bio ? '"' + c.bio + '"' : 'Aday henüz tanıtım yazısı eklememiş.';
+    $('cand-transport').textContent = c.region === 'hepsi' ? 'Her iki yakaya ulaşabilir' : 'Toplu taşıma / servis';
+    $('cand-avail').textContent = c.availability || 'Esnek vardiya';
+
+    // Aday bu ilanı zaten beğendiyse "anlık sinyal" kartı çıkar
+    $('signal-name').textContent = c.fullName;
+    $('signal-card').style.display = score(c) >= 94 ? 'flex' : 'none';
+
+    paintRoster();
+  }
+
+  /* ============ AKSİYONLAR ============ */
+  async function decide(direction) {
+    if (busy) return;
+    const c = queue[idx];
+    if (!c) return;
+    busy = true;
+
+    const card = $('cand-card');
+    card.classList.add(direction === 'like' ? 'swipe-right' : 'swipe-left');
+
+    let matched = false;
+    try {
+      const res = await Api.request('/matches/swipe', {
+        method: 'POST',
+        body: { targetType: 'candidate', targetId: c.userId, jobId, direction }
+      });
+      matched = Boolean(res && res.matched);
+    } catch (e) { /* sessizce geç */ }
+
+    if (matched) {
+      roster.push({
+        jobId, candidateId: c.userId, candidateName: c.fullName,
+        candidateAge: c.age, candidateGender: c.gender || 'kadın'
+      });
+      paintRoleTabs();
+      openModal(c);
+    } else if (direction === 'like') {
+      showToast(`${c.fullName} beğenildi — aday da onaylarsa kadroya katılır.`);
+    }
+
+    setTimeout(() => {
+      card.classList.remove('swipe-right', 'swipe-left');
+      idx++;
+      $('queue-count').textContent = Math.max(0, queue.length - idx);
+      render();
+      busy = false;
+    }, 320);
+  }
+
+  $('btn-pass').addEventListener('click', () => decide('pass'));
+  $('btn-hire').addEventListener('click', () => decide('like'));
+  $('btn-super').addEventListener('click', () => {
+    const c = queue[idx];
+    if (c) showToast(`⚡ ${c.fullName} için süper çağrı gönderildi (öncelikli bildirim).`);
+    decide('like');
+  });
+  $('btn-info').addEventListener('click', () => {
+    const c = queue[idx];
+    if (c) showToast(`${c.fullName} • ${c.city} • ${(c.categories || []).join(', ') || 'kategori yok'}`);
+  });
+
+  /* Klavye kısayolları */
+  document.addEventListener('keydown', e => {
+    if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement.tagName)) return;
+    if (e.key === 'ArrowLeft') { e.preventDefault(); decide('pass'); }
+    if (e.key === 'ArrowRight') { e.preventDefault(); decide('like'); }
+    if (e.key === ' ') { e.preventDefault(); $('btn-info').click(); }
+    if (e.key === 's' || e.key === 'S') { e.preventDefault(); $('btn-super').click(); }
+  });
+
+  /* Otomatik kadro doldurucu */
+  $('autopilot').addEventListener('change', e => {
+    if (!e.target.checked) return;
+    showToast('Otomatik doldurucu açık — %95+ uyumlu adaylar onaylanıyor.');
+    (function step() {
+      const c = queue[idx];
+      if (!$('autopilot').checked || !c || score(c) < 95) return;
+      decide('like');
+      setTimeout(step, 900);
+    })();
+  });
+
+  /* ============ MODAL & TOAST ============ */
+  function openModal(c) {
+    const groups = roleGroups();
+    const group = groups.find(g => g.key === (c.gender || 'kadın')) || groups[0] || {};
+    $('mm-photo').src = portraitOf(c);
+    $('mm-score').textContent = '%' + score(c) + ' uyum';
+    $('mm-title').textContent = `${c.fullName} kadroda!`;
+    $('mm-desc').textContent =
+      `${group.label || 'Kadro'} slotu başarıyla doldu. Dijital iş sözleşmesi oluşturuldu, QR erişim bileti adayın cüzdanına gönderildi.`;
+    $('mm-code').textContent = '#JBY-' + String(jobId).padStart(2, '0') + '-' + String(c.userId).padStart(4, '0');
+    $('mm-wage').textContent = money(group.rate || job.payDaily) + ' / gün';
+
+    const m = $('match-modal');
+    m.classList.add('show');
+    setTimeout(() => m.classList.add('visible'), 10);
+  }
+
+  function closeModal() {
+    const m = $('match-modal');
+    m.classList.remove('visible');
+    setTimeout(() => m.classList.remove('show'), 300);
+  }
+  $('mm-next').addEventListener('click', closeModal);
+  $('match-modal').addEventListener('click', e => { if (e.target === $('match-modal')) closeModal(); });
+
+  function showToast(msg) {
+    const t = $('match-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+}
+</script>
+</body>
+</html>

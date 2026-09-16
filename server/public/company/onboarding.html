@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Firma profilini tamamla — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell" style="max-width:640px;">
+  <div class="app-header">
+    <span class="chip chip-coral"><span class="live-dot coral"></span>Firma kurulumu</span>
+    <h1 style="margin-top:14px;">Firma profilini tamamla</h1>
+    <p>Bu bilgiler adayların seni tanımasını ve eşleşmeleri yönetmeni sağlayacak. İstediğin zaman güncelleyebilirsin.</p>
+  </div>
+
+  <div id="error-box" class="error-box"></div>
+
+  <form id="profile-form" class="panel">
+    <div class="form-section">
+      <span class="form-section-icon"><span class="mi">apartment</span></span>
+      <div>
+        <h2>Kurumsal kimlik</h2>
+        <p>Adaylar ilanlarında bu bilgileri görür; doğrulanmış firma rozetinin temelidir.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Şirket adı</label>
+      <input type="text" id="companyName" placeholder="Örn. Yeni Rakı">
+    </div>
+    <div class="field">
+      <label>Sektör / İşletme alanı</label>
+      <input type="text" id="sector" placeholder="Örn. İçecek & Etkinlik Pazarlaması">
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Şehir / Merkez</label>
+        <input type="text" id="city" placeholder="Örn. İstanbul">
+      </div>
+      <div class="field">
+        <label>Ülke</label>
+        <input type="text" id="country" placeholder="Türkiye" value="Türkiye">
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Telefon</label>
+        <input type="tel" id="phone" placeholder="+90 (212) 123-4567">
+      </div>
+      <div class="field">
+        <label>E-posta</label>
+        <input type="email" id="email" placeholder="iletisim@firma.com">
+      </div>
+    </div>
+    <hr class="form-divider">
+    <div class="form-section">
+      <span class="form-section-icon"><span class="mi">contact_mail</span></span>
+      <div>
+        <h2>İletişim &amp; adres</h2>
+        <p>Eşleşme sonrası ekip koordinasyonu bu kanallardan yürür.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Website (isteğe bağlı)</label>
+      <input type="url" id="website" placeholder="https://www.firma.com">
+    </div>
+    <div class="field">
+      <label>Tam adres</label>
+      <input type="text" id="address" placeholder="Mahalle Cad. No:123, Kat:4 İstanbul">
+    </div>
+    <div class="field">
+      <label>Firma hakkında</label>
+      <textarea id="description" placeholder="Firmanız, etkinlikleriniz ve adaylardan beklentileriniz hakkında kısaca yazın."></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">
+      <span class="mi mi-sm">add_circle</span><span>Profili kaydet ve ilanları yönet</span>
+    </button>
+  </form>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+if (Api.requireAuth('company')) {
+  (async () => {
+    try {
+      const profile = await Api.request('/companies/me');
+      if (profile) {
+        document.getElementById('companyName').value = profile.companyName || '';
+        document.getElementById('sector').value = profile.sector || '';
+        document.getElementById('city').value = profile.city || '';
+        document.getElementById('phone').value = profile.phone || '';
+        document.getElementById('email').value = profile.email || '';
+        document.getElementById('website').value = profile.website || '';
+        document.getElementById('address').value = profile.address || '';
+        document.getElementById('description').value = profile.description || '';
+      }
+    } catch (e) { /* profil henüz boş olabilir */ }
+  })();
+
+  const errorBox = document.getElementById('error-box');
+  const submitBtn = document.getElementById('submit-btn');
+
+  document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(errorBox);
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Kaydediliyor...</span>';
+    try {
+      await Api.request('/companies/me', {
+        method: 'PUT',
+        body: {
+          companyName: document.getElementById('companyName').value.trim(),
+          sector: document.getElementById('sector').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          email: document.getElementById('email').value.trim(),
+          website: document.getElementById('website').value.trim(),
+          address: document.getElementById('address').value.trim(),
+          description: document.getElementById('description').value.trim()
+        }
+      });
+      window.location.href = '/company/post-job.html';
+    } catch (err) {
+      showError(errorBox, err.message);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="mi mi-sm">add_circle</span><span>Profili kaydet ve ilanları yönet</span>';
+    }
+  });
+}
+</script>
+</body>
+</html>

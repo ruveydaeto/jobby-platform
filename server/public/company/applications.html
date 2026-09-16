@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Başvurular — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: var(--s-lg); }
+  .filter-bar button {
+    padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--stroke);
+    background: var(--surface-lowest); font-size: 13px; font-weight: 600;
+    color: var(--on-surface-var); cursor: pointer; transition: all .15s ease;
+  }
+  .filter-bar button:hover { border-color: var(--primary-fixed-dim); }
+  .filter-bar button.active { background: var(--primary); border-color: var(--primary); color: #fff; }
+
+  .app-card {
+    background: var(--surface-lowest); border: 1px solid var(--stroke);
+    border-left: 3px solid var(--indigo); border-radius: var(--r-lg);
+    padding: var(--s-lg); box-shadow: var(--e1);
+  }
+  .app-card.is-accepted { border-left-color: var(--tertiary-container); }
+  .app-card.is-rejected { border-left-color: var(--outline-var); opacity: 0.7; }
+
+  .app-top { display: flex; justify-content: space-between; align-items: flex-start;
+    gap: var(--s-md); margin-bottom: var(--s-sm); }
+  .app-top h3 { font-size: 18px; line-height: 26px; margin-bottom: 2px; }
+
+  .app-answers { display: flex; flex-direction: column; gap: 12px;
+    margin: var(--s-md) 0; padding: var(--s-md); background: var(--surface-low);
+    border-radius: var(--r); }
+  .answer dt { font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--on-surface-var); margin-bottom: 3px; }
+  .answer dd { margin: 0; font-size: 14px; line-height: 1.55; }
+
+  .app-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+  .btn-accept { background: var(--tertiary-container); color: #fff; }
+  .btn-accept:hover { filter: brightness(0.94); }
+  .btn-reject { background: transparent; color: var(--on-surface-var); border: 1.5px solid var(--stroke); }
+  .btn-reject:hover { border-color: var(--secondary); color: var(--secondary); }
+
+  .phone-link { font-weight: 700; color: var(--indigo); }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <span class="eyebrow"><span class="mi mi-xs">inbox</span>Gelen başvurular</span>
+    <h1 id="page-title">Başvurular</h1>
+    <p>Adayların doldurduğu başvuru formları burada. Kabul ettiğin başvuru anında eşleşmeye dönüşür ve aday bilgilendirilir.</p>
+  </div>
+
+  <div class="filter-bar" id="filters">
+    <button data-filter="pending" class="active">Bekleyen</button>
+    <button data-filter="accepted">Kabul edilen</button>
+    <button data-filter="rejected">Olumsuz</button>
+    <button data-filter="all">Tümü</button>
+  </div>
+
+  <div id="list" style="display:flex;flex-direction:column;gap:14px;"></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+const jobFilter = new URLSearchParams(location.search).get('job');
+let applications = [];
+let activeFilter = 'pending';
+
+const STATUS_CHIP = {
+  pending:  '<span class="chip chip-accent"><span class="mi mi-xs">hourglass_top</span>Bekliyor</span>',
+  accepted: '<span class="chip chip-teal"><span class="mi mi-xs mi-fill">check_circle</span>Kabul edildi</span>',
+  rejected: '<span class="chip chip-outline"><span class="mi mi-xs">cancel</span>Olumsuz</span>'
+};
+
+function timeAgo(iso) {
+  const mins = Math.floor((Date.now() - new Date(iso)) / 60000);
+  if (mins < 60) return Math.max(mins, 1) + ' dk önce';
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return hours + ' saat önce';
+  return Math.floor(hours / 24) + ' gün önce';
+}
+
+function appCard(a) {
+  const cls = a.status === 'accepted' ? 'is-accepted' : a.status === 'rejected' ? 'is-rejected' : '';
+  return `
+    <div class="app-card ${cls}" data-id="${a.id}">
+      <div class="app-top">
+        <div style="min-width:0;">
+          <h3>${a.candidateName}</h3>
+          <div class="job-meta">
+            <span>${a.candidateCity}</span>
+            ${a.candidateAge ? `<span>${a.candidateAge} yaş</span>` : ''}
+            ${a.candidateGender ? `<span>${a.candidateGender === 'female' ? 'Kadın' : 'Erkek'}</span>` : ''}
+            <span>${timeAgo(a.createdAt)}</span>
+          </div>
+        </div>
+        ${STATUS_CHIP[a.status] || ''}
+      </div>
+
+      <div class="need-row">
+        <span class="need-pill"><span class="mi mi-xs">work</span> ${a.jobTitle}</span>
+        <span class="need-pill"><span class="mi mi-xs">payments</span> ${money(a.payDaily)} / gün</span>
+      </div>
+
+      <div class="app-answers">
+        <div class="answer">
+          <dt>Neden uygun</dt>
+          <dd>${a.coverLetter}</dd>
+        </div>
+        <div class="answer">
+          <dt>Müsaitlik</dt>
+          <dd>${a.availabilityNote}</dd>
+        </div>
+        ${a.experience ? `<div class="answer"><dt>Deneyim</dt><dd>${a.experience}</dd></div>` : ''}
+        <div class="answer">
+          <dt>Telefon</dt>
+          <dd><a class="phone-link" href="tel:${a.phone.replace(/\s/g, '')}">${a.phone}</a></dd>
+        </div>
+      </div>
+
+      ${a.status === 'pending' ? `
+        <div class="app-actions">
+          <button class="btn btn-sm btn-accept" data-act="accepted" data-id="${a.id}">
+            <span class="mi mi-sm">check</span> Kabul et
+          </button>
+          <button class="btn btn-sm btn-reject" data-act="rejected" data-id="${a.id}">
+            <span class="mi mi-sm">close</span> Olumsuz
+          </button>
+        </div>` : ''}
+    </div>`;
+}
+
+function render() {
+  const list = document.getElementById('list');
+  const shown = activeFilter === 'all'
+    ? applications
+    : applications.filter(a => a.status === activeFilter);
+
+  if (!shown.length) {
+    const labels = { pending: 'bekleyen', accepted: 'kabul edilmiş', rejected: 'olumsuz sonuçlanmış', all: '' };
+    list.innerHTML = `<div class="empty-state">
+      <span class="mi mi-lg" style="color:var(--primary)">inbox</span>
+      <h3 style="margin:8px 0;">Burada ${labels[activeFilter]} başvuru yok</h3>
+      <p style="margin:0 0 16px;">Adaylar ilan detayından form doldurarak başvurduğunda burada listelenir.</p>
+      <a href="/company/dashboard.html" class="btn btn-primary btn-sm">İlanlarıma dön</a>
+    </div>`;
+    return;
+  }
+
+  list.innerHTML = shown.map(appCard).join('');
+  list.querySelectorAll('[data-act]').forEach(btn =>
+    btn.addEventListener('click', () => decide(Number(btn.dataset.id), btn.dataset.act, btn))
+  );
+}
+
+async function decide(id, status, btn) {
+  const card = btn.closest('.app-card');
+  card.querySelectorAll('button').forEach(b => b.disabled = true);
+  btn.textContent = status === 'accepted' ? 'Kabul ediliyor…' : 'Kaydediliyor…';
+
+  try {
+    await Api.request('/applications/' + id, { method: 'PATCH', body: { status } });
+    const app = applications.find(a => a.id === id);
+    if (app) {
+      app.status = status;
+      app.decidedAt = new Date().toISOString();
+    }
+    render();
+  } catch (e) {
+    card.querySelectorAll('button').forEach(b => b.disabled = false);
+    alert(e.message);
+  }
+}
+
+document.querySelectorAll('#filters button').forEach(btn =>
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  })
+);
+
+if (Api.requireAuth('company')) {
+  (async () => {
+    try {
+      applications = await Api.request('/applications/incoming' + (jobFilter ? '?jobId=' + jobFilter : ''));
+      if (jobFilter && applications.length) {
+        document.getElementById('page-title').textContent = applications[0].jobTitle;
+      }
+      render();
+    } catch (e) {
+      document.getElementById('list').innerHTML = `<div class="empty-state">Başvurular yüklenemedi.</div>`;
+    }
+  })();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,1475 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "ela.yildiz@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.273Z"
+    },
+    {
+      "id": 2,
+      "email": "kerem.aksoy@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.274Z"
+    },
+    {
+      "id": 3,
+      "email": "nil.demir@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.274Z"
+    },
+    {
+      "id": 4,
+      "email": "baran.kaya@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.274Z"
+    },
+    {
+      "id": 5,
+      "email": "sude.celik@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.274Z"
+    },
+    {
+      "id": 6,
+      "email": "emir.sahin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.274Z"
+    },
+    {
+      "id": 7,
+      "email": "zeynep.arslan@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 8,
+      "email": "ege.yilmaz@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 9,
+      "email": "defne.korkmaz@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 10,
+      "email": "kaan.ozturk@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 11,
+      "email": "alara.gunes@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 12,
+      "email": "toprak.aydin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 13,
+      "email": "ceren.bulut@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 14,
+      "email": "mert.polat@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 15,
+      "email": "ipek.dogan@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 16,
+      "email": "bora.cetin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 17,
+      "email": "yaren.uslu@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 18,
+      "email": "arda.kurt@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 19,
+      "email": "pinar.kaya@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 20,
+      "email": "serkan.ozdemir@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 21,
+      "email": "ayse.kilic@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 22,
+      "email": "ibrahim.yalcin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 23,
+      "email": "merve.sahin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 24,
+      "email": "ahmet.duran@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 25,
+      "email": "fatma.guven@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 26,
+      "email": "mustafa.aydemir@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 27,
+      "email": "selin.cakir@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 28,
+      "email": "gokhan.keskin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 29,
+      "email": "didem.aslan@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 30,
+      "email": "emre.savas@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 31,
+      "email": "zehra.yucel@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 32,
+      "email": "can.eren@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 33,
+      "email": "aynur.turan@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 34,
+      "email": "osman.tekin@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 35,
+      "email": "sinem.kara@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 36,
+      "email": "tarik.gul@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 37,
+      "email": "nurcan.demir@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 38,
+      "email": "hakan.gunes@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 39,
+      "email": "sibel.yildiz@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 40,
+      "email": "levent.dogan@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 41,
+      "email": "ozlem.celik@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 42,
+      "email": "tamer.aktas@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 43,
+      "email": "nese.aksoy@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 44,
+      "email": "volkan.yuzer@ornek.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "candidate",
+      "createdAt": "2026-09-07T15:42:59.275Z"
+    },
+    {
+      "id": 45,
+      "email": "iletisim@yenirakı.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "company",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 46,
+      "email": "info@techexpo.com.tr",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "company",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 47,
+      "email": "events@soundwave.com.tr",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "company",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 48,
+      "email": "contact@markaaktivation.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "company",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 49,
+      "email": "hr@lojistikbir.com",
+      "passwordHash": "$2b$08$dAWkeddzXkl39AWiTdEIzuirdl5xUKjc0DyzS6zBmsgq0Z3jKqwN2",
+      "role": "company",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 50,
+      "email": "ruveydaeto@hotmail.com",
+      "passwordHash": "$2b$08$SOdmS8M6Dh2m1qaarUk2MeS2WsemlNTnYYDOiuqvlOuzdOpL87Uv.",
+      "role": "candidate",
+      "createdAt": "2026-09-07T16:59:08.584Z"
+    }
+  ],
+  "candidates": [
+    {
+      "userId": 1,
+      "fullName": "Ela Yıldız",
+      "city": "İstanbul",
+      "age": 18,
+      "gender": "kadın",
+      "bio": "Etkinliklerde çalışmayı seven, iletişimi güçlü, esnek programlı biriyim.",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "hepsi",
+      "avatarSeed": "ElaYıldız"
+    },
+    {
+      "userId": 2,
+      "fullName": "Kerem Aksoy",
+      "city": "Ankara",
+      "age": 19,
+      "gender": "erkek",
+      "bio": "Sosyal, enerjik ve yeni insanlarla tanışmayı seviyorum. Her zaman gülümsüyorum!",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "avrupa",
+      "avatarSeed": "KeremAksoy"
+    },
+    {
+      "userId": 3,
+      "fullName": "Nil Demir",
+      "city": "İzmir",
+      "age": 20,
+      "gender": "kadın",
+      "bio": "Hem öğrenci hem de çalışan. Haftasonları ve akşamlarında vardiya arıyorum.",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "anadolu",
+      "avatarSeed": "NilDemir"
+    },
+    {
+      "userId": 4,
+      "fullName": "Baran Kaya",
+      "city": "Bursa",
+      "age": 21,
+      "gender": "erkek",
+      "bio": "Fiziksel olarak aktif, sorun çözebilen, detaylara dikkat eden biriyim.",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "hepsi",
+      "avatarSeed": "BaranKaya"
+    },
+    {
+      "userId": 5,
+      "fullName": "Sude Çelik",
+      "city": "Antalya",
+      "age": 22,
+      "gender": "kadın",
+      "bio": "Pazarlama ve satış deneyimim var. Müşteri hizmetleri tutkusuyla çalışıyorum.",
+      "categories": [
+        "Depo & Lojistik",
+        "Diğer",
+        "Hepsi"
+      ],
+      "availability": "Esnek (her zaman uygun)",
+      "region": "avrupa",
+      "avatarSeed": "SudeÇelik"
+    },
+    {
+      "userId": 6,
+      "fullName": "Emir Şahin",
+      "city": "İstanbul",
+      "age": 23,
+      "gender": "erkek",
+      "bio": "Güvenlik ve lojistik alanında deneyimli. Disiplinli ve sorumlu biriyim.",
+      "categories": [
+        "Diğer",
+        "Hepsi",
+        "Fuar Standı"
+      ],
+      "availability": "Saatli (kısa vardiyalar)",
+      "region": "anadolu",
+      "avatarSeed": "EmirŞahin"
+    },
+    {
+      "userId": 7,
+      "fullName": "Zeynep Arslan",
+      "city": "Ankara",
+      "age": 24,
+      "gender": "kadın",
+      "bio": "Yaratıcı, eğlenceli kişiyim. Etkinlikler benim tutkum!",
+      "categories": [
+        "Hepsi",
+        "Fuar Standı",
+        "Konser & Etkinlik"
+      ],
+      "availability": "Gece vardiyası uygun",
+      "region": "hepsi",
+      "avatarSeed": "ZeynepArslan"
+    },
+    {
+      "userId": 8,
+      "fullName": "Ege Yılmaz",
+      "city": "İzmir",
+      "age": 25,
+      "gender": "erkek",
+      "bio": "İngilizce biliyorum. Uluslararası etkinliklerde çalışmak isterim.",
+      "categories": [
+        "Fuar Standı",
+        "Konser & Etkinlik",
+        "Tadım & Promosyon"
+      ],
+      "availability": "Yaz aylarında uygun",
+      "region": "avrupa",
+      "avatarSeed": "EgeYılmaz"
+    },
+    {
+      "userId": 9,
+      "fullName": "Defne Korkmaz",
+      "city": "Bursa",
+      "age": 26,
+      "gender": "kadın",
+      "bio": "Depo ve envanter yönetiminde deneyim sahibiyim. Titiz çalışırım.",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "anadolu",
+      "avatarSeed": "DefneKorkmaz"
+    },
+    {
+      "userId": 10,
+      "fullName": "Kaan Öztürk",
+      "city": "Antalya",
+      "age": 27,
+      "gender": "erkek",
+      "bio": "Konserler ve müzik etkinliklerini seviyorum. Burada çalışmak hayalim!",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "hepsi",
+      "avatarSeed": "KaanÖztürk"
+    },
+    {
+      "userId": 11,
+      "fullName": "Alara Güneş",
+      "city": "İstanbul",
+      "age": 28,
+      "gender": "kadın",
+      "bio": "Etkinliklerde çalışmayı seven, iletişimi güçlü, esnek programlı biriyim.",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "avrupa",
+      "avatarSeed": "AlaraGüneş"
+    },
+    {
+      "userId": 12,
+      "fullName": "Toprak Aydın",
+      "city": "Ankara",
+      "age": 29,
+      "gender": "erkek",
+      "bio": "Sosyal, enerjik ve yeni insanlarla tanışmayı seviyorum. Her zaman gülümsüyorum!",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "anadolu",
+      "avatarSeed": "ToprakAydın"
+    },
+    {
+      "userId": 13,
+      "fullName": "Ceren Bulut",
+      "city": "İzmir",
+      "age": 18,
+      "gender": "kadın",
+      "bio": "Hem öğrenci hem de çalışan. Haftasonları ve akşamlarında vardiya arıyorum.",
+      "categories": [
+        "Depo & Lojistik",
+        "Diğer",
+        "Hepsi"
+      ],
+      "availability": "Esnek (her zaman uygun)",
+      "region": "hepsi",
+      "avatarSeed": "CerenBulut"
+    },
+    {
+      "userId": 14,
+      "fullName": "Mert Polat",
+      "city": "Bursa",
+      "age": 19,
+      "gender": "erkek",
+      "bio": "Fiziksel olarak aktif, sorun çözebilen, detaylara dikkat eden biriyim.",
+      "categories": [
+        "Diğer",
+        "Hepsi",
+        "Fuar Standı"
+      ],
+      "availability": "Saatli (kısa vardiyalar)",
+      "region": "avrupa",
+      "avatarSeed": "MertPolat"
+    },
+    {
+      "userId": 15,
+      "fullName": "İpek Doğan",
+      "city": "Antalya",
+      "age": 20,
+      "gender": "kadın",
+      "bio": "Pazarlama ve satış deneyimim var. Müşteri hizmetleri tutkusuyla çalışıyorum.",
+      "categories": [
+        "Hepsi",
+        "Fuar Standı",
+        "Konser & Etkinlik"
+      ],
+      "availability": "Gece vardiyası uygun",
+      "region": "anadolu",
+      "avatarSeed": "İpekDoğan"
+    },
+    {
+      "userId": 16,
+      "fullName": "Bora Çetin",
+      "city": "İstanbul",
+      "age": 21,
+      "gender": "erkek",
+      "bio": "Güvenlik ve lojistik alanında deneyimli. Disiplinli ve sorumlu biriyim.",
+      "categories": [
+        "Fuar Standı",
+        "Konser & Etkinlik",
+        "Tadım & Promosyon"
+      ],
+      "availability": "Yaz aylarında uygun",
+      "region": "hepsi",
+      "avatarSeed": "BoraÇetin"
+    },
+    {
+      "userId": 17,
+      "fullName": "Yaren Uslu",
+      "city": "Ankara",
+      "age": 22,
+      "gender": "kadın",
+      "bio": "Yaratıcı, eğlenceli kişiyim. Etkinlikler benim tutkum!",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "avrupa",
+      "avatarSeed": "YarenUslu"
+    },
+    {
+      "userId": 18,
+      "fullName": "Arda Kurt",
+      "city": "İzmir",
+      "age": 23,
+      "gender": "erkek",
+      "bio": "İngilizce biliyorum. Uluslararası etkinliklerde çalışmak isterim.",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "anadolu",
+      "avatarSeed": "ArdaKurt"
+    },
+    {
+      "userId": 19,
+      "fullName": "Pınar Kaya",
+      "city": "Bursa",
+      "age": 24,
+      "gender": "kadın",
+      "bio": "Depo ve envanter yönetiminde deneyim sahibiyim. Titiz çalışırım.",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "hepsi",
+      "avatarSeed": "PınarKaya"
+    },
+    {
+      "userId": 20,
+      "fullName": "Serkan Özdemir",
+      "city": "Antalya",
+      "age": 25,
+      "gender": "erkek",
+      "bio": "Konserler ve müzik etkinliklerini seviyorum. Burada çalışmak hayalim!",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "avrupa",
+      "avatarSeed": "SerkanÖzdemir"
+    },
+    {
+      "userId": 21,
+      "fullName": "Ayşe Kılıç",
+      "city": "İstanbul",
+      "age": 26,
+      "gender": "kadın",
+      "bio": "Etkinliklerde çalışmayı seven, iletişimi güçlü, esnek programlı biriyim.",
+      "categories": [
+        "Depo & Lojistik",
+        "Diğer",
+        "Hepsi"
+      ],
+      "availability": "Esnek (her zaman uygun)",
+      "region": "anadolu",
+      "avatarSeed": "AyşeKılıç"
+    },
+    {
+      "userId": 22,
+      "fullName": "İbrahim Yalçın",
+      "city": "Ankara",
+      "age": 27,
+      "gender": "erkek",
+      "bio": "Sosyal, enerjik ve yeni insanlarla tanışmayı seviyorum. Her zaman gülümsüyorum!",
+      "categories": [
+        "Diğer",
+        "Hepsi",
+        "Fuar Standı"
+      ],
+      "availability": "Saatli (kısa vardiyalar)",
+      "region": "hepsi",
+      "avatarSeed": "İbrahimYalçın"
+    },
+    {
+      "userId": 23,
+      "fullName": "Merve Şahin",
+      "city": "İzmir",
+      "age": 28,
+      "gender": "kadın",
+      "bio": "Hem öğrenci hem de çalışan. Haftasonları ve akşamlarında vardiya arıyorum.",
+      "categories": [
+        "Hepsi",
+        "Fuar Standı",
+        "Konser & Etkinlik"
+      ],
+      "availability": "Gece vardiyası uygun",
+      "region": "avrupa",
+      "avatarSeed": "MerveŞahin"
+    },
+    {
+      "userId": 24,
+      "fullName": "Ahmet Duran",
+      "city": "Bursa",
+      "age": 29,
+      "gender": "erkek",
+      "bio": "Fiziksel olarak aktif, sorun çözebilen, detaylara dikkat eden biriyim.",
+      "categories": [
+        "Fuar Standı",
+        "Konser & Etkinlik",
+        "Tadım & Promosyon"
+      ],
+      "availability": "Yaz aylarında uygun",
+      "region": "anadolu",
+      "avatarSeed": "AhmetDuran"
+    },
+    {
+      "userId": 25,
+      "fullName": "Fatma Güven",
+      "city": "Antalya",
+      "age": 18,
+      "gender": "kadın",
+      "bio": "Pazarlama ve satış deneyimim var. Müşteri hizmetleri tutkusuyla çalışıyorum.",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "hepsi",
+      "avatarSeed": "FatmaGüven"
+    },
+    {
+      "userId": 26,
+      "fullName": "Mustafa Aydemir",
+      "city": "İstanbul",
+      "age": 19,
+      "gender": "erkek",
+      "bio": "Güvenlik ve lojistik alanında deneyimli. Disiplinli ve sorumlu biriyim.",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "avrupa",
+      "avatarSeed": "MustafaAydemir"
+    },
+    {
+      "userId": 27,
+      "fullName": "Selin Çakır",
+      "city": "Ankara",
+      "age": 20,
+      "gender": "kadın",
+      "bio": "Yaratıcı, eğlenceli kişiyim. Etkinlikler benim tutkum!",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "anadolu",
+      "avatarSeed": "SelinÇakır"
+    },
+    {
+      "userId": 28,
+      "fullName": "Gökhan Keskin",
+      "city": "İzmir",
+      "age": 21,
+      "gender": "erkek",
+      "bio": "İngilizce biliyorum. Uluslararası etkinliklerde çalışmak isterim.",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "hepsi",
+      "avatarSeed": "GökhanKeskin"
+    },
+    {
+      "userId": 29,
+      "fullName": "Didem Aslan",
+      "city": "Bursa",
+      "age": 22,
+      "gender": "kadın",
+      "bio": "Depo ve envanter yönetiminde deneyim sahibiyim. Titiz çalışırım.",
+      "categories": [
+        "Depo & Lojistik",
+        "Diğer",
+        "Hepsi"
+      ],
+      "availability": "Esnek (her zaman uygun)",
+      "region": "avrupa",
+      "avatarSeed": "DidemAslan"
+    },
+    {
+      "userId": 30,
+      "fullName": "Emre Savaş",
+      "city": "Antalya",
+      "age": 23,
+      "gender": "erkek",
+      "bio": "Konserler ve müzik etkinliklerini seviyorum. Burada çalışmak hayalim!",
+      "categories": [
+        "Diğer",
+        "Hepsi",
+        "Fuar Standı"
+      ],
+      "availability": "Saatli (kısa vardiyalar)",
+      "region": "anadolu",
+      "avatarSeed": "EmreSavaş"
+    },
+    {
+      "userId": 31,
+      "fullName": "Zehra Yücel",
+      "city": "İstanbul",
+      "age": 24,
+      "gender": "kadın",
+      "bio": "Etkinliklerde çalışmayı seven, iletişimi güçlü, esnek programlı biriyim.",
+      "categories": [
+        "Hepsi",
+        "Fuar Standı",
+        "Konser & Etkinlik"
+      ],
+      "availability": "Gece vardiyası uygun",
+      "region": "hepsi",
+      "avatarSeed": "ZehraYücel"
+    },
+    {
+      "userId": 32,
+      "fullName": "Can Eren",
+      "city": "Ankara",
+      "age": 25,
+      "gender": "erkek",
+      "bio": "Sosyal, enerjik ve yeni insanlarla tanışmayı seviyorum. Her zaman gülümsüyorum!",
+      "categories": [
+        "Fuar Standı",
+        "Konser & Etkinlik",
+        "Tadım & Promosyon"
+      ],
+      "availability": "Yaz aylarında uygun",
+      "region": "avrupa",
+      "avatarSeed": "CanEren"
+    },
+    {
+      "userId": 33,
+      "fullName": "Aynur Turan",
+      "city": "İzmir",
+      "age": 26,
+      "gender": "kadın",
+      "bio": "Hem öğrenci hem de çalışan. Haftasonları ve akşamlarında vardiya arıyorum.",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "anadolu",
+      "avatarSeed": "AynurTuran"
+    },
+    {
+      "userId": 34,
+      "fullName": "Osman Tekin",
+      "city": "Bursa",
+      "age": 27,
+      "gender": "erkek",
+      "bio": "Fiziksel olarak aktif, sorun çözebilen, detaylara dikkat eden biriyim.",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "hepsi",
+      "avatarSeed": "OsmanTekin"
+    },
+    {
+      "userId": 35,
+      "fullName": "Sinem Kara",
+      "city": "Antalya",
+      "age": 28,
+      "gender": "kadın",
+      "bio": "Pazarlama ve satış deneyimim var. Müşteri hizmetleri tutkusuyla çalışıyorum.",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "avrupa",
+      "avatarSeed": "SinemKara"
+    },
+    {
+      "userId": 36,
+      "fullName": "Tarık Gül",
+      "city": "İstanbul",
+      "age": 29,
+      "gender": "erkek",
+      "bio": "Güvenlik ve lojistik alanında deneyimli. Disiplinli ve sorumlu biriyim.",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "anadolu",
+      "avatarSeed": "TarıkGül"
+    },
+    {
+      "userId": 37,
+      "fullName": "Nurcan Demir",
+      "city": "Ankara",
+      "age": 18,
+      "gender": "kadın",
+      "bio": "Yaratıcı, eğlenceli kişiyim. Etkinlikler benim tutkum!",
+      "categories": [
+        "Depo & Lojistik",
+        "Diğer",
+        "Hepsi"
+      ],
+      "availability": "Esnek (her zaman uygun)",
+      "region": "hepsi",
+      "avatarSeed": "NurcanDemir"
+    },
+    {
+      "userId": 38,
+      "fullName": "Hakan Güneş",
+      "city": "İzmir",
+      "age": 19,
+      "gender": "erkek",
+      "bio": "İngilizce biliyorum. Uluslararası etkinliklerde çalışmak isterim.",
+      "categories": [
+        "Diğer",
+        "Hepsi",
+        "Fuar Standı"
+      ],
+      "availability": "Saatli (kısa vardiyalar)",
+      "region": "avrupa",
+      "avatarSeed": "HakanGüneş"
+    },
+    {
+      "userId": 39,
+      "fullName": "Sibel Yıldız",
+      "city": "Bursa",
+      "age": 20,
+      "gender": "kadın",
+      "bio": "Depo ve envanter yönetiminde deneyim sahibiyim. Titiz çalışırım.",
+      "categories": [
+        "Hepsi",
+        "Fuar Standı",
+        "Konser & Etkinlik"
+      ],
+      "availability": "Gece vardiyası uygun",
+      "region": "anadolu",
+      "avatarSeed": "SibelYıldız"
+    },
+    {
+      "userId": 40,
+      "fullName": "Levent Doğan",
+      "city": "Antalya",
+      "age": 21,
+      "gender": "erkek",
+      "bio": "Konserler ve müzik etkinliklerini seviyorum. Burada çalışmak hayalim!",
+      "categories": [
+        "Fuar Standı",
+        "Konser & Etkinlik",
+        "Tadım & Promosyon"
+      ],
+      "availability": "Yaz aylarında uygun",
+      "region": "hepsi",
+      "avatarSeed": "LeventDoğan"
+    },
+    {
+      "userId": 41,
+      "fullName": "Özlem Çelik",
+      "city": "İstanbul",
+      "age": 22,
+      "gender": "kadın",
+      "bio": "Etkinliklerde çalışmayı seven, iletişimi güçlü, esnek programlı biriyim.",
+      "categories": [
+        "Konser & Etkinlik",
+        "Tadım & Promosyon",
+        "Hostes/Host"
+      ],
+      "availability": "Hafta sonu ve akşam",
+      "region": "avrupa",
+      "avatarSeed": "ÖzlemÇelik"
+    },
+    {
+      "userId": 42,
+      "fullName": "Tamer Aktaş",
+      "city": "Ankara",
+      "age": 23,
+      "gender": "erkek",
+      "bio": "Sosyal, enerjik ve yeni insanlarla tanışmayı seviyorum. Her zaman gülümsüyorum!",
+      "categories": [
+        "Tadım & Promosyon",
+        "Hostes/Host",
+        "Anket & Saha"
+      ],
+      "availability": "Her gün (tam zamanlı)",
+      "region": "anadolu",
+      "avatarSeed": "TamerAktaş"
+    },
+    {
+      "userId": 43,
+      "fullName": "Neşe Aksoy",
+      "city": "İzmir",
+      "age": 24,
+      "gender": "kadın",
+      "bio": "Hem öğrenci hem de çalışan. Haftasonları ve akşamlarında vardiya arıyorum.",
+      "categories": [
+        "Hostes/Host",
+        "Anket & Saha",
+        "Depo & Lojistik"
+      ],
+      "availability": "Hafta sonu sadece",
+      "region": "hepsi",
+      "avatarSeed": "NeşeAksoy"
+    },
+    {
+      "userId": 44,
+      "fullName": "Volkan Yüzer",
+      "city": "Bursa",
+      "age": 25,
+      "gender": "erkek",
+      "bio": "Fiziksel olarak aktif, sorun çözebilen, detaylara dikkat eden biriyim.",
+      "categories": [
+        "Anket & Saha",
+        "Depo & Lojistik",
+        "Diğer"
+      ],
+      "availability": "Pazartesi-Cuma akşam",
+      "region": "avrupa",
+      "avatarSeed": "VolkanYüzer"
+    },
+    {
+      "userId": 50,
+      "fullName": "ruvo",
+      "city": "Sarıyer",
+      "age": null,
+      "gender": "",
+      "bio": "",
+      "categories": [],
+      "availability": "",
+      "avatarSeed": "ruvo"
+    }
+  ],
+  "companies": [
+    {
+      "userId": 45,
+      "companyName": "Yeni Rakı",
+      "city": "İstanbul",
+      "sector": "İçecek & Etkinlik Pazarlaması",
+      "email": "iletisim@yenirakı.com",
+      "phone": "+90 (212) 555-0101",
+      "website": "https://www.yenirakı.com",
+      "address": "Nisantaşı Mah. Abdi İpekçi Cad. No:23 İstanbul",
+      "description": "Türkiye'nin önde gelen rakı markası olarak etkinlik ve tadım organizasyonları düzenlemekteyiz. Profesyonel, dinamik ve müşteri odaklı ekipler arıyoruz.",
+      "logoSeed": "Yeni Rakı"
+    },
+    {
+      "userId": 46,
+      "companyName": "TechExpo Fuarcılık",
+      "city": "Ankara",
+      "sector": "Fuar & Etkinlik Organizasyonu",
+      "email": "info@techexpo.com.tr",
+      "phone": "+90 (312) 555-0202",
+      "website": "https://www.techexpo.com.tr",
+      "address": "Çankaya Mah. İnönü Cad. No:45 Ankara",
+      "description": "Türkiye'nin en büyük teknoloji fuarlarını organize etmekteyiz. Her sene binlerce ziyaretçi ve katılımcı ağırlıyoruz.",
+      "logoSeed": "TechExpo Fuarcılık"
+    },
+    {
+      "userId": 47,
+      "companyName": "SoundWave Konser",
+      "city": "İzmir",
+      "sector": "Müzik & Etkinlik Üretimi",
+      "email": "events@soundwave.com.tr",
+      "phone": "+90 (232) 555-0303",
+      "website": "https://www.soundwave.com.tr",
+      "address": "Alsancak Mah. Fevzipaşa Bulv. No:67 İzmir",
+      "description": "Açık hava konser, müzik festivalleri ve büyük ölçekli organizasyonlar düzenliyoruz. Enerjik ve güvenilir ekip elemanları arıyoruz.",
+      "logoSeed": "SoundWave Konser"
+    },
+    {
+      "userId": 48,
+      "companyName": "Marka Aktivasyon Ajansı",
+      "city": "İstanbul",
+      "sector": "Pazarlama & Ürün Tanıtımı",
+      "email": "contact@markaaktivation.com",
+      "phone": "+90 (212) 555-0404",
+      "website": "https://www.markaaktivation.com",
+      "address": "Levent Mah. Büyükdere Cad. No:123 İstanbul",
+      "description": "Markaların müşterilerine ulaşmasını sağlayan etkinlik ve tanıtım kampanyaları yürütüyoruz. Temsil kabiliyeti yüksek adaylar arıyoruz.",
+      "logoSeed": "Marka Aktivasyon Ajansı"
+    },
+    {
+      "userId": 49,
+      "companyName": "Lojistik Bir",
+      "city": "Bursa",
+      "sector": "Lojistik & Depo Yönetimi",
+      "email": "hr@lojistikbir.com",
+      "phone": "+90 (224) 555-0505",
+      "website": "https://www.lojistikbir.com",
+      "address": "OSB Mah. Organize Sanayi Bölgesi No:567 Bursa",
+      "description": "Türkiye'nin en büyük lojistik firmalarından biri olarak mevsimlik depo ve kargo işleri için ekip arıyoruz. Güvenilir ve çalışkan adaylar tercih edilir.",
+      "logoSeed": "Lojistik Bir"
+    }
+  ],
+  "jobs": [
+    {
+      "id": 1,
+      "companyId": 45,
+      "title": "Rakı Tadım Standı Görevlisi",
+      "description": "Nisantaşı'nda düzenlenecek tadım etkinliğinde stant görevlisi arıyoruz. Güler yüzlü, temsil kabiliyeti yüksek adaylar tercih sebebidir.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 5,
+      "neededFemale": 8,
+      "payDaily": 1400,
+      "eventDate": "2026-09-16",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 2,
+      "companyId": 46,
+      "title": "Teknoloji Fuarı Stant Hostesi",
+      "description": "3 gün sürecek teknoloji fuarında ziyaretçi karşılama ve bilgilendirme. İngilizce bilen tercih edilir.",
+      "city": "Ankara",
+      "category": "Fuar Standı",
+      "neededMale": 2,
+      "neededFemale": 6,
+      "payDaily": 1200,
+      "eventDate": "2026-09-22",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 3,
+      "companyId": 47,
+      "title": "Konser Sahne Kenarı Ekibi",
+      "description": "Açıkhava konserinde giriş kontrolü ve yönlendirme ekibi. Dinamik ve soğukkanlı bireyler arıyoruz.",
+      "city": "İzmir",
+      "category": "Konser & Etkinlik",
+      "neededMale": 10,
+      "neededFemale": 4,
+      "payDaily": 1300,
+      "eventDate": "2026-09-29",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 4,
+      "companyId": 48,
+      "title": "Yeni Ürün Lansmanı Saha Ekibi",
+      "description": "AVM içinde ürün tanıtımı yapacak enerjik ekip arkadaşları arıyoruz. Satış deneyimi avantaj.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 3,
+      "neededFemale": 3,
+      "payDaily": 1100,
+      "eventDate": "2026-09-12",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 5,
+      "companyId": 49,
+      "title": "Depo Envanter Sayım Ekibi",
+      "description": "Yıl sonu sayımı için günlük vardiya ekibi. Titiz ve güvenilir çalışanlar tercih edilir.",
+      "city": "Bursa",
+      "category": "Depo & Lojistik",
+      "neededMale": 6,
+      "neededFemale": 2,
+      "payDaily": 1000,
+      "eventDate": "2026-09-10",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 6,
+      "companyId": 45,
+      "title": "Ürün Tanıtım Görevlisi (Perakende)",
+      "description": "Büyük marketlerde ürün tanıtım ve satış. Müşteri hizmetleri odaklı, sosyal kişiler arıyoruz.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 4,
+      "neededFemale": 6,
+      "payDaily": 950,
+      "eventDate": "2026-09-14",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 7,
+      "companyId": 46,
+      "title": "Web Tasarım Fuarı Moderatörü",
+      "description": "Tasarım fuarında moderation ve forum yönetimi. Yaratıcı, iyi iletişim kurabilen kişiler tercih edilir.",
+      "city": "Ankara",
+      "category": "Fuar Standı",
+      "neededMale": 3,
+      "neededFemale": 4,
+      "payDaily": 1350,
+      "eventDate": "2026-09-19",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 8,
+      "companyId": 47,
+      "title": "Açıkhava Filmi Canlı Yayını Ekibi",
+      "description": "Sinema etkinliğinin live streaming ve teknik desteği. Teknik bilgisi olan adaylar öne alınır.",
+      "city": "İzmir",
+      "category": "Konser & Etkinlik",
+      "neededMale": 5,
+      "neededFemale": 2,
+      "payDaily": 1500,
+      "eventDate": "2026-09-25",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 9,
+      "companyId": 48,
+      "title": "Makyöz ve Güzellik Danışmanı",
+      "description": "Yeni makyaj ürünleri event'inde demo ve satış. Makyöz veya güzellik alanında deneyim gerekli.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 0,
+      "neededFemale": 8,
+      "payDaily": 1600,
+      "eventDate": "2026-09-11",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 10,
+      "companyId": 49,
+      "title": "Kargo Dağıtım Ekibi (Geçici)",
+      "description": "Sezonluk kargo dağıtımı. Sabahtan akşama çalışabilecek, araç sahibi adaylar tercih edilir.",
+      "city": "Bursa",
+      "category": "Depo & Lojistik",
+      "neededMale": 8,
+      "neededFemale": 2,
+      "payDaily": 900,
+      "eventDate": "2026-09-09",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 11,
+      "companyId": 45,
+      "title": "VIP Misafir Ağırlama Görevlisi",
+      "description": "Kurumsal etkinliklerde VIP konukları ağırlamak. Profesyonel görünüm ve etiketi önemli.",
+      "city": "İstanbul",
+      "category": "Hostes/Host",
+      "neededMale": 3,
+      "neededFemale": 5,
+      "payDaily": 1800,
+      "eventDate": "2026-09-15",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 12,
+      "companyId": 46,
+      "title": "İstatistik Araştırması Saha Görevlisi",
+      "description": "Tüketici araştırması için saha görevlisi. Dikkatli, sabırlı ve iyi not tutabilen kişiler arıyoruz.",
+      "city": "Ankara",
+      "category": "Anket & Saha",
+      "neededMale": 4,
+      "neededFemale": 6,
+      "payDaily": 850,
+      "eventDate": "2026-09-13",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 13,
+      "companyId": 47,
+      "title": "Müzik Festivali Güvenlik Görevlisi",
+      "description": "Uluslararası müzik festivalinde güvenlik görevlisi. Güvenlik deneyimi ve fiziksel kondisyon gerekli.",
+      "city": "İzmir",
+      "category": "Konser & Etkinlik",
+      "neededMale": 15,
+      "neededFemale": 3,
+      "payDaily": 1100,
+      "eventDate": "2026-09-27",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 14,
+      "companyId": 48,
+      "title": "Sosyal Medya Etkinliği Influencer Koordinatörü",
+      "description": "Sosyal medya etkinliğinde influencer koordinasyonu. Digital savvy, genç dinamik ekip arıyoruz.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 2,
+      "neededFemale": 4,
+      "payDaily": 1700,
+      "eventDate": "2026-09-17",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 15,
+      "companyId": 49,
+      "title": "Gümrük Depo Yönetim Ekibi",
+      "description": "Gümrük deposu yönetim ve envanter kontrol. Muhasebe veya lojistik deneyimi tercih edilir.",
+      "city": "Bursa",
+      "category": "Depo & Lojistik",
+      "neededMale": 5,
+      "neededFemale": 1,
+      "payDaily": 1200,
+      "eventDate": "2026-09-08",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 16,
+      "companyId": 45,
+      "title": "Etkinlik Fotoğrafçı Asistanı",
+      "description": "Kurumsal etkinliklerde fotoğraf ekibinin asistanı. Teknik bilgi ve yaratıcılık gerekli.",
+      "city": "İstanbul",
+      "category": "Tadım & Promosyon",
+      "neededMale": 2,
+      "neededFemale": 3,
+      "payDaily": 1250,
+      "eventDate": "2026-09-18",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 17,
+      "companyId": 46,
+      "title": "Stand Kurulum ve Söküm Teknikçi",
+      "description": "Fuar standlarının kurulum ve söküm işlemlerinde çalışacak teknik ekip arıyoruz.",
+      "city": "Ankara",
+      "category": "Fuar Standı",
+      "neededMale": 8,
+      "neededFemale": 2,
+      "payDaily": 1050,
+      "eventDate": "2026-09-21",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    },
+    {
+      "id": 18,
+      "companyId": 47,
+      "title": "Konser Ses Teknisyeni Asistanı",
+      "description": "Ses sistemi kurulumu ve yönetiminde teknik asistan. Müzik teknolojisi ilgisi gerekli.",
+      "city": "İzmir",
+      "category": "Konser & Etkinlik",
+      "neededMale": 4,
+      "neededFemale": 1,
+      "payDaily": 1400,
+      "eventDate": "2026-09-26",
+      "status": "open",
+      "createdAt": "2026-09-07T15:42:59.276Z"
+    }
+  ],
+  "swipes": [
+    {
+      "id": 1,
+      "actorRole": "candidate",
+      "actorId": 50,
+      "targetType": "job",
+      "targetId": 1,
+      "jobId": 1,
+      "direction": "like",
+      "createdAt": "2026-09-07T17:05:47.722Z"
+    },
+    {
+      "id": 2,
+      "actorRole": "candidate",
+      "actorId": 50,
+      "targetType": "job",
+      "targetId": 2,
+      "jobId": 2,
+      "direction": "like",
+      "createdAt": "2026-09-13T18:33:06.046Z"
+    },
+    {
+      "id": 3,
+      "actorRole": "candidate",
+      "actorId": 50,
+      "targetType": "job",
+      "targetId": 3,
+      "jobId": 3,
+      "direction": "like",
+      "createdAt": "2026-09-13T18:33:18.650Z"
+    },
+    {
+      "id": 4,
+      "actorRole": "candidate",
+      "actorId": 50,
+      "targetType": "job",
+      "targetId": 4,
+      "jobId": 4,
+      "direction": "like",
+      "createdAt": "2026-09-13T18:33:19.447Z"
+    },
+    {
+      "id": 5,
+      "actorRole": "candidate",
+      "actorId": 50,
+      "targetType": "job",
+      "targetId": 5,
+      "jobId": 5,
+      "direction": "pass",
+      "createdAt": "2026-09-13T18:33:20.448Z"
+    },
+    {
+      "id": 6,
+      "actorRole": "company",
+      "actorId": 45,
+      "targetType": "candidate",
+      "targetId": 50,
+      "jobId": 1,
+      "direction": "like",
+      "createdAt": "2026-09-13T15:39:00.422Z"
+    },
+    {
+      "id": 7,
+      "actorRole": "company",
+      "actorId": 47,
+      "targetType": "candidate",
+      "targetId": 50,
+      "jobId": 3,
+      "direction": "like",
+      "createdAt": "2026-09-13T16:39:00.424Z"
+    }
+  ],
+  "matches": [
+    {
+      "id": 1,
+      "jobId": 1,
+      "candidateId": 50,
+      "companyId": 45,
+      "createdAt": "2026-09-13T16:39:00.424Z"
+    },
+    {
+      "id": 2,
+      "jobId": 3,
+      "candidateId": 50,
+      "companyId": 47,
+      "createdAt": "2026-09-13T17:39:00.424Z"
+    }
+  ]
+}

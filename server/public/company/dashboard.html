@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlanlarım — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <span class="eyebrow"><span class="live-dot coral"></span>Canlı kadro yönetimi</span>
+    <h1>İlanlarım</h1>
+    <p>Bir ilana uygun adayları incelemek için "Adayları incele" butonuna tıkla. Kadro doluluğunu her ilanda canlı takip edebilirsin.</p>
+  </div>
+
+  <div id="list" style="display:flex;flex-direction:column;gap:14px;"></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+function jobRow(j) {
+  const need = (j.neededFemale || 0) + (j.neededMale || 0);
+  const filled = Math.min(j.matchCount || 0, need);
+  const pct = need ? Math.round((filled / need) * 100) : 0;
+  return `
+    <div class="job-card">
+      <div class="job-card-top">
+        <div>
+          <h3>${j.title}</h3>
+          <div class="job-meta"><span>${j.city}</span><span>${j.category}</span><span>${dateLabel(j)}</span></div>
+        </div>
+        <span class="pay-badge">${money(j.payDaily)}<small style="display:block;font-size:10px;font-weight:600;color:var(--on-surface-var);text-align:right;">GÜNLÜK</small></span>
+      </div>
+      <div class="need-row">
+        <span class="need-pill">${j.neededFemale} kadın</span>
+        <span class="need-pill">${j.neededMale} erkek</span>
+        <span class="need-pill" style="background:rgba(16,185,129,.12);border-color:transparent;color:var(--tertiary-container);"><span class="mi mi-xs">handshake</span> ${j.matchCount} eşleşme</span>
+        ${j.applicationCount ? `<span class="need-pill" style="background:var(--primary-fixed);border-color:transparent;color:var(--primary);"><span class="mi mi-xs">inbox</span> ${j.applicationCount} başvuru</span>` : ''}
+      </div>
+      ${need ? `
+      <div>
+        <div class="t-lsm upper muted" style="margin-bottom:4px;">Kadro doluluğu · ${filled}/${need}</div>
+        <div class="meter"><i style="width:${pct}%"></i></div>
+      </div>` : ''}
+      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+        <a href="/company/review.html?job=${j.id}" class="btn btn-primary btn-sm"><span class="mi mi-sm">swipe</span>Adayları incele</a>
+        <a href="/company/applications.html?job=${j.id}" class="btn btn-ghost btn-sm">
+          <span class="mi mi-sm">inbox</span>Başvurular${j.pendingApplicationCount ? ` (${j.pendingApplicationCount})` : ''}
+        </a>
+      </div>
+    </div>`;
+}
+
+if (Api.requireAuth('company')) {
+  (async () => {
+    const list = document.getElementById('list');
+    try {
+      const jobs = await Api.request('/jobs/mine');
+      if (jobs.length === 0) {
+        list.innerHTML = `<div class="empty-state"><span class="mi mi-lg" style="color:var(--primary)">campaign</span><h3 style="margin:8px 0;">Henüz ilanın yok</h3><p style="margin:0 0 16px;">İlk ilanını oluşturarak adaylarla eşleşmeye başla.</p><a href="/company/post-job.html" class="btn btn-primary">İlan oluştur</a></div>`;
+      } else {
+        list.innerHTML = jobs.map(jobRow).join('');
+      }
+    } catch (e) {
+      list.innerHTML = `<div class="empty-state">İlanlar yüklenemedi.</div>`;
+    }
+  })();
+}
+</script>
+</body>
+</html>

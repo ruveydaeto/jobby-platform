@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Giriş yap — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <span class="chip chip-teal" style="margin-bottom:14px;"><span class="live-dot"></span>Vardiya havuzu canlı</span>
+    <h1 style="margin-bottom:8px;">Tekrar hoş geldin</h1>
+    <p style="margin-bottom:24px;">Hesabına giriş yap ve açık vardiyalarına kaldığın yerden devam et.</p>
+
+    <div id="error-box" class="error-box"></div>
+
+    <form id="login-form">
+      <div class="field">
+        <label>E-posta</label>
+        <input type="email" id="email" placeholder="ornek@eposta.com">
+      </div>
+      <div class="field">
+        <label>Şifre</label>
+        <input type="password" id="password" placeholder="Şifren">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">
+        <span class="mi mi-sm">login</span><span>Giriş yap</span>
+      </button>
+    </form>
+
+    <div class="auth-side-note" style="margin-top:18px;">
+      <span class="mi mi-sm" style="color:var(--primary)">info</span>
+      <span>
+        <b>Demo hesaplar</b> — Aday: <b>ela.yildiz@ornek.com</b> ·
+        Firma: <b>iletisim@yeniraki.com</b> · Şifre: <b>demo1234</b>
+      </span>
+    </div>
+
+    <p style="margin:20px 0 0;font-size:14px;text-align:center;">
+      Hesabın yok mu? <a href="/register.html" style="color:var(--primary);font-weight:700;">Ücretsiz kayıt ol</a>
+    </p>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+const errorBox = document.getElementById('error-box');
+const submitBtn = document.getElementById('submit-btn');
+
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideError(errorBox);
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Giriş yapılıyor...</span>';
+  try {
+    const data = await Api.request('/auth/login', {
+      method: 'POST',
+      body: {
+        email: document.getElementById('email').value.trim(),
+        password: document.getElementById('password').value
+      }
+    });
+    Api.setSession(data.token, data.role);
+    window.location.href = data.role === 'candidate' ? '/dashboard.html' : '/company/dashboard.html';
+  } catch (err) {
+    showError(errorBox, err.message);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span class="mi mi-sm">login</span><span>Giriş yap</span>';
+  }
+});
+</script>
+</body>
+</html>

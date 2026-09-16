@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kayıt ol — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="auth-shell">
+  <div class="auth-card">
+    <span class="chip" style="margin-bottom:14px;"><span class="mi mi-xs">bolt</span>2 dakikada kurulum</span>
+    <h1 style="margin-bottom:8px;">Hesap oluştur</h1>
+    <p style="margin-bottom:20px;">JOBBY'yi hangi amaçla kullanacaksın?</p>
+
+    <div class="role-toggle">
+      <button type="button" id="tab-candidate" class="active">İş arıyorum</button>
+      <button type="button" id="tab-company">Ekip arıyorum</button>
+    </div>
+
+    <div id="error-box" class="error-box"></div>
+
+    <form id="register-form">
+      <div class="field" id="field-name">
+        <label id="label-name">Ad Soyad</label>
+        <input type="text" id="fullName" placeholder="Örn. Ela Yıldız">
+      </div>
+      <div class="field" id="field-company" style="display:none;">
+        <label>Firma adı</label>
+        <input type="text" id="companyName" placeholder="Örn. Yeni Rakı">
+      </div>
+      <div class="field">
+        <label>Şehir</label>
+        <input type="text" id="city" placeholder="Örn. İstanbul">
+      </div>
+      <div class="field">
+        <label>E-posta</label>
+        <input type="email" id="email" placeholder="ornek@eposta.com">
+      </div>
+      <div class="field">
+        <label>Şifre</label>
+        <input type="password" id="password" placeholder="En az 6 karakter">
+      </div>
+      <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">
+        <span class="mi mi-sm">rocket_launch</span><span>Hesap oluştur</span>
+      </button>
+    </form>
+
+    <div class="auth-side-note" style="margin-top:18px;">
+      <span class="mi mi-sm" style="color:var(--teal)">verified_user</span>
+      <span>Profilin doğrulandıktan sonra sana uygun vardiyalar anında akışına düşer. Ödemeler JOBBY güvencesindedir.</span>
+    </div>
+
+    <p style="margin:20px 0 0;font-size:14px;text-align:center;">
+      Zaten hesabın var mı? <a href="/login.html" style="color:var(--primary);font-weight:700;">Giriş yap</a>
+    </p>
+  </div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+let role = 'candidate';
+const tabCandidate = document.getElementById('tab-candidate');
+const tabCompany = document.getElementById('tab-company');
+const fieldName = document.getElementById('field-name');
+const fieldCompany = document.getElementById('field-company');
+const labelName = document.getElementById('label-name');
+
+function setRole(r) {
+  role = r;
+  tabCandidate.classList.toggle('active', r === 'candidate');
+  tabCompany.classList.toggle('active', r === 'company');
+  fieldCompany.style.display = r === 'company' ? 'block' : 'none';
+  labelName.textContent = r === 'company' ? 'Yetkili adı soyadı' : 'Ad Soyad';
+}
+
+tabCandidate.addEventListener('click', () => setRole('candidate'));
+tabCompany.addEventListener('click', () => setRole('company'));
+
+const params = new URLSearchParams(window.location.search);
+if (params.get('role') === 'company') setRole('company');
+
+const errorBox = document.getElementById('error-box');
+const submitBtn = document.getElementById('submit-btn');
+
+document.getElementById('register-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  hideError(errorBox);
+
+  const payload = {
+    role,
+    email: document.getElementById('email').value.trim(),
+    password: document.getElementById('password').value,
+    city: document.getElementById('city').value.trim(),
+    fullName: document.getElementById('fullName').value.trim(),
+    companyName: document.getElementById('companyName').value.trim()
+  };
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Oluşturuluyor...</span>';
+  try {
+    const data = await Api.request('/auth/register', { method: 'POST', body: payload });
+    Api.setSession(data.token, data.role);
+    window.location.href = data.role === 'candidate' ? '/onboarding.html' : '/company/onboarding.html';
+  } catch (err) {
+    showError(errorBox, err.message);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = '<span class="mi mi-sm">rocket_launch</span><span>Hesap oluştur</span>';
+  }
+});
+</script>
+</body>
+</html>

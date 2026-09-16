@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOBBY — Etkinliklerin yıldız ekibi, bir kaydırma uzağında</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<main>
+
+<!-- ============================================================
+     ADAY OTURUMU: HIZLI EŞLEŞME WIDGET'I
+     ============================================================ -->
+<section class="section" id="matching-section" style="display:none;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow"><span class="live-dot"></span><span data-i18n="matching.kicker">Sana özel akış</span></span>
+        <h2 data-i18n="matching.title">Sana uygun vardiyalar</h2>
+        <p data-i18n="matching.subtitle">Kaydır, beğen, eşleş — firma da seni beğenirse anında eşleşme kurulur.</p>
+      </div>
+      <a href="/swipe.html" class="section-link" data-i18n="matching.browse">Tüm ilanları gör →</a>
+    </div>
+
+    <div id="swipe-stack" class="stack-area"></div>
+    <div class="swipe-dock" id="swipe-dock" style="display:none;">
+      <button class="round-btn pass" onclick="swipePass()" title="Pas geç"><span class="mi mi-lg">close</span></button>
+      <button class="round-btn info" onclick="location.href='/swipe.html'" title="Detay incele"><span class="mi">info</span></button>
+      <button class="round-btn like" onclick="swipeLike()" title="Beğen ve eşleş"><span class="mi mi-lg">favorite</span></button>
+    </div>
+    <div id="swipe-empty" class="empty-state" style="display:none;max-width:400px;margin:0 auto;">
+      <h3 style="margin-bottom:8px;" data-i18n="matching.empty">Şimdilik bu kadar</h3>
+      <p style="margin:0;" data-i18n="matching.emptyDesc">Profilinle eşleşen yeni ilan kalmadı. Daha sonra tekrar bak.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section class="hero" id="hero-section">
+  <div class="hero-inner">
+
+    <div class="hero-notice">
+      <span class="live-dot"></span>
+      <strong data-i18n="hero.badge">JOBBY 2.0 yayında</strong>
+      <span class="sep">•</span>
+      <span class="muted t-bsm" id="hero-new-count" data-i18n="hero.badgeSub">Bugün yeni vardiyalar açıldı</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span data-i18n="hero.title1">Etkinliklerin yıldız ekibi,</span><br>
+      <span class="grad" data-i18n="hero.title2">bir kaydırma uzağında.</span>
+    </h1>
+
+    <p class="hero-sub" data-i18n="hero.subtitle">
+      Festival, fuar, lansman ve gastronomi etkinlikleri için doğrulanmış genç yeteneklerle
+      organizatörleri saniyeler içinde buluşturan yeni nesil iş ağı.
+    </p>
+
+    <div class="hero-cta">
+      <a href="/register.html?role=candidate" class="btn btn-primary btn-lg">
+        <span class="mi mi-sm">flash_on</span><span data-i18n="cta.candidate">İş arıyorum / Günlük işe katıl</span>
+      </a>
+      <a href="/register.html?role=company" class="btn btn-light btn-lg">
+        <span class="mi mi-sm">groups</span><span data-i18n="cta.company">Firma / Ekip topla</span>
+      </a>
+    </div>
+
+    <!-- Canlı arama kartı -->
+    <div class="search-card">
+      <form class="search-grid" id="hero-search" onsubmit="event.preventDefault();applyHeroSearch();">
+        <div class="search-field">
+          <label><span class="mi mi-xs">category</span><span data-i18n="search.role">Etkinlik rolü</span></label>
+          <select id="search-category">
+            <option value="">Tümü (Host, Tadım, Barista)</option>
+            <option value="Fuar Standı">Fuar standı host/hostes</option>
+            <option value="Tadım &amp; Promosyon">Tadım &amp; marka elçiliği</option>
+            <option value="Konser &amp; Etkinlik">Konser &amp; müzik festivali</option>
+            <option value="Hostes/Host">Kongre &amp; karşılama</option>
+            <option value="Anket &amp; Saha">Anket &amp; saha ekibi</option>
+            <option value="Depo &amp; Lojistik">Depo &amp; lojistik</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label><span class="mi mi-xs">location_on</span><span data-i18n="search.location">Lokasyon</span></label>
+          <select id="search-city">
+            <option value="">Tüm şehirler</option>
+          </select>
+        </div>
+        <div class="search-field">
+          <label><span class="mi mi-xs">payments</span><span data-i18n="search.pay">Günlük taban ücret</span></label>
+          <select id="search-pay">
+            <option value="0">Fark etmez</option>
+            <option value="1000">₺1.000+ / günlük</option>
+            <option value="1500">₺1.500+ / günlük</option>
+            <option value="2000">₺2.000+ / günlük</option>
+            <option value="2500">₺2.500+ / VIP günlük</option>
+          </select>
+        </div>
+        <div class="search-last">
+          <div class="search-field">
+            <label><span class="mi mi-xs">event</span><span data-i18n="search.date">Tarih</span></label>
+            <select id="search-date">
+              <option value="0">Tüm tarihler</option>
+              <option value="3">Önümüzdeki 3 gün</option>
+              <option value="7">Bu hafta</option>
+              <option value="30">Bu ay</option>
+            </select>
+          </div>
+          <button class="search-go" type="submit" title="Filtrele"><span class="mi mi-lg">search</span></button>
+        </div>
+      </form>
+
+      <div class="fast-tags">
+        <span class="label" data-i18n="search.popular">Popüler aramalar:</span>
+        <span class="fast-tag" onclick="quickTag('Konser &amp; Etkinlik')">🎤 Konser sahası</span>
+        <span class="fast-tag" onclick="quickTag('Tadım &amp; Promosyon')">🍸 Tadım hostesi</span>
+        <span class="fast-tag" onclick="quickTag('Fuar Standı')">🏛️ Fuar standı</span>
+        <span class="fast-tag" onclick="quickTag('Anket &amp; Saha')">📋 Saha & akreditasyon</span>
+      </div>
+    </div>
+
+    <!-- Güven istatistikleri -->
+    <div class="stats-bar">
+      <div class="stat">
+        <span class="stat-number" id="stat-candidates">1.400+</span>
+        <span class="stat-label" data-i18n="stats.candidates">Doğrulanmış genç aday</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number ink" id="stat-jobs">180+</span>
+        <span class="stat-label" data-i18n="stats.jobs">Açık etkinlik ilanı</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number teal">%98,4</span>
+        <span class="stat-label" data-i18n="stats.score">Vardiya tamamlama skoru</span>
+      </div>
+      <div class="stat">
+        <span class="stat-number coral" id="stat-pay">₺1.250</span>
+        <span class="stat-label" data-i18n="stats.pay">Ortalama günlük ödeme</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     JOBBY MATCH — kaydırmalı eşleşme sahnesi
+     ============================================================ -->
+<section class="section" id="eslesme">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow"><span class="live-dot"></span><span data-i18n="match.kicker">Algoritmik eşleşme simülasyonu</span></span>
+        <h2 data-i18n="match.title">Kaydır, anında eşleş, sahaya çık</h2>
+        <p data-i18n="match.subtitle">İşletmeler ve yetenekler birbirini dakikalar içinde bulur. Karşılıklı beğeni olduğunda dijital sözleşme ve ödeme koruması otomatik devreye girer.</p>
+      </div>
+      <span class="chip chip-teal"><span class="live-dot"></span><span id="live-pool">Canlı havuz</span></span>
+    </div>
+
+    <div class="match-stage">
+
+      <!-- Sol: firma talebi -->
+      <div class="stage-panel">
+        <div class="stage-panel-head">
+          <span class="chip chip-coral"><span class="live-dot coral"></span>Canlı firma talebi</span>
+          <span class="t-lsm muted upper" id="demand-countdown">42 dk önce</span>
+        </div>
+        <h3 id="demand-title" style="margin-bottom:2px;">Yeni etkinlik ekibi</h3>
+        <p class="t-bsm" style="margin-bottom:12px;" id="demand-company">Organizasyon firması</p>
+
+        <div class="demand-row"><span class="k">Aranan kadro</span><span class="v" id="demand-roles">6 hostes / 2 barmen</span></div>
+        <div class="demand-row"><span class="k">Lokasyon</span><span class="v" id="demand-city">İstanbul</span></div>
+        <div class="demand-row"><span class="k">Günlük ücret</span><span class="v text-teal" id="demand-pay">₺2.400</span></div>
+        <div class="demand-row"><span class="k">Kıyafet</span><span class="v">Siyah smart casual</span></div>
+
+        <div style="margin-top:16px;">
+          <div class="t-lsm upper muted" style="margin-bottom:4px;">Kadro doluluk durumu</div>
+          <div class="meter"><i style="width:66%"></i></div>
+          <div class="t-bsm" style="margin-top:6px;">6 kişiden <b>4</b>'ü onaylandı</div>
+        </div>
+      </div>
+
+      <!-- Orta: aday/ilan kartı -->
+      <div class="stage-center">
+        <div class="match-card" id="match-card">
+          <div class="match-card-bg"></div>
+          <div class="match-card-emoji">🎯</div>
+          <div class="match-card-top">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <span class="pill-glass teal"><span class="mi mi-xs">bolt</span><span id="match-score">%98 eşleşme uyumu</span></span>
+              <span class="pill-glass dark">JOBBY onaylı ilan</span>
+            </div>
+            <span class="pill-glass amber"><span class="mi mi-xs mi-fill" style="color:var(--amber)">star</span>4.9</span>
+          </div>
+          <div class="match-card-bottom">
+            <h3 id="match-title">Vardiya yükleniyor…</h3>
+            <span class="loc"><span class="mi mi-xs">location_on</span><span id="match-loc">İstanbul</span></span>
+            <div class="micro-badges" id="match-badges"></div>
+            <div class="match-card-dock">
+              <div class="rate" id="match-pay">₺—<small>GÜNLÜK TABAN ÜCRET</small></div>
+              <a href="/register.html?role=candidate" class="btn btn-sm btn-primary">Başvur</a>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-dock">
+          <button class="round-btn pass" onclick="stageSwipe()" title="Pas geç"><span class="mi mi-lg">close</span></button>
+          <button class="round-btn info" onclick="location.href='#ilanlar'" title="Detay incele"><span class="mi">info</span></button>
+          <button class="round-btn like" onclick="stageSwipe()" title="Beğen"><span class="mi mi-lg">favorite</span></button>
+        </div>
+      </div>
+
+      <!-- Sağ: eşleşme bildirimi + referans -->
+      <div class="stage-panel">
+        <span class="chip chip-teal" style="margin-bottom:12px;"><span class="mi mi-xs">celebration</span>Anlık eşleşme sağlandı</span>
+        <div class="avatar-stack" style="margin-bottom:12px;">
+          <span style="background:linear-gradient(135deg,#3b4bf7,#182ae0)">SK</span>
+          <span style="background:linear-gradient(135deg,#FF5C38,#b52705)">YR</span>
+          <span style="background:linear-gradient(135deg,#10B981,#00573a)">+4</span>
+        </div>
+        <h3 style="margin-bottom:4px;">Tebrikler! Karşılıklı eşleşme</h3>
+        <p class="t-bsm">Yeni ilan organizasyon ekibiyle eşleştin. Vardiya detayları ve güvenceli ödeme bilgisi panelinde hazır.</p>
+        <a href="/register.html?role=candidate" class="btn btn-primary btn-block btn-sm" style="margin-bottom:16px;">
+          <span class="mi mi-sm">description</span>Vardiya detayını incele
+        </a>
+
+        <div class="quote-card">
+          <div class="stars">★★★★★</div>
+          "Gecenin ortasında iki kişi eksik kalmıştık, 40 dakikada doğrulanmış yeni ekip sahadaydı."
+          <div style="margin-top:8px;font-weight:700;color:var(--on-surface);">— Mert T., Etkinlik Operasyon Müdürü</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CANLI & POPÜLER ETKİNLİK İLANLARI
+     ============================================================ -->
+<section class="section" id="ilanlar" style="background:var(--surface-low);">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow"><span class="live-dot coral"></span><span data-i18n="board.kicker">Kaçırılmayacak günlük vardiyalar</span></span>
+        <h2 data-i18n="board.title">Canlı &amp; popüler etkinlik ilanları</h2>
+        <p data-i18n="board.subtitle">Bugün ve bu hafta sonu için doğrulanmış organizasyonlar tarafından açılan ilanlar.</p>
+      </div>
+      <div class="filter-tabs" id="board-filters"></div>
+    </div>
+
+    <div class="gig-grid" id="board-items"></div>
+
+    <div id="board-lock" class="empty-state" style="display:none;margin-top:24px;padding:24px;">
+      <span class="mi" style="color:var(--primary)">lock</span>
+      <span data-i18n="board.lock" style="margin:0 8px;">İlan detaylarını görmek için ücretsiz hesap oluştur.</span>
+      <a href="/register.html?role=candidate" class="btn btn-primary btn-sm" style="margin-top:12px;">Aday olarak katıl</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     NASIL ÇALIŞIR — çift motor
+     ============================================================ -->
+<section class="section" id="nasil-calisir">
+  <div class="wrap">
+    <div class="section-head" style="justify-content:center;text-align:center;">
+      <div>
+        <span class="eyebrow" style="justify-content:center;"><span data-i18n="how.kicker">Çift taraflı şeffaf sistem</span></span>
+        <h2 data-i18n="how.title">JOBBY nasıl çalışır?</h2>
+        <p data-i18n="how.subtitle">Uzun CV gönderimleri ve telefon trafiği yok. İş arayanlar ve ekip arayan firmalar aynı akışta buluşur.</p>
+      </div>
+    </div>
+
+    <div class="dual-grid">
+      <div class="dual-card candidate">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span class="chip"><span class="mi mi-xs">school</span><span data-i18n="roles.candidates">Adaylar &amp; gençler için</span></span>
+          <span class="mi" style="color:var(--primary)">swipe_right</span>
+        </div>
+        <h3 data-i18n="how.candidate.title">Boş günlerini kazanca çevir</h3>
+        <p class="t-bmd" data-i18n="how.candidate.subtitle">Ders programına ve müsait olduğun saatlere uyan günlük vardiyaları anında bul.</p>
+        <ul class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <span class="step-body">
+              <strong data-i18n="how.candidate.s1">2 dakikada profilini oluştur</strong>
+              <span data-i18n="how.candidate.s1d">Şehir, yaş, ilgi alanı ve müsaitlik. Doğrulanmış profil rozetini al.</span>
+            </span>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <span class="step-body">
+              <strong data-i18n="how.candidate.s2">Sana uygun ilanları kaydır</strong>
+              <span data-i18n="how.candidate.s2d">Algoritma yalnızca bölgene, kategorine ve ücret beklentine uyanları gösterir.</span>
+            </span>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <span class="step-body">
+              <strong data-i18n="how.candidate.s3">Eşleş, vardiyayı üstlen</strong>
+              <span data-i18n="how.candidate.s3d">Firma da seni beğendiğinde eşleşme kurulur, detaylar panelinde açılır.</span>
+            </span>
+          </li>
+        </ul>
+        <a href="/register.html?role=candidate" class="btn btn-primary btn-block" data-i18n="cta.join.candidate">Hemen aday olarak başla</a>
+      </div>
+
+      <div class="dual-card company">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+          <span class="chip chip-coral"><span class="mi mi-xs">apartment</span><span data-i18n="roles.companies">Firma &amp; organizasyon için</span></span>
+          <span class="mi" style="color:var(--coral)">groups</span>
+        </div>
+        <h3 data-i18n="how.company.title">Etkinlik ekibini 10 dakikada kur</h3>
+        <p class="t-bmd" data-i18n="how.company.subtitle">Kadro ihtiyacını tanımla, uygun adayları kart olarak incele, aynı gün ekibini tamamla.</p>
+        <ul class="steps">
+          <li class="step">
+            <span class="step-num">1</span>
+            <span class="step-body">
+              <strong data-i18n="how.company.s1">Kadro kriterlerini gir</strong>
+              <span data-i18n="how.company.s1d">Şehir, tarih, kategori, kadın/erkek kontenjanı ve günlük bütçe.</span>
+            </span>
+          </li>
+          <li class="step">
+            <span class="step-num">2</span>
+            <span class="step-body">
+              <strong data-i18n="how.company.s2">Aday havuzunu kaydır</strong>
+              <span data-i18n="how.company.s2d">Yalnızca kriterlerine uyan, profilini tamamlamış adaylar listelenir.</span>
+            </span>
+          </li>
+          <li class="step">
+            <span class="step-num">3</span>
+            <span class="step-body">
+              <strong data-i18n="how.company.s3">Eşleş ve ekibi kilitle</strong>
+              <span data-i18n="how.company.s3d">Tüm eşleşmeleri tek panelden yönet, kadro doluluğunu canlı takip et.</span>
+            </span>
+          </li>
+        </ul>
+        <a href="/register.html?role=company" class="btn btn-dark btn-block" data-i18n="cta.join.company">Firma olarak ilan aç</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     ADAY HAVUZUNDAN ÖNE ÇIKANLAR
+     ============================================================ -->
+<section class="section" id="aday-havuzu">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="eyebrow"><span class="mi mi-xs">workspace_premium</span><span data-i18n="talent.kicker">Doğrulanmış genç yetenekler</span></span>
+        <h2 data-i18n="talent.title">Aday havuzundan öne çıkanlar</h2>
+        <p data-i18n="talent.subtitle">Yüksek puanlı, tecrübeli ve profilini tamamlamış saha profesyonelleri.</p>
+      </div>
+      <a href="/register.html?role=company" class="section-link" data-i18n="talent.link">Tüm aday havuzunu incele →</a>
+    </div>
+
+    <div class="talent-grid" id="talent-grid"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     CTA BANNER
+     ============================================================ -->
+<section class="section-tight">
+  <div class="wrap">
+    <div class="cta-banner">
+      <div class="cta-copy">
+        <span class="cta-badge"><span class="live-dot"></span><span data-i18n="cta.badge">Ücretsiz kayıt • Komisyonsuz ilk ay</span></span>
+        <h2 data-i18n="cta.title">Hafta sonu ilk vardiyana başla ya da 10 dakikada ekibini kur.</h2>
+        <p data-i18n="cta.desc">JOBBY ile etkinlik ve genç yetenek arasındaki tüm bürokrasiyi kaldırıyoruz. Güvenceli ödeme, doğrulanmış profiller, tam zamanında kadro.</p>
+      </div>
+      <div class="cta-actions">
+        <a href="/register.html?role=candidate" class="btn btn-light btn-lg btn-block" data-i18n="cta.candidateShort">Genç yetenek girişi yap</a>
+        <a href="/register.html?role=company" class="btn btn-coral btn-lg btn-block" data-i18n="cta.companyShort">Firma olarak ilan aç</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<div id="footer-root"></div>
+<div class="match-toast" id="match-toast"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+/* ============================================================
+   i18n
+   ============================================================ */
+const i18n = {
+  tr: {
+    'hero.badge': 'JOBBY 2.0 yayında',
+    'hero.title1': 'Etkinliklerin yıldız ekibi,',
+    'hero.title2': 'bir kaydırma uzağında.',
+    'hero.subtitle': 'Festival, fuar, lansman ve gastronomi etkinlikleri için doğrulanmış genç yeteneklerle organizatörleri saniyeler içinde buluşturan yeni nesil iş ağı.',
+    'cta.candidate': 'İş arıyorum / Günlük işe katıl',
+    'cta.company': 'Firma / Ekip topla',
+    'search.role': 'Etkinlik rolü',
+    'search.location': 'Lokasyon',
+    'search.pay': 'Günlük taban ücret',
+    'search.date': 'Tarih',
+    'search.popular': 'Popüler aramalar:',
+    'stats.candidates': 'Doğrulanmış genç aday',
+    'stats.jobs': 'Açık etkinlik ilanı',
+    'stats.score': 'Vardiya tamamlama skoru',
+    'stats.pay': 'Ortalama günlük ödeme',
+    'match.kicker': 'Algoritmik eşleşme simülasyonu',
+    'match.title': 'Kaydır, anında eşleş, sahaya çık',
+    'match.subtitle': 'İşletmeler ve yetenekler birbirini dakikalar içinde bulur. Karşılıklı beğeni olduğunda dijital sözleşme ve ödeme koruması otomatik devreye girer.',
+    'board.kicker': 'Kaçırılmayacak günlük vardiyalar',
+    'board.title': 'Canlı & popüler etkinlik ilanları',
+    'board.subtitle': 'Bugün ve bu hafta sonu için doğrulanmış organizasyonlar tarafından açılan ilanlar.',
+    'board.lock': 'İlan detaylarını görmek için ücretsiz hesap oluştur.',
+    'how.kicker': 'Çift taraflı şeffaf sistem',
+    'how.title': 'JOBBY nasıl çalışır?',
+    'how.subtitle': 'Uzun CV gönderimleri ve telefon trafiği yok. İş arayanlar ve ekip arayan firmalar aynı akışta buluşur.',
+    'roles.candidates': 'Adaylar & gençler için',
+    'roles.companies': 'Firma & organizasyon için',
+    'how.candidate.title': 'Boş günlerini kazanca çevir',
+    'how.candidate.subtitle': 'Ders programına ve müsait olduğun saatlere uyan günlük vardiyaları anında bul.',
+    'how.candidate.s1': '2 dakikada profilini oluştur',
+    'how.candidate.s1d': 'Şehir, yaş, ilgi alanı ve müsaitlik. Doğrulanmış profil rozetini al.',
+    'how.candidate.s2': 'Sana uygun ilanları kaydır',
+    'how.candidate.s2d': 'Algoritma yalnızca bölgene, kategorine ve ücret beklentine uyanları gösterir.',
+    'how.candidate.s3': 'Eşleş, vardiyayı üstlen',
+    'how.candidate.s3d': 'Firma da seni beğendiğinde eşleşme kurulur, detaylar panelinde açılır.',
+    'how.company.title': 'Etkinlik ekibini 10 dakikada kur',
+    'how.company.subtitle': 'Kadro ihtiyacını tanımla, uygun adayları kart olarak incele, aynı gün ekibini tamamla.',
+    'how.company.s1': 'Kadro kriterlerini gir',
+    'how.company.s1d': 'Şehir, tarih, kategori, kadın/erkek kontenjanı ve günlük bütçe.',
+    'how.company.s2': 'Aday havuzunu kaydır',
+    'how.company.s2d': 'Yalnızca kriterlerine uyan, profilini tamamlamış adaylar listelenir.',
+    'how.company.s3': 'Eşleş ve ekibi kilitle',
+    'how.company.s3d': 'Tüm eşleşmeleri tek panelden yönet, kadro doluluğunu canlı takip et.',
+    'cta.join.candidate': 'Hemen aday olarak başla',
+    'cta.join.company': 'Firma olarak ilan aç',
+    'talent.kicker': 'Doğrulanmış genç yetenekler',
+    'talent.title': 'Aday havuzundan öne çıkanlar',
+    'talent.subtitle': 'Yüksek puanlı, tecrübeli ve profilini tamamlamış saha profesyonelleri.',
+    'talent.link': 'Tüm aday havuzunu incele →',
+    'cta.badge': 'Ücretsiz kayıt • Komisyonsuz ilk ay',
+    'cta.title': 'Hafta sonu ilk vardiyana başla ya da 10 dakikada ekibini kur.',
+    'cta.desc': 'JOBBY ile etkinlik ve genç yetenek arasındaki tüm bürokrasiyi kaldırıyoruz. Güvenceli ödeme, doğrulanmış profiller, tam zamanında kadro.',
+    'cta.candidateShort': 'Genç yetenek girişi yap',
+    'cta.companyShort': 'Firma olarak ilan aç',
+    'matching.kicker': 'Sana özel akış',
+    'matching.title': 'Sana uygun vardiyalar',
+    'matching.subtitle': 'Kaydır, beğen, eşleş — firma da seni beğenirse anında eşleşme kurulur.',
+    'matching.browse': 'Tüm ilanları gör →',
+    'matching.empty': 'Şimdilik bu kadar',
+    'matching.emptyDesc': 'Profilinle eşleşen yeni ilan kalmadı. Daha sonra tekrar bak.'
+  },
+  en: {
+    'hero.badge': 'JOBBY 2.0 is live',
+    'hero.title1': 'The star crew of every event,',
+    'hero.title2': 'one swipe away.',
+    'hero.subtitle': 'A new-generation work network connecting festivals, expos, launches and hospitality events with verified young talent in seconds.',
+    'cta.candidate': 'Looking for work / Join a shift',
+    'cta.company': 'Company / Build a crew',
+    'search.role': 'Event role',
+    'search.location': 'Location',
+    'search.pay': 'Minimum daily pay',
+    'search.date': 'Date',
+    'search.popular': 'Popular searches:',
+    'stats.candidates': 'Verified young candidates',
+    'stats.jobs': 'Open event listings',
+    'stats.score': 'Shift completion score',
+    'stats.pay': 'Average daily pay',
+    'match.kicker': 'Algorithmic matching preview',
+    'match.title': 'Swipe, match instantly, get on site',
+    'match.subtitle': 'Businesses and talent find each other in minutes. On a mutual like, the digital agreement and payment protection kick in automatically.',
+    'board.kicker': 'Daily shifts you should not miss',
+    'board.title': 'Live & popular event listings',
+    'board.subtitle': 'Listings opened by verified organisers for today and this weekend.',
+    'board.lock': 'Create a free account to see listing details.',
+    'how.kicker': 'A transparent two-sided system',
+    'how.title': 'How does JOBBY work?',
+    'how.subtitle': 'No long CV submissions, no phone tag. Job seekers and crew-hunting companies meet in the same flow.',
+    'roles.candidates': 'For candidates & students',
+    'roles.companies': 'For companies & organisers',
+    'how.candidate.title': 'Turn your free days into income',
+    'how.candidate.subtitle': 'Find daily shifts that fit your class schedule and the hours you are free.',
+    'how.candidate.s1': 'Build your profile in 2 minutes',
+    'how.candidate.s1d': 'City, age, interests and availability. Earn your verified profile badge.',
+    'how.candidate.s2': 'Swipe the listings picked for you',
+    'how.candidate.s2d': 'The algorithm only shows what fits your area, category and pay expectation.',
+    'how.candidate.s3': 'Match and take the shift',
+    'how.candidate.s3d': 'When the company likes you back, a match opens with all shift details.',
+    'how.company.title': 'Build your event crew in 10 minutes',
+    'how.company.subtitle': 'Define what you need, review candidates as cards, complete your crew the same day.',
+    'how.company.s1': 'Enter your crew criteria',
+    'how.company.s1d': 'City, date, category, female/male quota and daily budget.',
+    'how.company.s2': 'Swipe the talent pool',
+    'how.company.s2d': 'Only candidates matching your criteria with completed profiles are listed.',
+    'how.company.s3': 'Match and lock the crew',
+    'how.company.s3d': 'Manage every match from one panel and track crew capacity live.',
+    'cta.join.candidate': 'Start as a candidate',
+    'cta.join.company': 'Post a listing as a company',
+    'talent.kicker': 'Verified young talent',
+    'talent.title': 'Highlights from the talent pool',
+    'talent.subtitle': 'Highly rated, experienced field professionals with completed profiles.',
+    'talent.link': 'Browse the whole talent pool →',
+    'cta.badge': 'Free sign-up • No commission for the first month',
+    'cta.title': 'Start your first weekend shift, or build your crew in 10 minutes.',
+    'cta.desc': 'JOBBY removes the bureaucracy between events and young talent: secured payments, verified profiles, crews that show up on time.',
+    'cta.candidateShort': 'Enter as young talent',
+    'cta.companyShort': 'Post a listing as a company',
+    'matching.kicker': 'Your personal feed',
+    'matching.title': 'Shifts picked for you',
+    'matching.subtitle': 'Swipe, like, match — when the company likes you back, the match is instant.',
+    'matching.browse': 'See all listings →',
+    'matching.empty': 'That is all for now',
+    'matching.emptyDesc': 'No new listings match your profile. Check back later.'
+  }
+};
+
+window.currentLang = localStorage.getItem('jobby_lang') || 'tr';
+
+function t(key) {
+  return (i18n[window.currentLang] && i18n[window.currentLang][key]) || key;
+}
+
+function updatePageText() {
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (i18n[window.currentLang] && i18n[window.currentLang][key]) el.textContent = t(key);
+  });
+}
+
+function setLanguage(lang) {
+  window.currentLang = lang;
+  localStorage.setItem('jobby_lang', lang);
+  document.documentElement.lang = lang;
+  updatePageText();
+  renderNav('nav-root');
+}
+
+/* ============================================================
+   İLAN GRID'İ + FİLTRELER
+   ============================================================ */
+let allJobs = [];
+let boardJobs = [];
+let activeFilter = 'all';
+
+function jobCardHtml(job) {
+  const st = catStyle(job.category);
+  const left = daysUntil(job.eventDate);
+  const urgent = left <= 3;
+  const spots = (job.neededMale || 0) + (job.neededFemale || 0);
+  return `
+    <article class="gig-card" data-job="${job.id}">
+      <div class="gig-cover" style="background-image:url('${st.img}')">
+        <span class="badge-tl"><span class="badge-cat">${job.category}</span></span>
+        ${urgent ? `<span class="badge-tr"><span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? 'Bugün' : left + ' gün'}</span></span>` : ''}
+      </div>
+      <div class="gig-body">
+        <div class="gig-head">
+          <div style="min-width:0;">
+            <div class="gig-title">${job.title}</div>
+            <div class="gig-company">
+              ${job.companyName || 'Firma'}
+              <span class="gig-verified"><span class="mi mi-xs mi-fill">verified</span>Doğrulanmış</span>
+            </div>
+          </div>
+          <div class="gig-pay">₺${(job.payDaily || 0).toLocaleString('tr-TR')}<small>GÜNLÜK</small></div>
+        </div>
+        <div class="gig-chips">
+          <span class="gig-chip"><span class="mi mi-xs">location_on</span>${job.city}</span>
+          <span class="gig-chip"><span class="mi mi-xs">event</span>${dateLabel(job)}</span>
+          <span class="gig-chip"><span class="mi mi-xs">schedule</span>8 saat</span>
+        </div>
+        <div class="gig-foot">
+          <span class="gig-quota">${spots ? `<b>${spots} kişilik</b> kadro` : 'Kadro açık'}</span>
+          <span class="gig-views"><span class="mi mi-xs">visibility</span> ${viewCount(job)}</span>
+        </div>
+        <button class="gig-apply" type="button">Hemen başvur / detay</button>
+      </div>
+    </article>`;
+}
+
+function renderBoard() {
+  const grid = document.getElementById('board-items');
+  if (!grid) return;
+
+  boardJobs = (activeFilter === 'all' ? allJobs : allJobs.filter(j => j.category === activeFilter)).slice(0, 8);
+
+  if (!boardJobs.length) {
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Bu kritere uyan açık ilan bulunamadı.</div>`;
+    return;
+  }
+  grid.innerHTML = boardJobs.map(jobCardHtml).join('');
+  grid.querySelectorAll('.gig-card').forEach(card =>
+    card.addEventListener('click', () => openJob(card.dataset.job))
+  );
+}
+
+function renderFilters() {
+  const box = document.getElementById('board-filters');
+  if (!box) return;
+  const cats = [...new Set(allJobs.map(j => j.category))].slice(0, 4);
+  box.innerHTML = [{ k: 'all', l: `Tüm ilanlar (${allJobs.length})` }]
+    .concat(cats.map(c => ({ k: c, l: c })))
+    .map(f => `<button class="filter-tab${f.k === activeFilter ? ' active' : ''}" data-cat="${f.k}">${f.l}</button>`)
+    .join('');
+  box.querySelectorAll('.filter-tab').forEach(b =>
+    b.addEventListener('click', () => {
+      activeFilter = b.dataset.cat;
+      renderFilters();
+      renderBoard();
+    })
+  );
+}
+
+/* Hero arama kutusu -> ilan grid'ini filtreler */
+function applyHeroSearch() {
+  const cat = document.getElementById('search-category').value;
+  const city = document.getElementById('search-city').value;
+  const pay = Number(document.getElementById('search-pay').value) || 0;
+  const within = Number(document.getElementById('search-date').value) || 0;
+
+  const grid = document.getElementById('board-items');
+  const filtered = allJobs.filter(j =>
+    (!cat || j.category === cat) &&
+    (!city || j.city === city) &&
+    (j.payDaily || 0) >= pay &&
+    (!within || (daysUntil(j.eventDate) >= 0 && daysUntil(j.eventDate) <= within))
+  );
+
+  activeFilter = 'all';
+  renderFilters();
+  boardJobs = filtered.slice(0, 8);
+  grid.innerHTML = boardJobs.length
+    ? boardJobs.map(jobCardHtml).join('')
+    : `<div class="empty-state" style="grid-column:1/-1;">Aramanla eşleşen ilan bulunamadı. Filtreleri genişletmeyi dene.</div>`;
+  grid.querySelectorAll('.gig-card').forEach(card =>
+    card.addEventListener('click', () => openJob(card.dataset.job))
+  );
+  document.getElementById('ilanlar').scrollIntoView({ behavior: 'smooth' });
+}
+
+function quickTag(cat) {
+  document.getElementById('search-category').value = cat;
+  applyHeroSearch();
+}
+
+/* Giriş yapmayan kullanıcı detayı göremez */
+function openJob(id) {
+  if (!Api.isLoggedIn()) {
+    window.location.href = '/register.html?role=candidate&from=job-' + id;
+    return;
+  }
+  window.location.href = Api.role() === 'candidate'
+    ? '/job.html?id=' + id
+    : '/company/dashboard.html';
+}
+
+/* ============================================================
+   EŞLEŞME SAHNESİ (orta kart gerçek ilan verisiyle döner)
+   ============================================================ */
+let stageIndex = 0;
+let stageTimer = null;
+
+function fillStage(job) {
+  if (!job) return;
+  const st = catStyle(job.category);
+  const card = document.getElementById('match-card');
+  const bgEl = card.querySelector('.match-card-bg');
+  bgEl.style.backgroundImage = `url('${st.img}')`;
+  bgEl.style.backgroundSize = 'cover';
+  bgEl.style.backgroundPosition = 'center';
+  card.querySelector('.match-card-emoji').style.display = 'none';
+  document.getElementById('match-score').textContent = '%' + matchScore(job) + ' eşleşme uyumu';
+  document.getElementById('match-title').textContent = job.title;
+  document.getElementById('match-loc').textContent = `${job.city} • ${job.companyName || 'Firma'}`;
+  document.getElementById('match-pay').innerHTML =
+    `₺${(job.payDaily || 0).toLocaleString('tr-TR')}<small>GÜNLÜK TABAN ÜCRET</small>`;
+
+  const spots = (job.neededMale || 0) + (job.neededFemale || 0);
+  document.getElementById('match-badges').innerHTML = [
+    `<span class="micro-badge">${job.category}</span>`,
+    `<span class="micro-badge">${dateLabel(job)}</span>`,
+    spots ? `<span class="micro-badge">${spots} kişilik kadro</span>` : ''
+  ].join('');
+
+  // Sol paneldeki firma talebi de aynı ilanı yansıtır
+  document.getElementById('demand-title').textContent = job.title;
+  document.getElementById('demand-company').textContent = job.companyName || 'Organizasyon firması';
+  document.getElementById('demand-city').textContent = job.city;
+  document.getElementById('demand-pay').textContent = '₺' + (job.payDaily || 0).toLocaleString('tr-TR');
+  document.getElementById('demand-roles').textContent =
+    `${job.neededFemale || 0} kadın / ${job.neededMale || 0} erkek`;
+}
+
+function stageSwipe() {
+  const card = document.getElementById('match-card');
+  if (!card || allJobs.length < 2) return;
+  card.classList.add('swiping');
+  setTimeout(() => {
+    stageIndex = (stageIndex + 1) % Math.min(allJobs.length, 8);
+    fillStage(allJobs[stageIndex]);
+    card.classList.remove('swiping');
+  }, 360);
+  restartStageLoop();
+}
+
+function restartStageLoop() {
+  clearInterval(stageTimer);
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  stageTimer = setInterval(stageSwipe, 4600);
+}
+
+/* ============================================================
+   ADAY HAVUZU (tanıtım kartları)
+   ============================================================ */
+const TALENTS = [
+  { n: 'Bensu D.', a: 22, r: 'Boğaziçi Üni. · Sosyoloji', tags: ['Karşılama & Protokol', 'İngilizce C1'], city: 'Beşiktaş', rate: 2400, score: 4.9, gigs: 17, bg: 'linear-gradient(140deg,#A78BFA,#4C1D95)' },
+  { n: 'Caner V.', a: 24, r: 'Marmara Üni. · İşletme', tags: ['Barmen & Servis', 'Sahne arkası'], city: 'Kadıköy', rate: 2100, score: 4.8, gigs: 24, bg: 'linear-gradient(140deg,#38BDF8,#075985)' },
+  { n: 'Lara S.', a: 21, r: 'Yıldız Teknik · Endüstri', tags: ['Tadım & Marka elçisi', 'Almanca B1'], city: 'Şişli', rate: 2300, score: 4.95, gigs: 13, bg: 'linear-gradient(140deg,#FB7185,#9F1239)' },
+  { n: 'Kerem A.', a: 25, r: 'Saha operasyon & Lojistik', tags: ['Fuar kayıt masası', 'B sınıfı ehliyet'], city: 'Ataşehir', rate: 2600, score: 4.85, gigs: 31, bg: 'linear-gradient(140deg,#34D399,#065F46)' }
+];
+
+function renderTalents() {
+  const grid = document.getElementById('talent-grid');
+  if (!grid) return;
+  grid.innerHTML = TALENTS.map(p => `
+    <article class="talent-card">
+      <div class="talent-photo" style="background:${p.bg}">
+        ${initialsOf(p.n)}
+        <span class="rating"><span class="mi mi-xs mi-fill">star</span>${p.score}</span>
+      </div>
+      <div class="talent-body">
+        <div class="talent-name">${p.n}, ${p.a}<span class="mi mi-xs mi-fill" style="color:var(--teal)">verified</span></div>
+        <div class="talent-role">${p.r}</div>
+        <div class="talent-tags">${p.tags.map(t => `<span class="talent-tag">${t}</span>`).join('')}</div>
+        <div class="talent-foot">
+          <span class="talent-rate">₺${p.rate.toLocaleString('tr-TR')}<span class="t-bsm muted"> /gün</span></span>
+          <span class="t-bsm muted">${p.gigs} vardiya</span>
+        </div>
+        <a href="/register.html?role=company" class="btn btn-ghost btn-sm btn-block">Davet gönder</a>
+      </div>
+    </article>`).join('');
+}
+
+/* ============================================================
+   VERİ YÜKLEME
+   ============================================================ */
+async function loadLiveBoard() {
+  try {
+    const jobs = await Api.request('/jobs');
+    if (!jobs || !jobs.length) return;
+
+    // Yakın tarihliler önce, kategoriler serpiştirilerek (aynı renk yan yana düşmesin)
+    const byDate = jobs.slice().sort((a, b) => new Date(a.eventDate) - new Date(b.eventDate));
+    const buckets = new Map();
+    byDate.forEach(j => {
+      if (!buckets.has(j.category)) buckets.set(j.category, []);
+      buckets.get(j.category).push(j);
+    });
+    const queues = [...buckets.values()];
+    const mixed = [];
+    while (mixed.length < byDate.length) {
+      queues.forEach(q => { if (q.length) mixed.push(q.shift()); });
+    }
+    allJobs = mixed;
+
+    renderFilters();
+    renderBoard();
+
+    // Hero arama: şehir listesi gerçek veriden
+    const citySel = document.getElementById('search-city');
+    [...new Set(jobs.map(j => j.city))].sort().forEach(c => {
+      const o = document.createElement('option');
+      o.value = c; o.textContent = c;
+      citySel.appendChild(o);
+    });
+
+    // Eşleşme sahnesi
+    fillStage(allJobs[0]);
+    restartStageLoop();
+
+    // İstatistikler gerçek veriden
+    const avg = Math.round(jobs.reduce((s, j) => s + (j.payDaily || 0), 0) / jobs.length);
+    const openToday = jobs.filter(j => daysUntil(j.eventDate) >= 0 && daysUntil(j.eventDate) <= 7).length;
+    document.getElementById('stat-jobs').textContent = jobs.length + '+';
+    document.getElementById('stat-pay').textContent = '₺' + avg.toLocaleString('tr-TR');
+    document.getElementById('hero-new-count').textContent =
+      window.currentLang === 'en'
+        ? `${openToday} new shifts opened this week`
+        : `Bu hafta ${openToday} yeni vardiya açıldı`;
+    document.getElementById('live-pool').textContent =
+      window.currentLang === 'en' ? `Live pool · ${jobs.length} listings` : `Canlı havuz · ${jobs.length} ilan`;
+  } catch (e) {
+    console.log('İlanlar yüklenemedi', e);
+  }
+}
+
+/* ============================================================
+   ADAY OTURUMU: HIZLI EŞLEŞME
+   ============================================================ */
+let swipeCards = [];
+let currentIndex = 0;
+
+async function loadMatchingWidget() {
+  const isCandidate = Api.isLoggedIn() && Api.role() === 'candidate';
+  const hero = document.getElementById('hero-section');
+  const matching = document.getElementById('matching-section');
+
+  if (isCandidate) {
+    hero.style.display = 'none';
+    matching.style.display = 'block';
+    try {
+      let jobs = [];
+      try { jobs = await Api.request('/jobs/feed'); } catch (_) { jobs = await Api.request('/jobs'); }
+      swipeCards = jobs || [];
+      currentIndex = 0;
+      renderSwipeCard();
+    } catch (e) {
+      document.getElementById('swipe-empty').style.display = 'block';
+    }
+  } else {
+    hero.style.display = 'block';
+    matching.style.display = 'none';
+  }
+}
+
+function renderSwipeCard() {
+  const stack = document.getElementById('swipe-stack');
+  const empty = document.getElementById('swipe-empty');
+  const dock = document.getElementById('swipe-dock');
+
+  if (currentIndex >= swipeCards.length) {
+    stack.innerHTML = '';
+    stack.style.display = 'none';
+    dock.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+
+  stack.style.display = 'block';
+  dock.style.display = 'flex';
+  empty.style.display = 'none';
+
+  const job = swipeCards[currentIndex];
+  const st = catStyle(job.category);
+  const left = daysUntil(job.eventDate);
+
+  stack.innerHTML = `
+    <div class="swipe-card">
+      <div class="avatar-block photo" style="background-image:url('${st.img}')">
+        <span class="badge-cat">${job.category}</span>
+        ${left <= 3 ? `<span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? 'Bugün' : left + ' gün'}</span>` : ''}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div style="min-width:0;">
+          <h3>${job.title}</h3>
+          <div class="sub">${job.companyName || 'Firma'} · ${job.city} · ${dateLabel(job)}</div>
+        </div>
+        <div class="pay-badge">₺${(job.payDaily || 0).toLocaleString('tr-TR')}
+          <small style="display:block;font-size:10px;font-weight:600;color:var(--on-surface-var);">GÜNLÜK</small>
+        </div>
+      </div>
+      <div class="need-row">
+        ${job.neededFemale ? `<span class="need-pill">${job.neededFemale} kadın</span>` : ''}
+        ${job.neededMale ? `<span class="need-pill">${job.neededMale} erkek</span>` : ''}
+      </div>
+      <p class="desc">${job.description || ''}</p>
+    </div>`;
+}
+
+async function swipeLike() {
+  const job = swipeCards[currentIndex];
+  if (!job) return;
+  try {
+    const res = await Api.request('/matches/swipe', {
+      method: 'POST',
+      body: { targetType: 'job', targetId: job.id, direction: 'like' }
+    });
+    showMatchToast(res && res.matched
+      ? '🎉 Eşleştin! Panelinden detayları gör.'
+      : `${job.companyName || 'Firma'} ilanını beğendin.`);
+  } catch (e) { /* sessizce geç */ }
+  currentIndex++;
+  renderSwipeCard();
+}
+
+function swipePass() {
+  const job = swipeCards[currentIndex];
+  if (job) {
+    Api.request('/matches/swipe', {
+      method: 'POST',
+      body: { targetType: 'job', targetId: job.id, direction: 'pass' }
+    }).catch(() => {});
+  }
+  currentIndex++;
+  renderSwipeCard();
+}
+
+function showMatchToast(message) {
+  const toast = document.getElementById('match-toast');
+  toast.textContent = message;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+/* ============================================================
+   BAŞLAT
+   ============================================================ */
+document.documentElement.lang = window.currentLang;
+updatePageText();
+renderNav('nav-root');
+renderFooter('footer-root');
+renderTalents();
+loadLiveBoard();
+loadMatchingWidget();
+
+if (!Api.isLoggedIn()) {
+  const lock = document.getElementById('board-lock');
+  if (lock) lock.style.display = 'block';
+}
+</script>
+</body>
+</html>

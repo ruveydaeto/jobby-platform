@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eşleşmeler — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <span class="eyebrow"><span class="mi mi-xs">handshake</span>Onaylı kadro</span>
+    <h1>Eşleşmeler</h1>
+    <p>Beğendiğin ve seni beğenen tüm adaylar burada listelenir.</p>
+  </div>
+
+  <div id="list" style="display:flex;flex-direction:column;gap:14px;"></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+function matchCard(m) {
+  return `
+    <div class="job-card">
+      <div class="job-card-top">
+        <div>
+          <h3>${m.candidateName}</h3>
+          <div class="job-meta"><span>${m.jobTitle}</span><span>${m.candidateCity}</span>${m.candidateAge ? `<span>${m.candidateAge} yaş</span>` : ''}</div>
+        </div>
+        <span class="chip chip-teal"><span class="mi mi-xs mi-fill">check_circle</span>Eşleşti</span>
+      </div>
+    </div>`;
+}
+
+if (Api.requireAuth('company')) {
+  (async () => {
+    const list = document.getElementById('list');
+    try {
+      const matches = await Api.request('/matches/mine');
+      if (matches.length === 0) {
+        list.innerHTML = `<div class="empty-state"><span class="mi mi-lg" style="color:var(--primary)">groups</span><h3 style="margin:8px 0;">Henüz eşleşme yok</h3><p style="margin:0 0 16px;">İlanlarındaki adayları incelemeye devam et.</p><a href="/company/dashboard.html" class="btn btn-primary btn-sm">İlanlarıma git</a></div>`;
+      } else {
+        list.innerHTML = matches.map(matchCard).join('');
+      }
+    } catch (e) {
+      list.innerHTML = `<div class="empty-state">Eşleşmeler yüklenemedi.</div>`;
+    }
+  })();
+}
+</script>
+</body>
+</html>

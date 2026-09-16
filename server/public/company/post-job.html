@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeni etkinlik ilanı — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="page-wide">
+
+  <!-- Üst meta & başlık -->
+  <div class="page-head">
+    <div class="meta-row">
+      <div class="breadcrumb">
+        <a href="/company/dashboard.html"><span class="mi mi-xs">domain</span> İlan yönetimi</a>
+        <span class="mi mi-xs">chevron_right</span>
+        <span class="cur">Yeni etkinlik ilanı oluştur</span>
+      </div>
+      <div class="meta-badges">
+        <span class="chip chip-teal"><span class="live-dot"></span><span id="pool-count">Canlı kadro radarı</span></span>
+        <span class="chip chip-accent"><span class="mi mi-xs">bolt</span>Hızlı eşleşme algoritması</span>
+      </div>
+    </div>
+
+    <div class="page-head-row">
+      <div>
+        <h1>Yeni etkinlik ilanı &amp; kadro talebi oluştur</h1>
+        <p>Organizasyonun için gereken yetenekleri tanımla, bütçeyi belirle ve JOBBY kaydırmalı eşleştirme
+           algoritmasıyla dakikalar içinde ekibini tamamla.</p>
+      </div>
+      <div class="template-card">
+        <span class="ico"><span class="mi mi-sm">auto_awesome</span></span>
+        <div>
+          <span class="lbl">Hazır şablon</span>
+          <span class="val" id="template-name">Şablon seçilmedi</span>
+        </div>
+        <button class="btn btn-ghost btn-sm" type="button" id="btn-template">Şablon uygula</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="error-box" class="error-box"></div>
+
+  <form id="job-form" class="build-grid">
+
+    <!-- ================= SOL KOLON ================= -->
+    <div class="build-col">
+
+      <!-- ADIM 1 -->
+      <section class="step-card">
+        <div class="step-head">
+          <div class="step-head-left">
+            <span class="step-badge">1</span>
+            <div>
+              <h2>Firma &amp; organizasyon temel bilgileri</h2>
+              <p>Operasyonel kimlik ve organizasyon takvimi</p>
+            </div>
+          </div>
+          <span class="step-count">Adım 1 / 4</span>
+        </div>
+
+        <!-- Kurumsal kimlik -->
+        <div class="org-card">
+          <div style="display:flex;align-items:center;gap:16px;min-width:0;">
+            <span class="org-logo" id="org-logo">FR</span>
+            <div style="min-width:0;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <h3 style="font-size:17px;font-weight:700;" id="org-name">Firma</h3>
+                <span class="mi mi-sm mi-fill" style="color:var(--teal)" title="Doğrulanmış kurumsal organizatör">verified</span>
+              </div>
+              <div class="org-meta">
+                <span style="color:var(--on-surface);font-weight:700;">Doğrulanmış kurumsal organizatör</span>
+                <span class="sep">•</span>
+                <span class="rate"><span class="mi mi-xs mi-fill">star</span>4.9 / 5.0 (<span id="org-events">0</span> etkinlik)</span>
+                <span class="sep">•</span>
+                <span style="color:var(--primary);" id="org-sector">Kurumsal sözleşmeli üye</span>
+              </div>
+            </div>
+          </div>
+          <a href="/company/onboarding.html" class="btn btn-ghost btn-sm">
+            <span class="mi mi-sm">edit_note</span>Düzenle
+          </a>
+        </div>
+
+        <!-- Başlık & kategori -->
+        <div class="grid-2">
+          <div class="f-field">
+            <label for="title">Etkinlik / proje başlığı</label>
+            <div class="f-input">
+              <input type="text" id="title" placeholder="Örn. Yeni Rakı — Boğaz Tadım Gecesi &amp; Lansman">
+            </div>
+          </div>
+          <div class="f-field">
+            <label for="category">Etkinlik kategorisi</label>
+            <div class="f-input">
+              <select id="category">
+                <option>Tadım &amp; Promosyon</option>
+                <option>Konser &amp; Etkinlik</option>
+                <option>Fuar Standı</option>
+                <option>Hostes/Host</option>
+                <option>Anket &amp; Saha</option>
+                <option>Depo &amp; Lojistik</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarih & vardiya saatleri -->
+        <div class="grid-3">
+          <div class="f-field">
+            <label for="eventDate">Etkinlik tarihi</label>
+            <div class="f-input has-icon">
+              <input type="date" id="eventDate">
+              <span class="mi mi-sm f-icon">calendar_today</span>
+            </div>
+          </div>
+          <div class="f-field">
+            <label for="shiftStart">Vardiya saatleri</label>
+            <div class="f-input" style="gap:8px;">
+              <input type="time" id="shiftStart" value="17:30">
+              <input type="time" id="shiftEnd" value="01:00">
+            </div>
+          </div>
+          <div class="f-field">
+            <label>Toplam vardiya süresi</label>
+            <div class="f-static">
+              <span id="shift-length">7,5 saat</span>
+              <span class="mi mi-sm" id="shift-icon" style="color:var(--coral)">nightlight</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lokasyon -->
+        <div class="f-field">
+          <label>Lokasyon &amp; servis noktaları</label>
+          <div class="venue-card">
+            <div class="venue-photo" id="venue-photo">
+              <span class="pin"><span class="mi mi-xs" style="color:var(--primary)">pin_drop</span><span id="venue-pin">Mekân</span></span>
+            </div>
+            <div class="venue-body">
+              <div class="grid-2">
+                <div class="f-field">
+                  <label for="city">Şehir</label>
+                  <div class="f-input"><input type="text" id="city" placeholder="Örn. İstanbul"></div>
+                </div>
+                <div class="f-field">
+                  <label for="venue">Mekân adı</label>
+                  <div class="f-input"><input type="text" id="venue" placeholder="Örn. Kuruçeşme Arena"></div>
+                </div>
+              </div>
+              <div class="f-field">
+                <label for="address">Açık adres &amp; giriş noktası</label>
+                <div class="f-input"><input type="text" id="address" placeholder="Örn. Muallim Naci Cad. No:64, özel iskele girişi"></div>
+              </div>
+              <label class="transfer-note" style="cursor:pointer;">
+                <input type="checkbox" id="transferService" checked style="width:16px;min-height:0;accent-color:var(--indigo);">
+                <span class="mi mi-sm">airport_shuttle</span>
+                <span>Özel personel ring servisi sağlanıyor</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="f-field">
+          <label for="description">Etkinlik açıklaması</label>
+          <div class="f-input">
+            <textarea id="description" rows="3" placeholder="Etkinliği, sahadaki akışı ve ekipten beklentileri kısaca anlat"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- ADIM 2 -->
+      <section class="step-card">
+        <div class="step-head">
+          <div class="step-head-left">
+            <span class="step-badge">2</span>
+            <div>
+              <h2>Kadro dağılımı &amp; aranan roller</h2>
+              <p>Pozisyon gereksinimleri, kişi başı ücret ve kıyafet standartları</p>
+            </div>
+          </div>
+          <span class="chip chip-accent" id="total-crew">Toplam: 0 kişilik ekip</span>
+        </div>
+
+        <!-- ROL 1 -->
+        <div class="role-card" data-role="female">
+          <div class="role-top">
+            <div class="role-ident">
+              <span class="role-ico coral"><span class="mi">face_3</span></span>
+              <div>
+                <div class="role-title">
+                  <h3>Karşılama &amp; tadım hostesi</h3>
+                  <span class="role-gender">Kadın pozisyon</span>
+                </div>
+                <p class="t-bsm" style="margin:0;">VIP misafir karşılama, yaka kartı dağıtımı &amp; tadım sunumu</p>
+              </div>
+            </div>
+            <div class="counter">
+              <span class="lbl">Kontenjan:</span>
+              <button class="minus" type="button" data-step="-1" data-target="neededFemale">−</button>
+              <span class="val" id="neededFemale-val">5</span>
+              <button class="plus" type="button" data-step="1" data-target="neededFemale">+</button>
+              <input type="hidden" id="neededFemale" value="5">
+            </div>
+          </div>
+
+          <div class="qual-tags">
+            <span class="qual-tag"><span class="mi mi-xs">height</span>Boy 1.70m+</span>
+            <span class="qual-tag"><span class="mi mi-xs">translate</span>İngilizce B2+</span>
+            <span class="qual-tag"><span class="mi mi-xs">workspace_premium</span>Protokol deneyimi</span>
+            <span class="qual-tag"><span class="mi mi-xs">sentiment_satisfied</span>Diksiyonu düzgün</span>
+          </div>
+
+          <div class="role-foot">
+            <div class="dress-box">
+              <span class="mi mi-sm">checkroom</span>
+              <div style="min-width:0;flex:1;">
+                <span class="k">Kıyafet kodu</span>
+                <input type="text" id="dressFemale" value="Şık siyah kokteyl elbisesi (firma sağlar)">
+              </div>
+            </div>
+            <div class="pay-box">
+              <div>
+                <span class="k">Net kişi başı hakediş</span>
+                <span class="pay-input"><span class="cur">₺</span><input type="number" id="payFemale" min="0" step="50" value="2400"></span>
+              </div>
+              <div>
+                <span class="k"><span id="cnt-female">5</span> kişi toplam</span>
+                <span class="tot" id="tot-female">₺12.000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROL 2 -->
+        <div class="role-card" data-role="male">
+          <div class="role-top">
+            <div class="role-ident">
+              <span class="role-ico indigo"><span class="mi">local_bar</span></span>
+              <div>
+                <div class="role-title">
+                  <h3>Miksolojist &amp; barmen</h3>
+                  <span class="role-gender">Erkek pozisyon</span>
+                </div>
+                <p class="t-bsm" style="margin:0;">Özel kokteyl hazırlığı, hızlı bar servisi &amp; şov sunumu</p>
+              </div>
+            </div>
+            <div class="counter">
+              <span class="lbl">Kontenjan:</span>
+              <button class="minus" type="button" data-step="-1" data-target="neededMale">−</button>
+              <span class="val" id="neededMale-val">3</span>
+              <button class="plus" type="button" data-step="1" data-target="neededMale">+</button>
+              <input type="hidden" id="neededMale" value="3">
+            </div>
+          </div>
+
+          <div class="qual-tags">
+            <span class="qual-tag req"><span class="mi mi-xs">verified</span>MEB hijyen belgesi (zorunlu)</span>
+            <span class="qual-tag"><span class="mi mi-xs">timer</span>2+ yıl kokteyl bar tecrübesi</span>
+            <span class="qual-tag"><span class="mi mi-xs">speed</span>Kriz yönetimi &amp; stok takibi</span>
+          </div>
+
+          <div class="role-foot">
+            <div class="dress-box">
+              <span class="mi mi-sm">apparel</span>
+              <div style="min-width:0;flex:1;">
+                <span class="k">Kıyafet kodu</span>
+                <input type="text" id="dressMale" value="Beyaz gömlek, siyah papyon (önlük firmadan)">
+              </div>
+            </div>
+            <div class="pay-box">
+              <div>
+                <span class="k">Net kişi başı hakediş</span>
+                <span class="pay-input"><span class="cur">₺</span><input type="number" id="payMale" min="0" step="50" value="2600"></span>
+              </div>
+              <div>
+                <span class="k"><span id="cnt-male">3</span> kişi toplam</span>
+                <span class="tot" id="tot-male">₺7.800</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="add-role-btn" type="button" id="btn-add-role">
+          <span class="mi mi-sm">add_circle</span>
+          <span>Yeni rol ekle (saha süpervizörü, lojistik vb.)</span>
+        </button>
+      </section>
+
+      <!-- ADIM 3 -->
+      <section class="step-card">
+        <div class="step-head">
+          <div class="step-head-left">
+            <span class="step-badge">3</span>
+            <div>
+              <h2>Sosyal haklar &amp; sağlanan imkanlar</h2>
+              <p>Adayların eşleşme hızını belirgin şekilde artıran yan haklar</p>
+            </div>
+          </div>
+          <span class="step-count">Adım 3 / 4</span>
+        </div>
+
+        <div class="perk-grid" id="perk-grid">
+          <label class="perk">
+            <input type="checkbox" value="yemek" checked>
+            <span>
+              <span class="t"><span class="mi mi-sm">restaurant</span>Yemek sağlanıyor</span>
+              <span class="d">Sıcak catering tabağı, aperatif ve alkolsüz içecek servisi</span>
+            </span>
+          </label>
+          <label class="perk">
+            <input type="checkbox" value="servis" checked>
+            <span>
+              <span class="t"><span class="mi mi-sm">directions_bus</span>Gece servisi / eve dönüş</span>
+              <span class="d">Etkinlik bitişinde merkez noktalara servis kalkışı</span>
+            </span>
+          </label>
+          <label class="perk">
+            <input type="checkbox" value="sigorta" checked>
+            <span>
+              <span class="t"><span class="mi mi-sm">health_and_safety</span>SGK vardiya sigortası</span>
+              <span class="d">Platform güvencesiyle 1 günlük ferdi kaza ve SGK tescili</span>
+            </span>
+          </label>
+          <label class="perk">
+            <input type="checkbox" value="bahsis" checked>
+            <span>
+              <span class="t"><span class="mi mi-sm">paid</span>Bahşiş &amp; tip paylaşımı</span>
+              <span class="d">Ekibe adil havuz dağılımı ile ekstra gelir imkânı</span>
+            </span>
+          </label>
+          <label class="perk">
+            <input type="checkbox" value="kiyafet" checked>
+            <span>
+              <span class="t"><span class="mi mi-sm">styler</span>Özel tasarım kıyafet / apron</span>
+              <span class="d">Firma alanda temin eder, aday ekstra masraf yapmaz</span>
+            </span>
+          </label>
+          <label class="perk off">
+            <input type="checkbox" value="konaklama">
+            <span>
+              <span class="t"><span class="mi mi-sm">hotel</span>Konaklama desteği</span>
+              <span class="d">Şehir dışından gelen adaylar için otel / konaklama</span>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- ADIM 4 -->
+      <section class="step-card">
+        <div class="step-head">
+          <div class="step-head-left">
+            <span class="step-badge">4</span>
+            <div>
+              <h2>Aday eşleştirme &amp; swipe filtreleri</h2>
+              <p>Eşleşme havuzu ve güvenlik filtreleri</p>
+            </div>
+          </div>
+          <span class="step-count">Adım 4 / 4</span>
+        </div>
+
+        <div class="mode-grid" id="mode-grid">
+          <label class="mode-card active">
+            <input type="radio" name="matchMode" value="swipe" checked>
+            <span class="mode-top">
+              <b>Hızlı eşleşme (swipe havuzu)</b>
+              <span class="mi mi-sm">radio_button_checked</span>
+            </span>
+            <p>En uyumlu adaylar anlık kart ekranına düşer; kabul ettiklerin doğrudan kadroya katılır.</p>
+            <span class="mode-eta"><span class="mi mi-xs">speed</span>Ortalama tamamlanma: 18 dakika</span>
+          </label>
+          <label class="mode-card">
+            <input type="radio" name="matchMode" value="classic">
+            <span class="mode-top">
+              <b>Klasik başvuru listesi</b>
+              <span class="mi mi-sm">radio_button_unchecked</span>
+            </span>
+            <p>Adaylar ilana başvuru gönderir, ekibin profilleri tek tek inceler ve onaylar.</p>
+            <span class="mode-eta"><span class="mi mi-xs">hourglass_empty</span>Ortalama tamamlanma: 4-8 saat</span>
+          </label>
+        </div>
+
+        <div class="score-box">
+          <div class="score-top">
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+              <span class="t-lmd" style="font-weight:700;">Minimum eşleşme uyumluluk skoru:</span>
+              <span class="score-pill" id="score-pill">%85 ve üzeri</span>
+            </div>
+            <span class="t-bsm" id="score-hint" style="font-weight:600;">Önerilen — yüksek hassasiyet</span>
+          </div>
+          <input type="range" class="score-range" id="minScore" min="70" max="95" step="5" value="85">
+          <div class="score-legend">
+            <span>%70 (geniş havuz)</span>
+            <span>%80 (dengeli)</span>
+            <span class="on">%85 (önerilen)</span>
+            <span>%95 (seçkin protokol)</span>
+          </div>
+        </div>
+
+        <div class="f-field">
+          <label>Aday doğrulama &amp; güvenlik şartları (zorunlu filtreler)</label>
+          <div class="badge-filters" id="badge-filters">
+            <label class="badge-filter on">
+              <input type="checkbox" value="hijyen" checked>
+              <span class="l"><span class="mi mi-sm">verified_user</span>MEB hijyen sertifikası</span>
+              <span class="mi mi-sm chk">check_circle</span>
+            </label>
+            <label class="badge-filter on">
+              <input type="checkbox" value="sabika" checked>
+              <span class="l"><span class="mi mi-sm">gavel</span>Adli sicil kaydı temiz</span>
+              <span class="mi mi-sm chk">check_circle</span>
+            </label>
+            <label class="badge-filter on">
+              <input type="checkbox" value="ogrenci" checked>
+              <span class="l"><span class="mi mi-sm">school</span>Öğrenci / lisans mezunu</span>
+              <span class="mi mi-sm chk">check_circle</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-ghost" type="button" id="btn-draft">
+            <span class="mi mi-sm">save</span><span>Taslak olarak kaydet</span>
+          </button>
+          <button class="btn btn-primary btn-lg" type="submit" id="submit-btn">
+            <span class="mi mi-sm">rocket_launch</span>
+            <span id="submit-label">İlanı yayınla &amp; eşleşmeyi başlat</span>
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <!-- ================= SAĞ KOLON ================= -->
+    <aside class="build-aside">
+
+      <!-- Bütçe özeti -->
+      <div class="sum-card">
+        <div class="sum-head">
+          <h3>Kadro &amp; bütçe özeti</h3>
+          <span class="chip chip-teal"><span class="live-dot"></span>Canlı hesaplama</span>
+        </div>
+
+        <div class="sum-rows">
+          <div class="sum-row">
+            <span class="k"><span class="dot" style="background:var(--coral)"></span><b id="row-female">5x Karşılama &amp; tadım hostesi</b></span>
+            <span class="v" id="row-female-v">₺12.000</span>
+          </div>
+          <div class="sum-row">
+            <span class="k"><span class="dot" style="background:var(--primary-container)"></span><b id="row-male">3x Miksolojist &amp; barmen</b></span>
+            <span class="v" id="row-male-v">₺7.800</span>
+          </div>
+          <div class="sum-sep"></div>
+          <div class="sum-row">
+            <span class="k">Toplam net personel hakedişi</span>
+            <span class="v" id="row-net">₺19.800</span>
+          </div>
+          <div class="sum-row">
+            <span class="k">JOBBY hizmet &amp; SGK güvencesi (%15)</span>
+            <span class="v" id="row-fee">₺2.970</span>
+          </div>
+        </div>
+
+        <div class="total-box">
+          <span class="k">Genel toplam bütçe</span>
+          <div class="row">
+            <span class="v" id="row-total">₺22.770</span>
+            <span class="t-bsm">KDV dahil • E-fatura</span>
+          </div>
+        </div>
+
+        <div class="escrow">
+          <span class="mi mi-sm">shield</span>
+          <p style="margin:0;">
+            <b style="color:var(--on-surface);">JOBBY emanet hesap güvencesi:</b>
+            Ödemen, vardiya tamamlanıp saha sorumlusu tarafından onaylanana kadar bloke tutulur.
+          </p>
+        </div>
+      </div>
+
+      <!-- Canlı radar -->
+      <div class="radar-card">
+        <div class="radar-head">
+          <h3><span class="mi mi-sm">radar</span>Anlık uyumlu radar</h3>
+          <span class="radar-count" id="radar-count">— aday hazır</span>
+        </div>
+        <p id="radar-desc">Filtrelerine göre çevrede hazır bekleyen en yüksek uyumlu profiller:</p>
+        <div id="radar-list"></div>
+        <div class="radar-note">
+          <span class="mi mi-sm">notifications_active</span>
+          <span id="radar-note-text">İlan yayınlandığı anda uygun adaylara anlık vardiya teklifi gönderilir.</span>
+        </div>
+      </div>
+
+      <!-- Taahhütler -->
+      <div class="pledges">
+        <h3>JOBBY kurumsal taahhütleri</h3>
+        <div class="pledge">
+          <span class="mi mi-sm">check_circle</span>
+          <div>
+            <b>24 saatte eksiksiz kadro</b>
+            <span>Belirtilen kontenjan dolmazsa operasyon sorumlusu takviye atar.</span>
+          </div>
+        </div>
+        <div class="pledge">
+          <span class="mi mi-sm">published_with_changes</span>
+          <div>
+            <b>Yedek eleman sevk sistemi</b>
+            <span>Son dakika gelememe durumunda yedek personel sahada hazır bekletilir.</span>
+          </div>
+        </div>
+        <div class="pledge">
+          <span class="mi mi-sm">encrypted</span>
+          <div>
+            <b>Doğrulanmış profiller</b>
+            <span>Sahaya yalnızca kimliği ve belgeleri onaylanmış adaylar çıkar.</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </form>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+if (Api.requireAuth('company')) {
+
+  const $ = id => document.getElementById(id);
+  const SERVICE_FEE = 0.15;
+
+  /* ---------- Varsayılan tarih: bir hafta sonrası ---------- */
+  const d = new Date();
+  d.setDate(d.getDate() + 7);
+  $('eventDate').value = d.toISOString().slice(0, 10);
+
+  /* ---------- Firma kimliği ---------- */
+  (async () => {
+    try {
+      const c = await Api.request('/companies/me');
+      if (c) {
+        $('org-name').textContent = c.companyName || 'Firma';
+        $('org-logo').textContent = initialsOf(c.companyName || 'Firma');
+        if (c.sector) $('org-sector').textContent = c.sector;
+        if (c.city) $('city').value = c.city;
+      }
+      const mine = await Api.request('/jobs/mine');
+      $('org-events').textContent = (mine || []).length;
+    } catch (e) { /* profil henüz boş olabilir */ }
+  })();
+
+  /* ---------- Kontenjan sayaçları ---------- */
+  document.querySelectorAll('.counter button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = $(btn.dataset.target);
+      const next = Math.max(0, Number(input.value) + Number(btn.dataset.step));
+      input.value = next;
+      $(btn.dataset.target + '-val').textContent = next;
+      recalc();
+    });
+  });
+
+  /* ---------- Vardiya süresi ---------- */
+  function shiftHours() {
+    const [sh, sm] = ($('shiftStart').value || '0:0').split(':').map(Number);
+    const [eh, em] = ($('shiftEnd').value || '0:0').split(':').map(Number);
+    let mins = (eh * 60 + em) - (sh * 60 + sm);
+    if (mins <= 0) mins += 24 * 60;          // gece yarısını aşan vardiya
+    return mins / 60;
+  }
+
+  function updateShift() {
+    const h = shiftHours();
+    const isNight = Number(($('shiftEnd').value || '0:0').split(':')[0]) < 6 ||
+                    Number(($('shiftStart').value || '0:0').split(':')[0]) >= 18;
+    $('shift-length').textContent =
+      h.toLocaleString('tr-TR', { maximumFractionDigits: 1 }) + ' saat' + (isNight ? ' (gece operasyonu)' : '');
+    $('shift-icon').textContent = isNight ? 'nightlight' : 'light_mode';
+    $('shift-icon').style.color = isNight ? 'var(--coral)' : 'var(--amber)';
+  }
+  $('shiftStart').addEventListener('change', updateShift);
+  $('shiftEnd').addEventListener('change', updateShift);
+  updateShift();
+
+  /* ---------- Mekân görseli kategoriye göre ---------- */
+  function updateVenue() {
+    const st = catStyle($('category').value);
+    $('venue-photo').style.backgroundImage = `url('${st.img}')`;
+    $('venue-pin').textContent = $('venue').value.trim() || $('city').value.trim() || 'Mekân';
+  }
+  $('category').addEventListener('change', () => { updateVenue(); refreshRadar(); });
+  $('venue').addEventListener('input', updateVenue);
+  $('city').addEventListener('input', () => { updateVenue(); refreshRadar(); });
+  updateVenue();
+
+  /* ---------- Canlı bütçe hesabı ---------- */
+  function recalc() {
+    const nf = Number($('neededFemale').value) || 0;
+    const nm = Number($('neededMale').value) || 0;
+    const pf = Number($('payFemale').value) || 0;
+    const pm = Number($('payMale').value) || 0;
+
+    const totF = nf * pf;
+    const totM = nm * pm;
+    const net = totF + totM;
+    const fee = Math.round(net * SERVICE_FEE);
+
+    $('cnt-female').textContent = nf;
+    $('cnt-male').textContent = nm;
+    $('tot-female').textContent = money(totF);
+    $('tot-male').textContent = money(totM);
+
+    $('row-female').textContent = `${nf}x Karşılama & tadım hostesi`;
+    $('row-male').textContent = `${nm}x Miksolojist & barmen`;
+    $('row-female-v').textContent = money(totF);
+    $('row-male-v').textContent = money(totM);
+    $('row-net').textContent = money(net);
+    $('row-fee').textContent = money(fee);
+    $('row-total').textContent = money(net + fee);
+
+    $('total-crew').textContent = `Toplam: ${nf + nm} kişilik ekip`;
+    $('submit-label').textContent = (nf + nm)
+      ? `İlanı yayınla & eşleşmeyi başlat (${nf + nm} kişi)`
+      : 'İlanı yayınla & eşleşmeyi başlat';
+  }
+  ['payFemale', 'payMale'].forEach(id => $(id).addEventListener('input', recalc));
+  recalc();
+
+  /* ---------- Eşleşme modu ---------- */
+  document.querySelectorAll('.mode-card').forEach(card => {
+    card.addEventListener('click', () => {
+      document.querySelectorAll('.mode-card').forEach(c => {
+        const on = c === card;
+        c.classList.toggle('active', on);
+        c.querySelector('.mode-top .mi').textContent = on ? 'radio_button_checked' : 'radio_button_unchecked';
+      });
+    });
+  });
+
+  /* ---------- Uyum skoru ---------- */
+  const SCORE_HINT = {
+    70: 'Geniş havuz — en hızlı doluluk',
+    75: 'Geniş havuz — hızlı doluluk',
+    80: 'Dengeli — iyi hız/kalite dengesi',
+    85: 'Önerilen — yüksek hassasiyet',
+    90: 'Seçici — deneyimli adaylar',
+    95: 'Seçkin protokol — en dar havuz'
+  };
+  $('minScore').addEventListener('input', e => {
+    const v = Number(e.target.value);
+    $('score-pill').textContent = '%' + v + ' ve üzeri';
+    $('score-hint').textContent = SCORE_HINT[v] || '';
+    document.querySelectorAll('.score-legend span').forEach(s =>
+      s.classList.toggle('on', s.textContent.startsWith('%' + v))
+    );
+    refreshRadar();
+  });
+
+  /* ---------- Yan haklar & rozet filtreleri (görsel durum) ---------- */
+  document.querySelectorAll('.perk input').forEach(cb =>
+    cb.addEventListener('change', () => cb.closest('.perk').classList.toggle('off', !cb.checked))
+  );
+  document.querySelectorAll('.badge-filter input').forEach(cb =>
+    cb.addEventListener('change', () => {
+      cb.closest('.badge-filter').classList.toggle('on', cb.checked);
+      refreshRadar();
+    })
+  );
+
+  /* ---------- Canlı aday radarı (gerçek aday havuzundan) ---------- */
+  const AV_BG = [
+    'linear-gradient(135deg,#3b4bf7,#182ae0)',
+    'linear-gradient(135deg,#FF5C38,#b52705)',
+    'linear-gradient(135deg,#10B981,#00573a)'
+  ];
+  let radarPool = [];
+
+  async function loadRadar() {
+    try {
+      // Firmanın mevcut ilanlarından biri üzerinden uygun aday havuzunu örnekle
+      const mine = await Api.request('/jobs/mine');
+      if (mine && mine.length) {
+        radarPool = await Api.request('/candidates/candidates-for-job/' + mine[0].id);
+      }
+    } catch (e) { radarPool = []; }
+    refreshRadar();
+  }
+
+  function refreshRadar() {
+    const min = Number($('minScore').value);
+    const badges = document.querySelectorAll('.badge-filter input:checked').length;
+    // Skor ve filtre sayısı arttıkça havuz daralır
+    const factor = Math.max(0.15, (100 - min) / 30) * (1 - (3 - badges) * 0.05);
+    const ready = Math.max(0, Math.round(radarPool.length * factor));
+
+    $('radar-count').textContent = ready + ' aday hazır';
+    $('pool-count').textContent = `Canlı kadro radarı: ${radarPool.length} müsait aday`;
+    $('radar-note-text').textContent = ready
+      ? `İlan yayınlandığı anda bu ${ready} adaya anlık vardiya teklifi gönderilir.`
+      : 'Filtreleri gevşetirsen daha fazla adaya ulaşırsın.';
+
+    const list = $('radar-list');
+    if (!radarPool.length) {
+      list.innerHTML = `<div class="radar-note" style="background:rgba(255,255,255,.06);">
+        <span class="mi mi-sm">info</span>
+        <span>Aday havuzu ilk ilanını yayınladıktan sonra burada canlı listelenir.</span></div>`;
+      return;
+    }
+    list.innerHTML = radarPool.slice(0, 3).map((c, i) => {
+      const score = Math.max(min, 99 - i * 2);
+      return `
+        <div class="radar-row">
+          <div class="radar-who">
+            <span class="radar-av" style="background:${AV_BG[i % 3]}">${initialsOf(c.fullName)}</span>
+            <div style="min-width:0;">
+              <div class="radar-name">${c.fullName}${c.age ? ' (' + c.age + ')' : ''}</div>
+              <div class="radar-sub">${c.city} • ${(c.categories || [])[0] || 'Saha ekibi'}</div>
+            </div>
+          </div>
+          <span class="radar-score">%${score} uyum</span>
+        </div>`;
+    }).join('');
+  }
+  loadRadar();
+
+  /* ---------- Şablon ---------- */
+  $('btn-template').addEventListener('click', () => {
+    $('title').value = 'Yeni Rakı — Boğaz Tadım Gecesi & Lansman';
+    $('category').value = 'Tadım & Promosyon';
+    $('venue').value = 'Kuruçeşme Arena';
+    $('address').value = 'Muallim Naci Cad. No:64, özel iskele girişi';
+    $('description').value = 'Boğaz kıyısında düzenlenecek tadım ve lansman gecesi için karşılama ve bar ekibi arıyoruz. Güler yüzlü, dakik ve protokol deneyimli adaylar tercih sebebidir.';
+    $('template-name').textContent = 'Gastronomi & Tadım';
+    updateVenue();
+  });
+
+  /* ---------- Taslak (yerel) ---------- */
+  $('btn-draft').addEventListener('click', () => {
+    localStorage.setItem('jobby_job_draft', JSON.stringify(collect()));
+    const b = $('btn-draft');
+    b.innerHTML = '<span class="mi mi-sm">check</span><span>Taslak kaydedildi</span>';
+    setTimeout(() => { b.innerHTML = '<span class="mi mi-sm">save</span><span>Taslak olarak kaydet</span>'; }, 1800);
+  });
+
+  /* ---------- Gönderim ---------- */
+  function collect() {
+    const nf = Number($('neededFemale').value) || 0;
+    const nm = Number($('neededMale').value) || 0;
+    const pf = Number($('payFemale').value) || 0;
+    const pm = Number($('payMale').value) || 0;
+    return {
+      title: $('title').value.trim(),
+      description: $('description').value.trim(),
+      city: $('city').value.trim(),
+      eventDate: $('eventDate').value,
+      category: $('category').value,
+      neededFemale: nf,
+      neededMale: nm,
+      // Kartlarda tek bir rakam gösterildiği için en yüksek rol ücreti taban kabul edilir
+      payDaily: Math.max(pf, pm),
+      venue: $('venue').value.trim(),
+      address: $('address').value.trim(),
+      shiftStart: $('shiftStart').value,
+      shiftEnd: $('shiftEnd').value,
+      shiftHours: Number(shiftHours().toFixed(1)),
+      transferService: $('transferService').checked,
+      roles: [
+        { key: 'female', label: 'Karşılama & tadım hostesi', gender: 'kadın', count: nf, rate: pf, dressCode: $('dressFemale').value.trim() },
+        { key: 'male', label: 'Miksolojist & barmen', gender: 'erkek', count: nm, rate: pm, dressCode: $('dressMale').value.trim() }
+      ].filter(r => r.count > 0),
+      perks: [...document.querySelectorAll('.perk input:checked')].map(i => i.value),
+      matchMode: document.querySelector('input[name=matchMode]:checked').value,
+      minScore: Number($('minScore').value),
+      requiredBadges: [...document.querySelectorAll('.badge-filter input:checked')].map(i => i.value)
+    };
+  }
+
+  const errorBox = $('error-box');
+  const submitBtn = $('submit-btn');
+
+  $('job-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(errorBox);
+
+    const payload = collect();
+    if (payload.neededFemale + payload.neededMale === 0) {
+      showError(errorBox, 'En az bir rol için kontenjan girmelisin.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Yayınlanıyor...</span>';
+    try {
+      await Api.request('/jobs', { method: 'POST', body: payload });
+      localStorage.removeItem('jobby_job_draft');
+      window.location.href = '/company/dashboard.html';
+    } catch (err) {
+      showError(errorBox, err.message);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="mi mi-sm">rocket_launch</span><span>İlanı yayınla &amp; eşleşmeyi başlat</span>';
+    }
+  });
+}
+</script>
+</body>
+</html>

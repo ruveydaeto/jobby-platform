@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int     @id @default(autoincrement())
+  email     String  @unique
+  passwordHash String
+  role      String
+  createdAt DateTime @default(now())
+
+  candidate Candidate?
+  company   Company?
+
+  @@map("users")
+}
+
+model Candidate {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique
+  fullName  String
+  city      String
+  region    String?
+  age       Int?
+  gender    String?
+  bio       String?
+  categories String?
+  availability String?
+  avatarSeed String?
+
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches      Match[] @relation("CandidateMatch")
+  applications Application[]
+
+  @@map("candidates")
+}
+
+model Company {
+  id        Int     @id @default(autoincrement())
+  userId    Int     @unique
+  companyName String
+  sector    String?
+  city      String?
+  email     String?
+  phone     String?
+  website   String?
+  address   String?
+  description String?
+  logoSeed  String?
+
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobs         Job[]
+  matches      Match[] @relation("CompanyMatch")
+  applications Application[]
+
+  @@map("companies")
+}
+
+model Job {
+  id        Int     @id @default(autoincrement())
+  companyId Int
+  title     String
+  description String?
+  city      String
+  category  String
+  neededMale Int @default(0)
+  neededFemale Int @default(0)
+  payDaily  Int @default(0)
+  eventDate String
+  status    String @default("open")
+  createdAt DateTime @default(now())
+
+  company      Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  matches      Match[]
+  applications Application[]
+
+  @@map("jobs")
+}
+
+model Match {
+  id        Int     @id @default(autoincrement())
+  jobId     Int
+  candidateId Int
+  companyId Int
+  createdAt DateTime @default(now())
+
+  job       Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidate Candidate @relation("CandidateMatch", fields: [candidateId], references: [id], onDelete: Cascade)
+  company   Company @relation("CompanyMatch", fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, candidateId])
+  @@map("matches")
+}
+
+model Application {
+  id        Int     @id @default(autoincrement())
+  jobId     Int
+  candidateId Int
+  companyId Int
+  phone     String
+  coverLetter String
+  availabilityNote String
+  experience String?
+  status    String @default("pending")
+  createdAt DateTime @default(now())
+  decidedAt DateTime?
+
+  job       Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([jobId, candidateId])
+  @@map("applications")
+}

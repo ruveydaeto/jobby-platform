@@ -1,0 +1,131 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlanları kaydır — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <span class="eyebrow"><span class="live-dot"></span>Hızlı eşleşme motoru</span>
+    <h1>İlanları kaydır</h1>
+    <p>Sana uygun ilanları getirdik. Beğendiğini sağa, ilgilenmediğini sola kaydır — firma da seni beğenirse eşleşme anında kurulur.</p>
+  </div>
+
+  <div class="stack-area" id="stack-area"></div>
+  <div class="swipe-dock" id="actions" style="display:none;">
+    <button class="round-btn pass" id="btn-pass" title="İlgilenmiyorum"><span class="mi mi-lg">close</span></button>
+    <button class="round-btn info" id="btn-info" title="Detay"><span class="mi">info</span></button>
+    <button class="round-btn like" id="btn-like" title="Beğendim"><span class="mi mi-lg">favorite</span></button>
+  </div>
+</div>
+
+<div class="match-toast" id="match-toast">🎉 Eşleştin! Panelinden detayları gör.</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+let jobs = [];
+let idx = 0;
+const stackArea = document.getElementById('stack-area');
+const actions = document.getElementById('actions');
+const toast = document.getElementById('match-toast');
+
+function cardHtml(job) {
+  const st = catStyle(job.category);
+  const left = daysUntil(job.eventDate);
+  return `
+    <div class="swipe-card" data-id="${job.id}">
+      <div class="avatar-block photo" style="background-image:url('${st.img}')">
+        <span class="badge-cat">${job.category}</span>
+        ${left <= 3 ? `<span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? 'Bugün' : left + ' gün'}</span>` : ''}
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div style="min-width:0;">
+          <h3>${job.title}</h3>
+          <div class="sub">${job.companyName} · ${job.city} · ${dateLabel(job)}</div>
+        </div>
+        <div class="pay-badge">${money(job.payDaily)}
+          <small style="display:block;font-size:10px;font-weight:600;color:var(--on-surface-var);">GÜNLÜK</small>
+        </div>
+      </div>
+      <div class="need-row">
+        ${job.neededFemale ? `<span class="need-pill">${job.neededFemale} kadın</span>` : ''}
+        ${job.neededMale ? `<span class="need-pill">${job.neededMale} erkek</span>` : ''}
+      </div>
+      <p class="desc">${job.description || ''}</p>
+    </div>`;
+}
+
+function render() {
+  stackArea.innerHTML = '';
+  const visible = jobs.slice(idx, idx + 3).reverse();
+  if (jobs.slice(idx).length === 0) {
+    stackArea.innerHTML = `<div class="empty-state"><span class="mi mi-lg" style="color:var(--primary)">done_all</span><h3 style="margin:8px 0;">Şimdilik bu kadar</h3><p style="margin:0;">Profilinle eşleşen yeni ilan kalmadı. Daha sonra tekrar bak.</p></div>`;
+    actions.style.display = 'none';
+    return;
+  }
+  actions.style.display = 'flex';
+  visible.forEach((job, i) => {
+    const el = document.createElement('div');
+    el.innerHTML = cardHtml(job);
+    const card = el.firstElementChild;
+    const depth = visible.length - 1 - i;
+    card.style.transform = `translateY(${depth * 10}px) scale(${1 - depth * 0.04})`;
+    card.style.zIndex = 10 + i;
+    stackArea.appendChild(card);
+  });
+}
+
+async function swipe(direction) {
+  const job = jobs[idx];
+  if (!job) return;
+  const topCard = stackArea.querySelector(`.swipe-card[data-id="${job.id}"]`);
+  if (topCard) {
+    topCard.style.transform = `translateX(${direction === 'like' ? 500 : -500}px) rotate(${direction === 'like' ? 18 : -18}deg)`;
+    topCard.style.opacity = '0';
+  }
+  idx++;
+  setTimeout(render, 220);
+
+  try {
+    const res = await Api.request('/matches/swipe', {
+      method: 'POST',
+      body: { targetType: 'job', targetId: job.id, direction }
+    });
+    if (res.matched) {
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2400);
+    }
+  } catch (e) { /* sessizce geç */ }
+}
+
+document.getElementById('btn-like').addEventListener('click', () => swipe('like'));
+document.getElementById('btn-pass').addEventListener('click', () => swipe('pass'));
+document.getElementById('btn-info').addEventListener('click', () => {
+  const job = jobs[idx];
+  location.href = job ? '/job.html?id=' + job.id : '/dashboard.html';
+});
+
+if (Api.requireAuth('candidate')) {
+  (async () => {
+    try {
+      jobs = await Api.request('/jobs/feed');
+      render();
+    } catch (e) {
+      stackArea.innerHTML = `<div class="empty-state">İlanlar yüklenemedi.</div>`;
+    }
+  })();
+}
+</script>
+</body>
+</html>

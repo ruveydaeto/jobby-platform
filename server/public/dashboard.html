@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panelim — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .panel-section { margin-top: var(--s-2xl); }
+  .section-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    gap: var(--s-md); margin-bottom: var(--s-md);
+  }
+  .section-head h2 { font-size: 22px; line-height: 30px; margin-bottom: 4px; }
+  .section-head p { margin: 0; font-size: 13px; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+
+  .row-card {
+    display: flex; justify-content: space-between; align-items: center; gap: var(--s-md);
+    background: var(--surface-lowest); border: 1px solid var(--stroke);
+    border-left: 3px solid var(--outline-var); border-radius: var(--r-lg);
+    padding: 16px 18px; box-shadow: var(--e1);
+  }
+  .row-card.is-pending  { border-left-color: var(--indigo); }
+  .row-card.is-accepted { border-left-color: var(--tertiary-container); }
+  .row-card.is-rejected { border-left-color: var(--outline-var); opacity: 0.72; }
+  .row-card h3 { font-size: 16px; line-height: 24px; margin-bottom: 2px; }
+  .row-right { text-align: right; white-space: nowrap; display: flex;
+    flex-direction: column; align-items: flex-end; gap: 6px; }
+  .row-pay { font-weight: 800; font-size: 15px; color: var(--primary); }
+  .row-note { font-size: 12px; color: var(--on-surface-var); }
+
+  @media (max-width: 600px) {
+    .row-card { flex-direction: column; align-items: flex-start; }
+    .row-right { text-align: left; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <div class="app-header">
+    <span class="eyebrow"><span class="mi mi-xs">dashboard</span>Aday paneli</span>
+    <h1>Panelim</h1>
+    <p>Eşleşmelerin, gönderdiğin başvurular ve beğendiğin ilanlar burada. Eşleşme; ya firma da seni beğendiğinde ya da başvurun kabul edildiğinde kurulur.</p>
+  </div>
+
+  <section>
+    <div class="section-head">
+      <div>
+        <h2>Eşleşmelerim</h2>
+        <p class="muted">Karşılıklı onay tamamlandı — vardiya detayları açık.</p>
+      </div>
+      <span class="chip chip-teal" id="match-count" style="display:none;"></span>
+    </div>
+    <div class="stack" id="list"></div>
+  </section>
+
+  <section class="panel-section" id="apps-section" style="display:none;">
+    <div class="section-head">
+      <div>
+        <h2>Başvurularım</h2>
+        <p class="muted">Form doldurarak gönderdiğin başvurular ve firmaların yanıtı.</p>
+      </div>
+      <span class="chip chip-accent" id="apps-count"></span>
+    </div>
+    <div class="stack" id="apps-list"></div>
+  </section>
+
+  <section class="panel-section" id="pending-section" style="display:none;">
+    <div class="section-head">
+      <div>
+        <h2>Beğendiklerin</h2>
+        <p class="muted">Sağa kaydırdın, firmanın beğenisi bekleniyor. Beklemek istemiyorsan ilana başvuru da yapabilirsin.</p>
+      </div>
+      <span class="chip chip-outline" id="pending-count"></span>
+    </div>
+    <div class="stack" id="pending-list"></div>
+  </section>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+const APPLICATION_STATUS = {
+  pending:  { cls: 'is-pending',  chip: 'chip-accent', icon: 'hourglass_top', label: 'Yanıt bekleniyor' },
+  accepted: { cls: 'is-accepted', chip: 'chip-teal',   icon: 'check_circle',  label: 'Kabul edildi' },
+  rejected: { cls: 'is-rejected', chip: 'chip-outline',icon: 'cancel',        label: 'Olumsuz' }
+};
+
+function timeAgo(iso) {
+  const mins = Math.floor((Date.now() - new Date(iso)) / 60000);
+  if (mins < 1) return 'az önce';
+  if (mins < 60) return mins + ' dk önce';
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) return hours + ' saat önce';
+  return Math.floor(hours / 24) + ' gün önce';
+}
+
+function matchCard(m) {
+  return `
+    <div class="job-card">
+      <div class="job-card-top">
+        <div>
+          <h3>${m.jobTitle}</h3>
+          <div class="job-meta"><span>${m.companyName}</span><span>${m.jobCity}</span><span>${m.eventDate}</span></div>
+        </div>
+        <span class="chip chip-teal"><span class="mi mi-xs mi-fill">check_circle</span>Eşleşti</span>
+      </div>
+      <div class="need-row">
+        <span class="need-pill"><span class="mi mi-xs">payments</span> ${money(m.payDaily)} / gün</span>
+        <span class="need-pill"><span class="mi mi-xs">verified_user</span> Ödeme güvencesi</span>
+      </div>
+    </div>`;
+}
+
+function applicationCard(a) {
+  const s = APPLICATION_STATUS[a.status] || APPLICATION_STATUS.pending;
+  const when = a.status === 'pending' ? 'Gönderildi · ' + timeAgo(a.createdAt)
+                                      : 'Yanıtlandı · ' + timeAgo(a.decidedAt || a.createdAt);
+  return `
+    <a class="row-card ${s.cls}" href="/job.html?id=${a.jobId}">
+      <div style="min-width:0;">
+        <h3>${a.jobTitle}</h3>
+        <div class="job-meta"><span>${a.companyName}</span><span>${a.jobCity}</span><span>${a.eventDate}</span></div>
+      </div>
+      <div class="row-right">
+        <span class="chip ${s.chip}"><span class="mi mi-xs">${s.icon}</span>${s.label}</span>
+        <span class="row-pay">${money(a.payDaily)} / gün</span>
+        <span class="row-note">${when}</span>
+      </div>
+    </a>`;
+}
+
+function pendingCard(p) {
+  return `
+    <a class="row-card" href="/job.html?id=${p.jobId}">
+      <div style="min-width:0;">
+        <h3>${p.jobTitle}</h3>
+        <div class="job-meta"><span>${p.companyName}</span><span>${p.jobCity}</span><span>${p.eventDate}</span></div>
+      </div>
+      <div class="row-right">
+        <span class="row-pay">${money(p.payDaily)} / gün</span>
+        <span class="row-note">Beğendin · ${timeAgo(p.likedAt)}</span>
+      </div>
+    </a>`;
+}
+
+if (Api.requireAuth('candidate')) {
+  (async () => {
+    const list = document.getElementById('list');
+
+    const [matches, applications, pending] = await Promise.all([
+      Api.request('/matches/mine').catch(() => null),
+      Api.request('/applications/mine').catch(() => []),
+      Api.request('/matches/pending').catch(() => [])
+    ]);
+
+    if (matches === null) {
+      list.innerHTML = `<div class="empty-state">Eşleşmeler yüklenemedi.</div>`;
+    } else if (matches.length === 0) {
+      const waiting = applications.filter(a => a.status === 'pending').length + pending.length;
+      const hint = waiting
+        ? `<p style="margin:0 0 16px;">${waiting} ilan için yanıt bekliyorsun. Aşağıda listeledik.</p>`
+        : `<p style="margin:0 0 16px;">İlanları kaydır veya doğrudan başvur — firma onayladığında burada görünecek.</p>`;
+      list.innerHTML = `<div class="empty-state">
+        <span class="mi mi-lg" style="color:var(--primary)">swipe_right</span>
+        <h3 style="margin:8px 0;">Henüz eşleşmen yok</h3>${hint}
+        <a href="/swipe.html" class="btn btn-primary btn-sm">İlanları kaydır</a>
+      </div>`;
+    } else {
+      list.innerHTML = matches.map(matchCard).join('');
+      const c = document.getElementById('match-count');
+      c.textContent = matches.length + ' eşleşme';
+      c.style.display = '';
+    }
+
+    if (applications.length) {
+      document.getElementById('apps-section').style.display = 'block';
+      document.getElementById('apps-count').textContent = applications.length + ' başvuru';
+      document.getElementById('apps-list').innerHTML = applications.map(applicationCard).join('');
+    }
+
+    if (pending.length) {
+      document.getElementById('pending-section').style.display = 'block';
+      document.getElementById('pending-count').textContent = pending.length + ' ilan';
+      document.getElementById('pending-list').innerHTML = pending.map(pendingCard).join('');
+    }
+  })();
+}
+</script>
+</body>
+</html>

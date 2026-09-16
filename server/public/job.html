@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlan detayı — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+<style>
+  .job-hero {
+    height: 240px; border-radius: var(--r-xl); position: relative; overflow: hidden;
+    background-size: cover; background-position: center; margin-bottom: var(--s-lg);
+  }
+  .job-hero::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.05) 40%, rgba(0,0,0,0.55) 100%);
+  }
+  .job-hero .badge-cat { position: absolute; top: 14px; left: 14px; z-index: 1; }
+  .job-hero .badge-live { position: absolute; top: 14px; right: 14px; z-index: 1; }
+
+  .job-layout { display: grid; grid-template-columns: 1fr 360px; gap: var(--s-xl); align-items: start; }
+  .apply-panel {
+    position: sticky; top: 24px;
+    background: var(--surface-lowest); border: 1px solid var(--stroke);
+    border-radius: var(--r-lg); padding: var(--s-lg); box-shadow: var(--e2);
+  }
+  .apply-pay { font-size: 32px; font-weight: 800; color: var(--primary); letter-spacing: -0.02em; }
+  .apply-pay small { display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--on-surface-var); text-transform: uppercase; margin-top: 2px; }
+
+  .fact-row { display: flex; justify-content: space-between; gap: 12px; padding: 11px 0;
+    border-top: 1px solid var(--stroke); font-size: 14px; }
+  .fact-row:first-of-type { border-top: none; }
+  .fact-row dt { color: var(--on-surface-var); }
+  .fact-row dd { margin: 0; font-weight: 600; text-align: right; }
+
+  .status-banner {
+    display: flex; align-items: center; gap: 10px; padding: 14px;
+    border-radius: var(--r); font-size: 14px; font-weight: 600; line-height: 1.4;
+  }
+  .status-pending  { background: var(--primary-fixed); color: var(--primary); }
+  .status-accepted { background: rgba(16,185,129,0.12); color: var(--tertiary-container); }
+  .status-rejected { background: rgba(255,92,56,0.1); color: var(--secondary); }
+
+  .prefill {
+    background: var(--surface-low); border-radius: var(--r); padding: 12px 14px;
+    font-size: 13px; color: var(--on-surface-var); margin-bottom: var(--s-md);
+  }
+  .prefill strong { color: var(--on-surface); font-weight: 600; }
+
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 14px;
+    font-weight: 600; color: var(--on-surface-var); margin-bottom: var(--s-md); }
+  .back-link:hover { color: var(--primary); }
+
+  .char-count { font-size: 12px; color: var(--on-surface-var); margin-top: 6px; text-align: right; }
+
+  @media (max-width: 900px) {
+    .job-layout { grid-template-columns: 1fr; }
+    .apply-panel { position: static; }
+  }
+</style>
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell">
+  <a href="/" class="back-link"><span class="mi mi-sm">arrow_back</span>Tüm ilanlar</a>
+  <div id="content"><div class="empty-state">Yükleniyor…</div></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+const jobId = new URLSearchParams(location.search).get('id');
+const content = document.getElementById('content');
+
+function detailHtml(job, application, profile) {
+  const st = catStyle(job.category);
+  const left = daysUntil(job.eventDate);
+  const eventDate = new Date(job.eventDate).toLocaleDateString('tr-TR',
+    { day: 'numeric', month: 'long', year: 'numeric' });
+
+  return `
+    <div class="job-hero" style="background-image:url('${st.img}')">
+      <span class="chip chip-outline badge-cat" style="background:rgba(255,255,255,0.92);">${st.emoji} ${job.category}</span>
+      ${left <= 3 ? `<span class="chip chip-coral badge-live" style="background:rgba(255,255,255,0.92);">
+        <span class="mi mi-xs">local_fire_department</span>${left <= 0 ? 'Bugün' : left + ' gün kaldı'}</span>` : ''}
+    </div>
+
+    <div class="job-layout">
+      <div>
+        <h1 style="margin-bottom:6px;">${job.title}</h1>
+        <div class="job-meta" style="margin-bottom:var(--s-lg);">
+          <span>${job.companyName}</span><span>${job.city}</span><span>${dateLabel(job)}</span>
+        </div>
+
+        <h3 style="margin-bottom:8px;">İş tanımı</h3>
+        <p style="line-height:1.65;">${job.description || 'Bu ilan için ayrıntılı açıklama girilmemiş.'}</p>
+
+        <hr class="form-divider">
+
+        <h3 style="margin-bottom:12px;">Aranan ekip</h3>
+        <div class="need-row" style="margin-bottom:var(--s-lg);">
+          ${job.neededFemale ? `<span class="need-pill">${job.neededFemale} kadın</span>` : ''}
+          ${job.neededMale ? `<span class="need-pill">${job.neededMale} erkek</span>` : ''}
+          <span class="need-pill">${job.applicantCount} başvuru</span>
+        </div>
+
+        <h3 style="margin-bottom:8px;">Firma</h3>
+        <p style="line-height:1.65;">
+          <strong>${job.companyName}</strong>${job.companySector ? ' · ' + job.companySector : ''}<br>
+          ${job.companyDescription || ''}
+        </p>
+      </div>
+
+      <aside class="apply-panel">
+        <div class="apply-pay">${money(job.payDaily)}<small>Günlük ücret</small></div>
+
+        <dl style="margin:var(--s-lg) 0;">
+          <div class="fact-row"><dt>Tarih</dt><dd>${eventDate}</dd></div>
+          <div class="fact-row"><dt>Şehir</dt><dd>${job.city}</dd></div>
+          <div class="fact-row"><dt>Kategori</dt><dd>${job.category}</dd></div>
+          <div class="fact-row"><dt>Başvuru</dt><dd>${job.applicantCount} kişi</dd></div>
+        </dl>
+
+        <div id="apply-zone">${applyZoneHtml(application, profile)}</div>
+      </aside>
+    </div>`;
+}
+
+function applyZoneHtml(application, profile) {
+  if (!Api.isLoggedIn()) {
+    return `
+      <a href="/login.html" class="btn btn-primary btn-block">Başvurmak için giriş yap</a>
+      <p class="hint" style="text-align:center;margin-top:10px;">
+        Hesabın yok mu? <a href="/register.html?role=candidate" style="color:var(--indigo);font-weight:600;">Aday olarak kaydol</a>
+      </p>`;
+  }
+
+  if (Api.role() === 'company') {
+    return `<div class="status-banner status-pending">
+      <span class="mi mi-sm">business</span>Firma hesabıyla ilana başvuru yapılamaz.
+    </div>`;
+  }
+
+  if (application && application.applied) {
+    const map = {
+      pending:  ['status-pending',  'hourglass_top', 'Başvurun iletildi. Firmanın yanıtı bekleniyor.'],
+      accepted: ['status-accepted', 'check_circle',  'Başvurun kabul edildi! Eşleşmelerinde görebilirsin.'],
+      rejected: ['status-rejected', 'cancel',        'Bu başvurun olumsuz sonuçlandı.']
+    };
+    const [cls, icon, text] = map[application.status] || map.pending;
+    return `<div class="status-banner ${cls}"><span class="mi mi-sm">${icon}</span>${text}</div>
+      <a href="/dashboard.html" class="btn btn-ghost btn-block" style="margin-top:12px;">Başvurularım</a>`;
+  }
+
+  return `
+    <button class="btn btn-primary btn-block" id="btn-open-form">
+      <span class="mi mi-sm">edit_document</span> Başvur
+    </button>
+    <p class="hint" style="text-align:center;margin-top:10px;">Kısa bir form doldurman yeterli.</p>
+
+    <form id="apply-form" style="display:none;margin-top:var(--s-md);">
+      <div class="error-box" id="form-error"></div>
+
+      <div class="prefill">
+        Profilinden gidecek: <strong>${profile ? profile.fullName : ''}</strong>
+        ${profile && profile.city ? ' · ' + profile.city : ''}${profile && profile.age ? ' · ' + profile.age + ' yaş' : ''}
+      </div>
+
+      <div class="field">
+        <label for="phone">Telefon <span style="color:var(--secondary);">*</span></label>
+        <input type="tel" id="phone" placeholder="05XX XXX XX XX" required>
+        <div class="hint">Firma seninle bu numaradan iletişime geçecek.</div>
+      </div>
+
+      <div class="field">
+        <label for="coverLetter">Neden bu iş için uygunsun? <span style="color:var(--secondary);">*</span></label>
+        <textarea id="coverLetter" placeholder="Kendini kısaca tanıt, bu işe neden uygun olduğunu anlat." required></textarea>
+        <div class="char-count" id="cover-count">0 / en az 20 karakter</div>
+      </div>
+
+      <div class="field">
+        <label for="availabilityNote">Bu iş için müsaitliğin <span style="color:var(--secondary);">*</span></label>
+        <input type="text" id="availabilityNote" placeholder="Örn. Tüm gün müsaitim, 09:00-18:00" required>
+      </div>
+
+      <div class="field">
+        <label for="experience">İlgili deneyimin</label>
+        <textarea id="experience" placeholder="Bu alanda daha önce çalıştıysan kısaca yaz. Zorunlu değil." style="min-height:72px;"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block" id="btn-submit">Başvuruyu gönder</button>
+      <button type="button" class="btn btn-ghost btn-block" id="btn-cancel" style="margin-top:8px;">Vazgeç</button>
+    </form>`;
+}
+
+function bindForm(job) {
+  const openBtn = document.getElementById('btn-open-form');
+  if (!openBtn) return;
+
+  const form = document.getElementById('apply-form');
+  const errorBox = document.getElementById('form-error');
+  const cover = document.getElementById('coverLetter');
+  const counter = document.getElementById('cover-count');
+
+  openBtn.addEventListener('click', () => {
+    openBtn.style.display = 'none';
+    form.style.display = 'block';
+    document.getElementById('phone').focus();
+  });
+
+  document.getElementById('btn-cancel').addEventListener('click', () => {
+    form.style.display = 'none';
+    openBtn.style.display = '';
+    hideError(errorBox);
+  });
+
+  cover.addEventListener('input', () => {
+    const n = cover.value.trim().length;
+    counter.textContent = n < 20 ? `${n} / en az 20 karakter` : `${n} karakter`;
+    counter.style.color = n < 20 ? 'var(--on-surface-var)' : 'var(--tertiary-container)';
+  });
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(errorBox);
+    const btn = document.getElementById('btn-submit');
+    btn.disabled = true;
+    btn.textContent = 'Gönderiliyor…';
+
+    try {
+      await Api.request('/applications', {
+        method: 'POST',
+        body: {
+          jobId: job.id,
+          phone: document.getElementById('phone').value,
+          coverLetter: cover.value,
+          availabilityNote: document.getElementById('availabilityNote').value,
+          experience: document.getElementById('experience').value
+        }
+      });
+      document.getElementById('apply-zone').innerHTML =
+        applyZoneHtml({ applied: true, status: 'pending' }, null);
+    } catch (err) {
+      showError(errorBox, err.message);
+      btn.disabled = false;
+      btn.textContent = 'Başvuruyu gönder';
+    }
+  });
+}
+
+(async () => {
+  if (!jobId) {
+    content.innerHTML = `<div class="empty-state">İlan bulunamadı.</div>`;
+    return;
+  }
+
+  try {
+    const job = await Api.request('/jobs/' + jobId);
+
+    let application = null;
+    let profile = null;
+    if (Api.isLoggedIn() && Api.role() === 'candidate') {
+      application = await Api.request('/applications/status/' + jobId).catch(() => null);
+      profile = await Api.request('/candidates/me').catch(() => null);
+    }
+
+    content.innerHTML = detailHtml(job, application, profile);
+    bindForm(job);
+  } catch (e) {
+    content.innerHTML = `<div class="empty-state">
+      <h3 style="margin:8px 0;">İlan açılamadı</h3>
+      <p style="margin:0 0 16px;">${e.message}</p>
+      <a href="/" class="btn btn-primary btn-sm">Ana sayfaya dön</a>
+    </div>`;
+  }
+})();
+</script>
+</body>
+</html>

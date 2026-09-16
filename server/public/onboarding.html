@@ -1,0 +1,231 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profilini tamamla — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell" style="max-width:860px;">
+  <div class="progress-head">
+    <div class="progress-top">
+      <div>
+        <span class="chip"><span class="live-dot"></span>Aday başvuru portalı</span>
+        <h1 style="margin:10px 0 6px;">Aday profilini oluştur — dakikalar içinde eşleşme havuzuna katıl</h1>
+        <p style="margin:0;max-width:62ch;">Konser, festival, fuar ve gastronomi etkinliklerinde günlük esnek vardiyalar yakala.
+           Profilin ne kadar doluysa o kadar çok davet alırsın.</p>
+      </div>
+      <div class="progress-badge">
+        <div class="ring">
+          <svg width="56" height="56" viewBox="0 0 48 48">
+            <circle cx="24" cy="24" r="19" fill="none" stroke="var(--surface-high)" stroke-width="4"></circle>
+            <circle id="ring-fill" cx="24" cy="24" r="19" fill="none" stroke="var(--primary-container)"
+                    stroke-width="4" stroke-linecap="round" stroke-dasharray="119.38" stroke-dashoffset="119.38"
+                    style="transition:stroke-dashoffset .5s ease"></circle>
+          </svg>
+          <span id="ring-label">0%</span>
+        </div>
+        <div>
+          <div class="t-lsm upper" style="color:var(--teal);display:flex;align-items:center;gap:4px;">
+            <span class="mi mi-xs mi-fill">verified</span><span id="strength-label">Profil gücü</span>
+          </div>
+          <p class="t-bsm" style="margin:0;">Hızlı eşleşme için önerilir</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="stepper">
+      <div class="stepper-item done">
+        <span class="stepper-dot"><span class="mi mi-xs">check</span></span>
+        <span class="stepper-text"><i>Adım 1</i><b>Hesap oluşturuldu</b></span>
+      </div>
+      <div class="stepper-item current">
+        <span class="stepper-dot">2</span>
+        <span class="stepper-text"><i>Şu anki adım</i><b>Kişisel bilgiler</b></span>
+      </div>
+      <div class="stepper-item">
+        <span class="stepper-dot">3</span>
+        <span class="stepper-text"><i>Sırada</i><b>Yetkinlik &amp; roller</b></span>
+      </div>
+      <div class="stepper-item todo">
+        <span class="stepper-dot">4</span>
+        <span class="stepper-text"><i>Son adım</i><b>İlanları kaydır</b></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="error-box" class="error-box"></div>
+
+  <form id="profile-form" class="panel">
+    <div class="form-section">
+      <span class="form-section-icon"><span class="mi">badge</span></span>
+      <div>
+        <h2>Temel bilgiler</h2>
+        <p>Organizatörler seni ilk olarak bu bilgilerle değerlendirir.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Ad Soyad</label>
+      <input type="text" id="fullName">
+    </div>
+    <div class="grid-2">
+      <div class="field">
+        <label>Şehir</label>
+        <input type="text" id="city">
+      </div>
+      <div class="field">
+        <label>Yaş</label>
+        <input type="number" id="age" min="16" max="70">
+      </div>
+    </div>
+    <div class="field">
+      <label>Cinsiyet</label>
+      <select id="gender">
+        <option value="kadın">Kadın</option>
+        <option value="erkek">Erkek</option>
+        <option value="belirtmek istemiyorum">Belirtmek istemiyorum</option>
+      </select>
+    </div>
+    <hr class="form-divider">
+    <div class="form-section">
+      <span class="form-section-icon"><span class="mi">distance</span></span>
+      <div>
+        <h2>Bölge &amp; müsaitlik</h2>
+        <p>Vardiya teklifleri seçtiğin bölgeye ve müsaitliğine göre filtrelenir.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Çalışmak istediğin bölge</label>
+      <select id="region">
+        <option value="">Seç</option>
+        <option value="hepsi">Hepsi</option>
+        <option value="avrupa">Avrupa Yakası</option>
+        <option value="anadolu">Anadolu Yakası</option>
+      </select>
+    </div>
+    <hr class="form-divider">
+    <div class="form-section">
+      <span class="form-section-icon"><span class="mi">work</span></span>
+      <div>
+        <h2>Roller &amp; tanıtım</h2>
+        <p>Eşleşme algoritmasının sana doğrudan davet göndereceği uzmanlık alanları.</p>
+      </div>
+    </div>
+    <div class="field">
+      <label>Çalışmak istediğin alanlar</label>
+      <div class="checkbox-grid" id="category-grid"></div>
+    </div>
+    <div class="field">
+      <label>Müsaitlik</label>
+      <input type="text" id="availability" placeholder="Örn. Hafta sonu ve akşam">
+    </div>
+    <div class="field">
+      <label>Kısa tanıtım</label>
+      <textarea id="bio" placeholder="Kendini birkaç cümleyle anlat"></textarea>
+    </div>
+    <div class="auth-side-note" style="margin-bottom:16px;">
+      <span class="mi mi-sm" style="color:var(--primary)">lightbulb</span>
+      <span>Doğrulanmış profil ve yabancı dil bilgisi ekleyen adaylar haftada ortalama
+        <b>3,4 kat daha fazla</b> doğrudan vardiya daveti alıyor.</span>
+    </div>
+    <button type="submit" class="btn btn-primary btn-block btn-lg" id="submit-btn">
+      <span class="mi mi-sm">bolt</span><span>Profili kaydet ve ilanları gör</span>
+    </button>
+  </form>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+if (Api.requireAuth('candidate')) {
+  const CATEGORIES = ['Hepsi', 'Fuar Standı','Konser & Etkinlik','Tadım & Promosyon','Hostes/Host','Anket & Saha','Depo & Lojistik', 'Diğer'];
+  const grid = document.getElementById('category-grid');
+  grid.innerHTML = CATEGORIES.map(c => `
+    <label class="check-pill" data-cat="${c}">
+      <input type="checkbox" value="${c}"> ${c}
+    </label>`).join('');
+
+  grid.querySelectorAll('input[type=checkbox]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('.check-pill').classList.toggle('checked', cb.checked);
+    });
+  });
+
+  (async () => {
+    try {
+      const profile = await Api.request('/candidates/me');
+      if (profile) {
+        document.getElementById('fullName').value = profile.fullName || '';
+        document.getElementById('city').value = profile.city || '';
+        document.getElementById('age').value = profile.age || '';
+        document.getElementById('gender').value = profile.gender || 'kadın';
+        document.getElementById('region').value = profile.region || '';
+        document.getElementById('availability').value = profile.availability || '';
+        document.getElementById('bio').value = profile.bio || '';
+        (profile.categories || []).forEach(c => {
+          const el = grid.querySelector(`input[value="${c}"]`);
+          if (el) { el.checked = true; el.closest('.check-pill').classList.add('checked'); }
+        });
+      }
+    } catch (e) { /* profil henüz boş olabilir */ }
+    updateStrength();
+  })();
+
+
+  /* --- Canlı profil gücü göstergesi --- */
+  const RING_LEN = 119.38;
+  function updateStrength() {
+    const ids = ['fullName', 'city', 'age', 'region', 'availability', 'bio'];
+    let filled = ids.filter(id => String(document.getElementById(id).value || '').trim() !== '').length;
+    if (grid.querySelectorAll('input:checked').length) filled++;
+    const pct = Math.round((filled / (ids.length + 1)) * 100);
+    document.getElementById('ring-fill').setAttribute('stroke-dashoffset', RING_LEN * (1 - pct / 100));
+    document.getElementById('ring-label').textContent = pct + '%';
+    document.getElementById('strength-label').textContent =
+      pct >= 85 ? 'Yüksek profil gücü' : pct >= 50 ? 'Orta profil gücü' : 'Profil gücü düşük';
+  }
+  document.getElementById('profile-form').addEventListener('input', updateStrength);
+  document.getElementById('profile-form').addEventListener('change', updateStrength);
+  updateStrength();
+
+  const errorBox = document.getElementById('error-box');
+  const submitBtn = document.getElementById('submit-btn');
+
+  document.getElementById('profile-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideError(errorBox);
+    const categories = Array.from(grid.querySelectorAll('input:checked')).map(i => i.value);
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Kaydediliyor...</span>';
+    try {
+      await Api.request('/candidates/me', {
+        method: 'PUT',
+        body: {
+          fullName: document.getElementById('fullName').value.trim(),
+          city: document.getElementById('city').value.trim(),
+          age: Number(document.getElementById('age').value) || null,
+          gender: document.getElementById('gender').value,
+          region: document.getElementById('region').value.trim(),
+          availability: document.getElementById('availability').value.trim(),
+          bio: document.getElementById('bio').value.trim(),
+          categories
+        }
+      });
+      window.location.href = '/swipe.html';
+    } catch (err) {
+      showError(errorBox, err.message);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = '<span class="mi mi-sm">bolt</span><span>Profili kaydet ve ilanları gör</span>';
+    }
+  });
+}
+</script>
+</body>
+</html>

@@ -15,6 +15,7 @@ app.use('/api/companies', require('./routes/companies'));
 app.use('/api/jobs', require('./routes/jobs'));
 app.use('/api/matches', require('./routes/matches'));
 app.use('/api/applications', require('./routes/applications'));
+app.use('/api/ai', require('./routes/ai'));
 app.use('/api/admin', require('./routes/admin'));
 
 app.use(express.static(path.join(__dirname, 'public')));

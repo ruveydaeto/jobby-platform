@@ -84,3 +84,31 @@ function viewCount(job) { return 30 + ((job.id * 37) % 170); }
 function matchScore(job) { return 88 + ((job.id * 7) % 11); }
 
 function money(n) { return '₺' + Number(n || 0).toLocaleString('tr-TR'); }
+
+/* Google Analytics Events */
+function trackGA(eventName, params = {}) {
+  if (typeof gtag !== 'undefined') {
+    gtag('event', eventName, params);
+  }
+}
+
+// Growth Events
+function onSignup(role) {
+  trackGA('sign_up', { method: role, signup_role: role });
+}
+
+function onJobView(jobId, category) {
+  trackGA('view_item', { item_id: jobId, category: category });
+}
+
+function onJobApply(jobId, jobTitle) {
+  trackGA('add_to_cart', { item_id: jobId, item_name: jobTitle, event_category: 'başvuru' });
+}
+
+function onMatch(jobId, candidateId) {
+  trackGA('purchase', { transaction_id: `match_${jobId}_${candidateId}`, value: 1, currency: 'TRY' });
+}
+
+function onDashboardVisit(role) {
+  trackGA('page_view', { page_title: 'Dashboard', user_role: role });
+}

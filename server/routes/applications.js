@@ -120,29 +120,52 @@ router.get('/incoming', requireAuth, requireRole('company'), async (req, res) =>
     if (!company) return res.json([]);
 
     const jobIdFilter = req.query.jobId ? Number(req.query.jobId) : null;
+
+    // Hem application.companyId hem job.companyId üzerinden bul
+    // (eski kayıtlarda companyId sapması olsa bile kaçmasın)
     const apps = await prisma.application.findMany({
       where: {
-        companyId: company.id,
+        OR: [
+          { companyId: company.id },
+          { job: { companyId: company.id } }
+        ],
         ...(jobIdFilter ? { jobId: jobIdFilter } : {})
       },
       include: { job: true, candidate: true },
       orderBy: { createdAt: 'desc' }
     });
 
-    res.json(apps.map(a => ({
+    // Yinelenenleri temizle + sapmış companyId'leri job üzerinden düzelt
+    const seen = new Set();
+    const unique = [];
+    for (const a of apps) {
+      if (seen.has(a.id)) continue;
+      seen.add(a.id);
+      if (a.job && a.companyId !== a.job.companyId) {
+        await prisma.application.update({
+          where: { id: a.id },
+          data: { companyId: a.job.companyId }
+        });
+        a.companyId = a.job.companyId;
+      }
+      unique.push(a);
+    }
+
+    res.json(unique.map(a => ({
       id: a.id,
       status: a.status,
       createdAt: a.createdAt,
       decidedAt: a.decidedAt,
-      phone: a.phone,
-      coverLetter: a.coverLetter,
-      availabilityNote: a.availabilityNote,
-      experience: a.experience,
+      phone: a.phone || '',
+      coverLetter: a.coverLetter || '',
+      availabilityNote: a.availabilityNote || '',
+      experience: a.experience || '',
+      source: (a.phone || '').includes('Swipe') ? 'swipe' : 'form',
       jobId: a.jobId,
       jobTitle: a.job?.title || '',
       payDaily: a.job?.payDaily || 0,
       candidateId: a.candidate?.userId,
-      candidateName: a.candidate?.fullName || '',
+      candidateName: a.candidate?.fullName || 'İsimsiz aday',
       candidateCity: a.candidate?.city || '',
       candidateAge: a.candidate?.age ?? null,
       candidateGender: a.candidate?.gender || '',

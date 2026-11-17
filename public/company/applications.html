@@ -89,41 +89,57 @@ function timeAgo(iso) {
   return Math.floor(hours / 24) + ' gün önce';
 }
 
+function genderLabel(g) {
+  if (!g) return '';
+  const v = String(g).toLowerCase();
+  if (v === 'female' || v === 'kadın' || v === 'kadin') return 'Kadın';
+  if (v === 'male' || v === 'erkek') return 'Erkek';
+  return g;
+}
+
 function appCard(a) {
   const cls = a.status === 'accepted' ? 'is-accepted' : a.status === 'rejected' ? 'is-rejected' : '';
+  const phone = a.phone || '';
+  const tel = phone.replace(/\s/g, '');
+  const sourceChip = a.source === 'swipe'
+    ? '<span class="chip chip-outline"><span class="mi mi-xs">favorite</span>Swipe</span>'
+    : '<span class="chip chip-outline"><span class="mi mi-xs">edit_document</span>Form</span>';
   return `
     <div class="app-card ${cls}" data-id="${a.id}">
       <div class="app-top">
         <div style="min-width:0;">
-          <h3>${a.candidateName}</h3>
+          <h3>${a.candidateName || 'İsimsiz aday'}</h3>
           <div class="job-meta">
-            <span>${a.candidateCity}</span>
+            ${a.candidateCity ? `<span>${a.candidateCity}</span>` : ''}
             ${a.candidateAge ? `<span>${a.candidateAge} yaş</span>` : ''}
-            ${a.candidateGender ? `<span>${a.candidateGender === 'female' ? 'Kadın' : 'Erkek'}</span>` : ''}
+            ${a.candidateGender ? `<span>${genderLabel(a.candidateGender)}</span>` : ''}
             <span>${timeAgo(a.createdAt)}</span>
           </div>
         </div>
-        ${STATUS_CHIP[a.status] || ''}
+        <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;">
+          ${sourceChip}
+          ${STATUS_CHIP[a.status] || ''}
+        </div>
       </div>
 
       <div class="need-row">
-        <span class="need-pill"><span class="mi mi-xs">work</span> ${a.jobTitle}</span>
+        <span class="need-pill"><span class="mi mi-xs">work</span> ${a.jobTitle || 'İlan'}</span>
         <span class="need-pill"><span class="mi mi-xs">payments</span> ${money(a.payDaily)} / gün</span>
       </div>
 
       <div class="app-answers">
         <div class="answer">
           <dt>Neden uygun</dt>
-          <dd>${a.coverLetter}</dd>
+          <dd>${a.coverLetter || '—'}</dd>
         </div>
         <div class="answer">
           <dt>Müsaitlik</dt>
-          <dd>${a.availabilityNote}</dd>
+          <dd>${a.availabilityNote || '—'}</dd>
         </div>
         ${a.experience ? `<div class="answer"><dt>Deneyim</dt><dd>${a.experience}</dd></div>` : ''}
         <div class="answer">
           <dt>Telefon</dt>
-          <dd><a class="phone-link" href="tel:${a.phone.replace(/\s/g, '')}">${a.phone}</a></dd>
+          <dd>${tel && !tel.includes('Swipe') ? `<a class="phone-link" href="tel:${tel}">${phone}</a>` : (phone || 'Belirtilmedi')}</dd>
         </div>
       </div>
 

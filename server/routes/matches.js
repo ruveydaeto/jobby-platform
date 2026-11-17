@@ -51,18 +51,37 @@ router.post('/swipe', requireAuth, async (req, res) => {
       });
 
       if (direction === 'like') {
-        const companyLiked = await prisma.swipe.findFirst({
-          where: {
-            actorRole: 'company',
-            targetType: 'candidate',
-            targetId: req.user.id,
-            jobId: job.id,
-            direction: 'like'
+        const candidate = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
+        if (candidate) {
+          // Swipe like da firma "Başvurular" kutusuna düşsün
+          const existingApp = await prisma.application.findUnique({
+            where: { jobId_candidateId: { jobId: job.id, candidateId: candidate.id } }
+          });
+          if (!existingApp) {
+            await prisma.application.create({
+              data: {
+                jobId: job.id,
+                candidateId: candidate.id,
+                companyId: job.companyId,
+                phone: 'Swipe ile iletildi',
+                coverLetter: 'Aday bu ilanı swipe ile beğendi. Detaylı form doldurulmadı; profilinden inceleyebilirsiniz.',
+                availabilityNote: candidate.availability || 'Belirtilmedi',
+                experience: candidate.bio || '',
+                status: 'pending'
+              }
+            });
           }
-        });
-        if (companyLiked) {
-          const candidate = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
-          if (candidate) {
+
+          const companyLiked = await prisma.swipe.findFirst({
+            where: {
+              actorRole: 'company',
+              targetType: 'candidate',
+              targetId: req.user.id,
+              jobId: job.id,
+              direction: 'like'
+            }
+          });
+          if (companyLiked) {
             matched = await createMatchIfNeeded({
               jobId: job.id,
               candidateProfileId: candidate.id,

@@ -1,5 +1,5 @@
 const express = require('express');
-const { prisma, mapCandidate, toJsonArray, parseJsonArray } = require('../db.prisma');
+const { prisma, mapCandidate, toJsonArray } = require('../db.prisma');
 const { requireAuth, requireRole } = require('../auth');
 
 const router = express.Router();
@@ -58,19 +58,11 @@ router.get('/candidates-for-job/:jobId', requireAuth, requireRole('company'), as
     });
     const swipedIds = new Set(alreadySwiped.map(s => s.targetId));
 
-    const candidates = await prisma.candidate.findMany({
-      where: { city: job.city }
-    });
-
+    // Skor / kategori / şehir eşleşme filtresi yok — sadece henüz kaydırılmayanlar
+    const candidates = await prisma.candidate.findMany();
     const filtered = candidates
       .map(mapCandidate)
-      .filter(c => {
-        if (swipedIds.has(c.userId)) return false;
-        const cats = Array.isArray(c.categories) ? c.categories : parseJsonArray(c.categories);
-        if (!cats.length) return true;
-        if (cats.includes('Hepsi') || cats.includes('Diğer')) return true;
-        return cats.includes(job.category);
-      });
+      .filter(c => !swipedIds.has(c.userId));
 
     res.json(filtered);
   } catch (e) {

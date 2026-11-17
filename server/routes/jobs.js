@@ -1,5 +1,5 @@
 const express = require('express');
-const { prisma, mapJob, toJsonArray, parseJsonArray } = require('../db.prisma');
+const { prisma, mapJob, toJsonArray } = require('../db.prisma');
 const { requireAuth, requireRole } = require('../auth');
 
 const router = express.Router();
@@ -23,7 +23,7 @@ router.post('/', requireAuth, requireRole('company'), async (req, res) => {
     const {
       title, description, city, category, neededMale, neededFemale, payDaily, eventDate,
       venue, address, shiftStart, shiftEnd, shiftHours, transferService,
-      roles, perks, matchMode, minScore, requiredBadges
+      roles, perks, matchMode, requiredBadges
     } = req.body;
 
     if (!title || !city || !category || !eventDate) {
@@ -54,7 +54,7 @@ router.post('/', requireAuth, requireRole('company'), async (req, res) => {
         roles: toJsonArray(roles),
         perks: toJsonArray(perks),
         matchMode: matchMode === 'classic' ? 'classic' : 'swipe',
-        minScore: Number(minScore) || 0,
+        minScore: 0,
         requiredBadges: toJsonArray(requiredBadges)
       },
       include: { company: true }
@@ -121,17 +121,8 @@ router.get('/feed', requireAuth, requireRole('candidate'), async (req, res) => {
       include: { company: true },
       orderBy: { createdAt: 'desc' }
     });
+    // Tüm açık ilanlar — şehir/kategori/skor filtresi yok
     jobs = jobs.filter(j => !alreadySwiped.has(j.id) && !alreadyApplied.has(j.id));
-
-    if (profile?.city) {
-      const cityMatches = jobs.filter(j => j.city === profile.city);
-      if (cityMatches.length) jobs = cityMatches;
-    }
-    const cats = parseJsonArray(profile?.categories);
-    if (cats.length) {
-      const catMatches = jobs.filter(j => cats.includes(j.category));
-      if (catMatches.length) jobs = catMatches;
-    }
 
     res.json(jobs.map(j => mapJob(j, j.company)));
   } catch (e) {

@@ -196,21 +196,16 @@
         </div>
 
         <div class="filter-row">
-          <div class="top"><span>Min. algoritma uyumu</span><b id="lbl-score">%85+ uyum</b></div>
-          <input type="range" id="f-score" min="70" max="98" step="1" value="85">
-        </div>
-
-        <div class="filter-row">
           <div class="top"><span>Lokasyon yarıçapı</span><b id="lbl-radius">15 km</b></div>
           <input type="range" id="f-radius" min="5" max="50" step="5" value="15">
         </div>
 
         <div>
-          <span class="t-lsm upper muted" style="display:block;margin-bottom:6px;">Zorunlu kriterler</span>
+          <span class="t-lsm upper muted" style="display:block;margin-bottom:6px;">İsteğe bağlı kriterler</span>
           <div class="crit-list" id="crit-list">
-            <label class="crit"><span>Şehir eşleşmesi</span><input type="checkbox" value="city" checked></label>
-            <label class="crit"><span>Kategori deneyimi</span><input type="checkbox" value="category" checked></label>
-            <label class="crit"><span>Profili tamamlanmış</span><input type="checkbox" value="complete" checked></label>
+            <label class="crit"><span>Şehir eşleşmesi</span><input type="checkbox" value="city"></label>
+            <label class="crit"><span>Kategori deneyimi</span><input type="checkbox" value="category"></label>
+            <label class="crit"><span>Profili tamamlanmış</span><input type="checkbox" value="complete"></label>
           </div>
         </div>
 
@@ -363,11 +358,6 @@ if (Api.requireAuth('company')) {
     $('logi-meal').textContent = (job.perks || []).includes('yemek') ? 'Catering dahil' : 'Belirtilmedi';
     $('logi-hours').textContent = job.shiftHours ? job.shiftHours + ' saat' : '—';
 
-    if (job.minScore) {
-      $('f-score').value = job.minScore;
-      $('lbl-score').textContent = '%' + job.minScore + '+ uyum';
-    }
-
     paintRoleTabs();
     paintRoster();
   }
@@ -488,37 +478,31 @@ if (Api.requireAuth('company')) {
 
   /* ============ FİLTRELER ============ */
   function applyFilters() {
-    const min = Number($('f-score').value);
     const crits = [...document.querySelectorAll('.crit input:checked')].map(i => i.value);
     const hired = new Set(roster.map(m => m.candidateId));
 
     queue = all.filter(c => {
       if (hired.has(c.userId)) return false;
       if (activeRole !== 'all' && (c.gender || 'kadın') !== activeRole) return false;
-      if (score(c) < min) return false;
       if (crits.includes('city') && job.city && c.city !== job.city) return false;
       if (crits.includes('category') && !(c.categories || []).includes(job.category)) return false;
       if (crits.includes('complete') && !(c.bio && c.availability)) return false;
       return true;
-    }).sort((a, b) => score(b) - score(a));
+    });
 
     idx = 0;
     $('queue-count').textContent = queue.length;
-    $('queue-note').textContent = `%${min}+ uyumlu`;
+    $('queue-note').textContent = 'Tüm adaylar';
     render();
   }
 
-  ['f-score', 'f-radius'].forEach(id => $(id).addEventListener('input', () => {
-    $('lbl-score').textContent = '%' + $('f-score').value + '+ uyum';
+  $('f-radius').addEventListener('input', () => {
     $('lbl-radius').textContent = $('f-radius').value + ' km';
-    if (id === 'f-score') applyFilters();
-  }));
+  });
   document.querySelectorAll('.crit input').forEach(cb => cb.addEventListener('change', applyFilters));
   $('btn-reset').addEventListener('click', () => {
-    $('f-score').value = job && job.minScore ? job.minScore : 85;
     $('f-radius').value = 15;
-    document.querySelectorAll('.crit input').forEach(cb => cb.checked = true);
-    $('lbl-score').textContent = '%' + $('f-score').value + '+ uyum';
+    document.querySelectorAll('.crit input').forEach(cb => cb.checked = false);
     $('lbl-radius').textContent = '15 km';
     applyFilters();
   });
@@ -546,11 +530,12 @@ if (Api.requireAuth('company')) {
     const rate = group.rate || job.payDaily;
 
     $('cand-photo').src = portraitOf(c);
-    $('cand-score').textContent = '%' + score(c);
+    const scoreEl = $('cand-score');
+    if (scoreEl) scoreEl.style.display = 'none';
     $('cand-name').textContent = `${c.fullName}${c.age ? ', ' + c.age : ''}`;
     $('cand-role').textContent = [group.label, c.city].filter(Boolean).join(' • ');
     $('cand-wage').textContent = money(rate);
-    $('cand-vip').style.display = score(c) >= 95 ? '' : 'none';
+    $('cand-vip').style.display = 'none';
 
     $('cand-signals').innerHTML = [
       c.region ? `<span class="signal-pill"><span class="mi mi-xs">explore</span>${c.region === 'hepsi' ? 'Tüm bölgeler' : c.region + ' yakası'}</span>` : '',
@@ -567,9 +552,8 @@ if (Api.requireAuth('company')) {
     $('cand-transport').textContent = c.region === 'hepsi' ? 'Her iki yakaya ulaşabilir' : 'Toplu taşıma / servis';
     $('cand-avail').textContent = c.availability || 'Esnek vardiya';
 
-    // Aday bu ilanı zaten beğendiyse "anlık sinyal" kartı çıkar
     $('signal-name').textContent = c.fullName;
-    $('signal-card').style.display = score(c) >= 94 ? 'flex' : 'none';
+    $('signal-card').style.display = 'none';
 
     paintRoster();
   }
@@ -644,10 +628,10 @@ if (Api.requireAuth('company')) {
   /* Otomatik kadro doldurucu */
   $('autopilot').addEventListener('change', e => {
     if (!e.target.checked) return;
-    showToast('Otomatik doldurucu açık — %95+ uyumlu adaylar onaylanıyor.');
+    showToast('Otomatik doldurucu açık — sıradaki adaylar onaylanıyor.');
     (function step() {
       const c = queue[idx];
-      if (!$('autopilot').checked || !c || score(c) < 95) return;
+      if (!$('autopilot').checked || !c) return;
       decide('like');
       setTimeout(step, 900);
     })();
@@ -658,7 +642,7 @@ if (Api.requireAuth('company')) {
     const groups = roleGroups();
     const group = groups.find(g => g.key === (c.gender || 'kadın')) || groups[0] || {};
     $('mm-photo').src = portraitOf(c);
-    $('mm-score').textContent = '%' + score(c) + ' uyum';
+    $('mm-score').textContent = 'Eşleşme';
     $('mm-title').textContent = `${c.fullName} kadroda!`;
     $('mm-desc').textContent =
       `${group.label || 'Kadro'} slotu başarıyla doldu. Dijital iş sözleşmesi oluşturuldu, QR erişim bileti adayın cüzdanına gönderildi.`;

@@ -21,7 +21,16 @@ const Api = {
       method, headers, body: body ? JSON.stringify(body) : undefined
     });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.error || 'Bir şeyler ters gitti.');
+    if (!res.ok) {
+      if (res.status === 401 && this.token() && !String(path).startsWith('/auth/')) {
+        this.clearSession();
+        if (typeof location !== 'undefined' && !/login\.html$/i.test(location.pathname)) {
+          location.href = '/login.html';
+        }
+        throw new Error(data.error || 'Oturum sona erdi. Tekrar giriş yap.');
+      }
+      throw new Error(data.error || 'Bir şeyler ters gitti.');
+    }
     return data;
   },
 

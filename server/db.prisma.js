@@ -44,13 +44,16 @@ function mapCompany(c) {
 
 function mapJob(j, company) {
   if (!j) return null;
+  const { _count, company: _companyRel, applications: _apps, matches: _matches, ...rest } = j;
   return {
-    ...j,
+    ...rest,
     roles: parseJsonArray(j.roles),
     perks: parseJsonArray(j.perks),
     requiredBadges: parseJsonArray(j.requiredBadges),
     companyName: company ? company.companyName : j.companyName,
-    companySector: company ? company.sector : j.companySector
+    companySector: company ? company.sector : j.companySector,
+    companyDescription: company ? (company.description || '') : (j.companyDescription || ''),
+    applicantCount: _count?.applications ?? j.applicantCount ?? 0
   };
 }
 

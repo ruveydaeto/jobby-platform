@@ -585,13 +585,20 @@ if (Api.requireAuth('company')) {
     card.classList.add(direction === 'like' ? 'swipe-right' : 'swipe-left');
 
     let matched = false;
+    let ok = false;
     try {
       const res = await Api.request('/matches/swipe', {
         method: 'POST',
         body: { targetType: 'candidate', targetId: c.userId, jobId, direction }
       });
       matched = Boolean(res && res.matched);
-    } catch (e) { /* sessizce geç */ }
+      ok = true;
+    } catch (e) {
+      showToast(e.message || 'Kaydırma kaydedilemedi.');
+      card.classList.remove('swipe-right', 'swipe-left');
+      busy = false;
+      return;
+    }
 
     if (matched) {
       roster.push({
@@ -600,7 +607,7 @@ if (Api.requireAuth('company')) {
       });
       paintRoleTabs();
       openModal(c);
-    } else if (direction === 'like') {
+    } else if (direction === 'like' && ok) {
       showToast(`${c.fullName} beğenildi — aday da onaylarsa kadroya katılır.`);
     }
 

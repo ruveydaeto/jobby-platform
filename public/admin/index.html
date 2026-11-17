@@ -471,7 +471,7 @@ async function loadJobs() {
     const data = await fetchAdmin('/data');
     const tbody = document.getElementById('jobs-tbody');
     tbody.innerHTML = data.jobs.map(j => {
-      const company = data.companies.find(c => c.userId === j.companyId);
+      const company = data.companies.find(c => c.id === j.companyId);
       return `
         <tr>
           <td>${j.title}</td>
@@ -496,8 +496,8 @@ async function loadMatches() {
     const tbody = document.getElementById('matches-tbody');
     tbody.innerHTML = data.matches.map(m => {
       const job = data.jobs.find(j => j.id === m.jobId);
-      const candidate = data.candidates.find(c => c.userId === m.candidateId);
-      const company = data.companies.find(c => c.userId === m.companyId);
+      const candidate = data.candidates.find(c => c.id === m.candidateId);
+      const company = data.companies.find(c => c.id === m.companyId);
       return `
         <tr>
           <td>${job ? job.title : 'Unknown'}</td>

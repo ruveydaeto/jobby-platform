@@ -14,6 +14,22 @@ async function createMatchIfNeeded({ jobId, candidateProfileId, companyId }) {
   });
 }
 
+async function acceptApplicationIfNeeded({ jobId, candidateProfileId, companyId }) {
+  const app = await prisma.application.findUnique({
+    where: { jobId_candidateId: { jobId, candidateId: candidateProfileId } }
+  });
+  if (!app) return;
+  if (app.status === 'accepted' && app.companyId === companyId) return;
+  await prisma.application.update({
+    where: { id: app.id },
+    data: {
+      status: 'accepted',
+      decidedAt: app.decidedAt || new Date(),
+      companyId
+    }
+  });
+}
+
 router.post('/swipe', requireAuth, async (req, res) => {
   try {
     const { targetType, targetId, jobId, direction } = req.body;
@@ -27,6 +43,7 @@ router.post('/swipe', requireAuth, async (req, res) => {
       if (targetType !== 'job') return res.status(400).json({ error: 'Geçersiz hedef.' });
       const job = await prisma.job.findUnique({ where: { id: Number(targetId) } });
       if (!job) return res.status(404).json({ error: 'İlan bulunamadı.' });
+      if (job.status !== 'open') return res.status(400).json({ error: 'Bu ilan başvuruya kapalı.' });
 
       const dup = await prisma.swipe.findFirst({
         where: {
@@ -87,6 +104,11 @@ router.post('/swipe', requireAuth, async (req, res) => {
               candidateProfileId: candidate.id,
               companyId: job.companyId
             });
+            await acceptApplicationIfNeeded({
+              jobId: job.id,
+              candidateProfileId: candidate.id,
+              companyId: job.companyId
+            });
           }
         }
       }
@@ -140,7 +162,12 @@ router.post('/swipe', requireAuth, async (req, res) => {
             matched = await createMatchIfNeeded({
               jobId: job.id,
               candidateProfileId: candidate.id,
-              companyId: company.id
+              companyId: job.companyId
+            });
+            await acceptApplicationIfNeeded({
+              jobId: job.id,
+              candidateProfileId: candidate.id,
+              companyId: job.companyId
             });
           }
         }
@@ -167,6 +194,16 @@ router.get('/pending', requireAuth, async (req, res) => {
         ).map(m => m.jobId)
       );
 
+      const appliedJobIds = new Set(
+        (candidate
+          ? await prisma.application.findMany({
+              where: { candidateId: candidate.id },
+              select: { jobId: true }
+            })
+          : []
+        ).map(a => a.jobId)
+      );
+
       const likes = await prisma.swipe.findMany({
         where: {
           actorRole: 'candidate',
@@ -179,7 +216,8 @@ router.get('/pending', requireAuth, async (req, res) => {
       const seen = new Set();
       const result = [];
       for (const s of likes) {
-        if (seen.has(s.jobId) || matchedJobIds.has(s.jobId)) continue;
+        // Application inbox'ta zaten görünenleri pending'den çıkar
+        if (seen.has(s.jobId) || matchedJobIds.has(s.jobId) || appliedJobIds.has(s.jobId)) continue;
         seen.add(s.jobId);
         const job = await prisma.job.findUnique({
           where: { id: s.jobId },
@@ -256,6 +294,7 @@ router.get('/mine', requireAuth, async (req, res) => {
       return res.json(matches.map(m => ({
         id: m.id,
         createdAt: m.createdAt,
+        jobId: m.jobId,
         jobTitle: m.job?.title || '',
         jobCity: m.job?.city || '',
         eventDate: m.job?.eventDate || '',

@@ -64,10 +64,13 @@ router.get('/candidates-for-job/:jobId', requireAuth, requireRole('company'), as
 
     const filtered = candidates
       .map(mapCandidate)
-      .filter(c =>
-        !swipedIds.has(c.userId) &&
-        parseJsonArray(c.categories).includes(job.category)
-      );
+      .filter(c => {
+        if (swipedIds.has(c.userId)) return false;
+        const cats = Array.isArray(c.categories) ? c.categories : parseJsonArray(c.categories);
+        if (!cats.length) return true;
+        if (cats.includes('Hepsi') || cats.includes('Diğer')) return true;
+        return cats.includes(job.category);
+      });
 
     res.json(filtered);
   } catch (e) {

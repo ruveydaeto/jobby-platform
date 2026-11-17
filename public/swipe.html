@@ -86,27 +86,37 @@ function render() {
   });
 }
 
+let swipeBusy = false;
 async function swipe(direction) {
   const job = jobs[idx];
-  if (!job) return;
-  const topCard = stackArea.querySelector(`.swipe-card[data-id="${job.id}"]`);
-  if (topCard) {
-    topCard.style.transform = `translateX(${direction === 'like' ? 500 : -500}px) rotate(${direction === 'like' ? 18 : -18}deg)`;
-    topCard.style.opacity = '0';
-  }
-  idx++;
-  setTimeout(render, 220);
-
+  if (!job || swipeBusy) return;
+  swipeBusy = true;
   try {
     const res = await Api.request('/matches/swipe', {
       method: 'POST',
       body: { targetType: 'job', targetId: job.id, direction }
     });
+    const topCard = stackArea.querySelector(`.swipe-card[data-id="${job.id}"]`);
+    if (topCard) {
+      topCard.style.transform = `translateX(${direction === 'like' ? 500 : -500}px) rotate(${direction === 'like' ? 18 : -18}deg)`;
+      topCard.style.opacity = '0';
+    }
+    idx++;
+    setTimeout(render, 220);
     if (res.matched) {
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 2400);
     }
-  } catch (e) { /* sessizce geç */ }
+  } catch (e) {
+    toast.textContent = e.message || 'Kaydırma kaydedilemedi.';
+    toast.classList.add('show');
+    setTimeout(() => {
+      toast.classList.remove('show');
+      toast.textContent = '🎉 Eşleşme!';
+    }, 2400);
+  } finally {
+    swipeBusy = false;
+  }
 }
 
 document.getElementById('btn-like').addEventListener('click', () => swipe('like'));

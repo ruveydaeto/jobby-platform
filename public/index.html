@@ -897,21 +897,26 @@ async function swipeLike() {
     showMatchToast(res && res.matched
       ? '🎉 Eşleştin! Panelinden detayları gör.'
       : `${job.companyName || 'Firma'} ilanını beğendin.`);
-  } catch (e) { /* sessizce geç */ }
-  currentIndex++;
-  renderSwipeCard();
+    currentIndex++;
+    renderSwipeCard();
+  } catch (e) {
+    showMatchToast(e.message || 'Kaydırma kaydedilemedi.');
+  }
 }
 
-function swipePass() {
+async function swipePass() {
   const job = swipeCards[currentIndex];
-  if (job) {
-    Api.request('/matches/swipe', {
+  if (!job) return;
+  try {
+    await Api.request('/matches/swipe', {
       method: 'POST',
       body: { targetType: 'job', targetId: job.id, direction: 'pass' }
-    }).catch(() => {});
+    });
+    currentIndex++;
+    renderSwipeCard();
+  } catch (e) {
+    showMatchToast(e.message || 'Kaydırma kaydedilemedi.');
   }
-  currentIndex++;
-  renderSwipeCard();
 }
 
 function showMatchToast(message) {

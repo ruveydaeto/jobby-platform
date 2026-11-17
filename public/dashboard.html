@@ -111,8 +111,9 @@ function timeAgo(iso) {
 }
 
 function matchCard(m) {
+  const href = m.jobId ? `/job.html?id=${m.jobId}` : '#';
   return `
-    <div class="job-card">
+    <a class="job-card" href="${href}" style="display:block;text-decoration:none;color:inherit;">
       <div class="job-card-top">
         <div>
           <h3>${m.jobTitle}</h3>
@@ -124,7 +125,7 @@ function matchCard(m) {
         <span class="need-pill"><span class="mi mi-xs">payments</span> ${money(m.payDaily)} / gün</span>
         <span class="need-pill"><span class="mi mi-xs">verified_user</span> Ödeme güvencesi</span>
       </div>
-    </div>`;
+    </a>`;
 }
 
 function applicationCard(a) {
@@ -172,7 +173,7 @@ if (Api.requireAuth('candidate')) {
     if (matches === null) {
       list.innerHTML = `<div class="empty-state">Eşleşmeler yüklenemedi.</div>`;
     } else if (matches.length === 0) {
-      const waiting = applications.filter(a => a.status === 'pending').length + pending.length;
+      const waiting = applications.filter(a => a.status === 'pending').length;
       const hint = waiting
         ? `<p style="margin:0 0 16px;">${waiting} ilan için yanıt bekliyorsun. Aşağıda listeledik.</p>`
         : `<p style="margin:0 0 16px;">İlanları kaydır veya doğrudan başvur — firma onayladığında burada görünecek.</p>`;

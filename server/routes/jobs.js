@@ -108,12 +108,20 @@ router.get('/feed', requireAuth, requireRole('candidate'), async (req, res) => {
     });
     const alreadySwiped = new Set(swiped.map(s => s.targetId));
 
+    const applied = profile
+      ? await prisma.application.findMany({
+          where: { candidateId: profile.id },
+          select: { jobId: true }
+        })
+      : [];
+    const alreadyApplied = new Set(applied.map(a => a.jobId));
+
     let jobs = await prisma.job.findMany({
       where: { status: 'open' },
       include: { company: true },
       orderBy: { createdAt: 'desc' }
     });
-    jobs = jobs.filter(j => !alreadySwiped.has(j.id));
+    jobs = jobs.filter(j => !alreadySwiped.has(j.id) && !alreadyApplied.has(j.id));
 
     if (profile?.city) {
       const cityMatches = jobs.filter(j => j.city === profile.city);
@@ -136,7 +144,10 @@ router.get('/:id', async (req, res) => {
   try {
     const job = await prisma.job.findUnique({
       where: { id: Number(req.params.id) },
-      include: { company: true }
+      include: {
+        company: true,
+        _count: { select: { applications: true } }
+      }
     });
     if (!job) return res.status(404).json({ error: 'İlan bulunamadı.' });
     res.json(mapJob(job, job.company));

@@ -17,6 +17,10 @@ function jobSummary(job, company) {
   };
 }
 
+function isSwipePlaceholder(app) {
+  return Boolean(app && String(app.phone || '').includes('Swipe'));
+}
+
 router.post('/', requireAuth, requireRole('candidate'), async (req, res) => {
   try {
     const { jobId, phone, coverLetter, availabilityNote, experience } = req.body;
@@ -42,17 +46,38 @@ router.post('/', requireAuth, requireRole('candidate'), async (req, res) => {
     const already = await prisma.application.findUnique({
       where: { jobId_candidateId: { jobId: job.id, candidateId: candidate.id } }
     });
-    if (already) return res.status(409).json({ error: 'Bu ilana zaten başvurdun.' });
+
+    const payload = {
+      phone: String(phone).trim(),
+      coverLetter: String(coverLetter).trim(),
+      availabilityNote: String(availabilityNote).trim(),
+      experience: experience ? String(experience).trim() : '',
+      companyId: job.companyId
+    };
+
+    // Swipe placeholder varsa formu üzerine yaz; gerçek başvuruyu 409 ile engelle
+    if (already) {
+      if (!isSwipePlaceholder(already) || already.status !== 'pending') {
+        return res.status(409).json({ error: 'Bu ilana zaten başvurdun.' });
+      }
+      const application = await prisma.application.update({
+        where: { id: already.id },
+        data: payload
+      });
+      return res.json({
+        ok: true,
+        application: {
+          ...application,
+          candidateUserId: req.user.id
+        }
+      });
+    }
 
     const application = await prisma.application.create({
       data: {
         jobId: job.id,
         candidateId: candidate.id,
-        companyId: job.companyId,
-        phone: String(phone).trim(),
-        coverLetter: String(coverLetter).trim(),
-        availabilityNote: String(availabilityNote).trim(),
-        experience: experience ? String(experience).trim() : '',
+        ...payload,
         status: 'pending'
       }
     });
@@ -61,7 +86,7 @@ router.post('/', requireAuth, requireRole('candidate'), async (req, res) => {
       ok: true,
       application: {
         ...application,
-        candidateId: req.user.id
+        candidateUserId: req.user.id
       }
     });
   } catch (e) {
@@ -86,6 +111,7 @@ router.get('/mine', requireAuth, requireRole('candidate'), async (req, res) => {
       status: a.status,
       createdAt: a.createdAt,
       decidedAt: a.decidedAt,
+      source: isSwipePlaceholder(a) ? 'swipe' : 'form',
       ...jobSummary(a.job, a.company)
     })));
   } catch (e) {
@@ -97,7 +123,7 @@ router.get('/mine', requireAuth, requireRole('candidate'), async (req, res) => {
 router.get('/status/:jobId', requireAuth, requireRole('candidate'), async (req, res) => {
   try {
     const candidate = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
-    if (!candidate) return res.json({ applied: false, status: null });
+    if (!candidate) return res.json({ applied: false, status: null, completable: false, source: null });
 
     const found = await prisma.application.findUnique({
       where: {
@@ -107,7 +133,14 @@ router.get('/status/:jobId', requireAuth, requireRole('candidate'), async (req, 
         }
       }
     });
-    res.json({ applied: Boolean(found), status: found ? found.status : null });
+
+    const swipePending = Boolean(found && isSwipePlaceholder(found) && found.status === 'pending');
+    res.json({
+      applied: Boolean(found) && !swipePending,
+      status: found ? found.status : null,
+      completable: swipePending,
+      source: found ? (isSwipePlaceholder(found) ? 'swipe' : 'form') : null
+    });
   } catch (e) {
     console.error(e);
     res.status(500).json({ error: 'Durum alınamadı.' });
@@ -121,8 +154,6 @@ router.get('/incoming', requireAuth, requireRole('company'), async (req, res) =>
 
     const jobIdFilter = req.query.jobId ? Number(req.query.jobId) : null;
 
-    // Hem application.companyId hem job.companyId üzerinden bul
-    // (eski kayıtlarda companyId sapması olsa bile kaçmasın)
     const apps = await prisma.application.findMany({
       where: {
         OR: [
@@ -135,7 +166,6 @@ router.get('/incoming', requireAuth, requireRole('company'), async (req, res) =>
       orderBy: { createdAt: 'desc' }
     });
 
-    // Yinelenenleri temizle + sapmış companyId'leri job üzerinden düzelt
     const seen = new Set();
     const unique = [];
     for (const a of apps) {
@@ -160,7 +190,7 @@ router.get('/incoming', requireAuth, requireRole('company'), async (req, res) =>
       coverLetter: a.coverLetter || '',
       availabilityNote: a.availabilityNote || '',
       experience: a.experience || '',
-      source: (a.phone || '').includes('Swipe') ? 'swipe' : 'form',
+      source: isSwipePlaceholder(a) ? 'swipe' : 'form',
       jobId: a.jobId,
       jobTitle: a.job?.title || '',
       payDaily: a.job?.payDaily || 0,
@@ -189,14 +219,24 @@ router.patch('/:id', requireAuth, requireRole('company'), async (req, res) => {
     if (!company) return res.status(404).json({ error: 'Firma profili bulunamadı.' });
 
     const application = await prisma.application.findUnique({
-      where: { id: Number(req.params.id) }
+      where: { id: Number(req.params.id) },
+      include: { job: true }
     });
     if (!application) return res.status(404).json({ error: 'Başvuru bulunamadı.' });
-    if (application.companyId !== company.id) return res.status(403).json({ error: 'Yetkisiz.' });
+
+    const ownerCompanyId = application.job?.companyId ?? application.companyId;
+    if (ownerCompanyId !== company.id) return res.status(403).json({ error: 'Yetkisiz.' });
+
+    if (application.companyId !== ownerCompanyId) {
+      await prisma.application.update({
+        where: { id: application.id },
+        data: { companyId: ownerCompanyId }
+      });
+    }
 
     const updated = await prisma.application.update({
       where: { id: application.id },
-      data: { status, decidedAt: new Date() }
+      data: { status, decidedAt: new Date(), companyId: ownerCompanyId }
     });
 
     let matched = false;
@@ -214,11 +254,18 @@ router.patch('/:id', requireAuth, requireRole('company'), async (req, res) => {
           data: {
             jobId: application.jobId,
             candidateId: application.candidateId,
-            companyId: application.companyId
+            companyId: ownerCompanyId
           }
         });
       }
       matched = true;
+    } else {
+      await prisma.match.deleteMany({
+        where: {
+          jobId: application.jobId,
+          candidateId: application.candidateId
+        }
+      });
     }
 
     res.json({ ok: true, status: updated.status, matched });

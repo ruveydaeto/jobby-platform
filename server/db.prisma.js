@@ -1,21 +1,4 @@
-const fs = require('fs');
-const path = require('path');
 const { PrismaClient } = require('@prisma/client');
-
-function resolveDatabaseUrl() {
-  if (process.env.VERCEL) {
-    const tmpDb = '/tmp/jobby.db';
-    const seedDb = path.join(__dirname, 'prisma', 'dev.db');
-    if (!fs.existsSync(tmpDb) && fs.existsSync(seedDb)) {
-      fs.copyFileSync(seedDb, tmpDb);
-    }
-    return `file:${tmpDb}`;
-  }
-  if (process.env.DATABASE_URL) return process.env.DATABASE_URL;
-  return `file:${path.join(__dirname, 'prisma', 'dev.db')}`;
-}
-
-process.env.DATABASE_URL = resolveDatabaseUrl();
 
 const globalForPrisma = globalThis;
 

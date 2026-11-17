@@ -1,9 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "framework": "express",
-  "functions": {
-    "server.js": {
-      "includeFiles": "server/prisma/**"
-    }
-  }
+  "framework": "express"
 }

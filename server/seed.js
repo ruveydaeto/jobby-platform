@@ -192,7 +192,7 @@ async function seedIfEmpty() {
     prisma.job.count(),
     prisma.match.count()
   ]);
-  console.log(`Demo verisi (SQLite): ${counts[0]} kullanıcı, ${counts[1]} ilan, ${counts[2]} eşleşme.`);
+  console.log(`Demo verisi (Postgres): ${counts[0]} kullanıcı, ${counts[1]} ilan, ${counts[2]} eşleşme.`);
   console.log('Tüm demo hesapların şifresi: demo1234');
 }
 

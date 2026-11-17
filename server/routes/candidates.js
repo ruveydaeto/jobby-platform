@@ -1,53 +1,79 @@
 const express = require('express');
-const db = require('../db');
+const { prisma, mapCandidate, toJsonArray, parseJsonArray } = require('../db.prisma');
 const { requireAuth, requireRole } = require('../auth');
 
 const router = express.Router();
 
-router.get('/me', requireAuth, requireRole('candidate'), (req, res) => {
-  const data = db.load();
-  const profile = data.candidates.find(c => c.userId === req.user.id);
-  res.json(profile);
+router.get('/me', requireAuth, requireRole('candidate'), async (req, res) => {
+  try {
+    const profile = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
+    if (!profile) return res.status(404).json({ error: 'Profil bulunamadı.' });
+    res.json(mapCandidate(profile));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Profil yüklenemedi.' });
+  }
 });
 
-router.put('/me', requireAuth, requireRole('candidate'), (req, res) => {
-  const { fullName, city, age, gender, bio, categories, availability, region } = req.body;
-  const data = db.load();
-  const profile = data.candidates.find(c => c.userId === req.user.id);
-  if (!profile) return res.status(404).json({ error: 'Profil bulunamadı.' });
+router.put('/me', requireAuth, requireRole('candidate'), async (req, res) => {
+  try {
+    const { fullName, city, age, gender, bio, categories, availability, region } = req.body;
+    const existing = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
+    if (!existing) return res.status(404).json({ error: 'Profil bulunamadı.' });
 
-  if (fullName !== undefined) profile.fullName = fullName;
-  if (city !== undefined) profile.city = city;
-  if (age !== undefined) profile.age = age;
-  if (gender !== undefined) profile.gender = gender;
-  if (bio !== undefined) profile.bio = bio;
-  if (categories !== undefined) profile.categories = categories;
-  if (availability !== undefined) profile.availability = availability;
-  if (region !== undefined) profile.region = region;
-  profile.avatarSeed = profile.fullName || profile.avatarSeed;
-
-  db.save(data);
-  res.json(profile);
+    const updated = await prisma.candidate.update({
+      where: { userId: req.user.id },
+      data: {
+        ...(fullName !== undefined ? { fullName } : {}),
+        ...(city !== undefined ? { city } : {}),
+        ...(age !== undefined ? { age: age === null || age === '' ? null : Number(age) } : {}),
+        ...(gender !== undefined ? { gender } : {}),
+        ...(bio !== undefined ? { bio } : {}),
+        ...(categories !== undefined ? { categories: toJsonArray(categories) } : {}),
+        ...(availability !== undefined ? { availability } : {}),
+        ...(region !== undefined ? { region } : {}),
+        avatarSeed: (fullName !== undefined ? fullName : existing.fullName) || existing.avatarSeed
+      }
+    });
+    res.json(mapCandidate(updated));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Profil güncellenemedi.' });
+  }
 });
 
-// Firmanın bir ilan için uygun adayları kaydırması (like/pass) amacıyla listeleme
-router.get('/candidates-for-job/:jobId', requireAuth, requireRole('company'), (req, res) => {
-  const data = db.load();
-  const job = data.jobs.find(j => j.id === Number(req.params.jobId));
-  if (!job || job.companyId !== req.user.id) return res.status(404).json({ error: 'İlan bulunamadı.' });
+router.get('/candidates-for-job/:jobId', requireAuth, requireRole('company'), async (req, res) => {
+  try {
+    const company = await prisma.company.findUnique({ where: { userId: req.user.id } });
+    if (!company) return res.status(404).json({ error: 'Firma profili bulunamadı.' });
 
-  const alreadySwiped = new Set(
-    data.swipes.filter(s => s.actorRole === 'company' && s.actorId === req.user.id && s.jobId === job.id)
-      .map(s => s.targetId)
-  );
+    const job = await prisma.job.findFirst({
+      where: { id: Number(req.params.jobId), companyId: company.id }
+    });
+    if (!job) return res.status(404).json({ error: 'İlan bulunamadı.' });
 
-  const candidates = data.candidates.filter(c =>
-    !alreadySwiped.has(c.userId) &&
-    (c.city === job.city) &&
-    (c.categories || []).includes(job.category)
-  );
+    const alreadySwiped = await prisma.swipe.findMany({
+      where: { actorRole: 'company', actorId: req.user.id, jobId: job.id },
+      select: { targetId: true }
+    });
+    const swipedIds = new Set(alreadySwiped.map(s => s.targetId));
 
-  res.json(candidates);
+    const candidates = await prisma.candidate.findMany({
+      where: { city: job.city }
+    });
+
+    const filtered = candidates
+      .map(mapCandidate)
+      .filter(c =>
+        !swipedIds.has(c.userId) &&
+        parseJsonArray(c.categories).includes(job.category)
+      );
+
+    res.json(filtered);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Adaylar yüklenemedi.' });
+  }
 });
 
 module.exports = router;

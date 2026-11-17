@@ -3,7 +3,7 @@
   "framework": "express",
   "functions": {
     "server.js": {
-      "includeFiles": "server/data/**"
+      "includeFiles": "server/prisma/**"
     }
   }
 }

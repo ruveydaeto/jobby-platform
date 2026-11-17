@@ -8,11 +8,11 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
   passwordHash String
-  role      String
-  createdAt DateTime @default(now())
+  role         String
+  createdAt    DateTime @default(now())
 
   candidate Candidate?
   company   Company?
@@ -21,98 +21,127 @@ model User {
 }
 
 model Candidate {
-  id        Int     @id @default(autoincrement())
-  userId    Int     @unique
-  fullName  String
-  city      String
-  region    String?
-  age       Int?
-  gender    String?
-  bio       String?
-  categories String?
-  availability String?
-  avatarSeed String?
+  id             Int     @id @default(autoincrement())
+  userId         Int     @unique
+  fullName       String
+  city           String
+  region         String?
+  age            Int?
+  gender         String?
+  bio            String?
+  categories     String? // JSON array string
+  availability   String?
+  avatarSeed     String?
 
-  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  matches      Match[] @relation("CandidateMatch")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matches      Match[]       @relation("CandidateMatch")
   applications Application[]
 
   @@map("candidates")
 }
 
 model Company {
-  id        Int     @id @default(autoincrement())
-  userId    Int     @unique
+  id          Int     @id @default(autoincrement())
+  userId      Int     @unique
   companyName String
-  sector    String?
-  city      String?
-  email     String?
-  phone     String?
-  website   String?
-  address   String?
+  sector      String?
+  city        String?
+  email       String?
+  phone       String?
+  website     String?
+  address     String?
   description String?
-  logoSeed  String?
+  logoSeed    String?
 
-  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   jobs         Job[]
-  matches      Match[] @relation("CompanyMatch")
+  matches      Match[]       @relation("CompanyMatch")
   applications Application[]
 
   @@map("companies")
 }
 
 model Job {
-  id        Int     @id @default(autoincrement())
-  companyId Int
-  title     String
-  description String?
-  city      String
-  category  String
-  neededMale Int @default(0)
-  neededFemale Int @default(0)
-  payDaily  Int @default(0)
-  eventDate String
-  status    String @default("open")
-  createdAt DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  companyId      Int // Company.id
+  title          String
+  description    String?
+  city           String
+  category       String
+  neededMale     Int      @default(0)
+  neededFemale   Int      @default(0)
+  payDaily       Int      @default(0)
+  eventDate      String
+  status         String   @default("open")
+  createdAt      DateTime @default(now())
+  venue          String?
+  address        String?
+  shiftStart     String?
+  shiftEnd       String?
+  shiftHours     Int      @default(0)
+  transferService Boolean @default(false)
+  roles          String? // JSON
+  perks          String? // JSON
+  matchMode      String   @default("swipe")
+  minScore       Int      @default(0)
+  requiredBadges String? // JSON
 
-  company      Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
   matches      Match[]
   applications Application[]
+  swipes       Swipe[]
 
   @@map("jobs")
 }
 
-model Match {
-  id        Int     @id @default(autoincrement())
-  jobId     Int
-  candidateId Int
-  companyId Int
-  createdAt DateTime @default(now())
+model Swipe {
+  id         Int      @id @default(autoincrement())
+  actorRole  String
+  actorId    Int // userId of actor
+  targetType String // job | candidate
+  targetId   Int // jobId or candidate userId
+  jobId      Int
+  direction  String // like | pass
+  createdAt  DateTime @default(now())
 
-  job       Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([actorRole, actorId, jobId])
+  @@index([jobId, direction])
+  @@map("swipes")
+}
+
+model Match {
+  id          Int      @id @default(autoincrement())
+  jobId       Int
+  candidateId Int // Candidate.id
+  companyId   Int // Company.id
+  createdAt   DateTime @default(now())
+
+  job       Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
   candidate Candidate @relation("CandidateMatch", fields: [candidateId], references: [id], onDelete: Cascade)
-  company   Company @relation("CompanyMatch", fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company   @relation("CompanyMatch", fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, candidateId])
   @@map("matches")
 }
 
 model Application {
-  id        Int     @id @default(autoincrement())
-  jobId     Int
-  candidateId Int
-  companyId Int
-  phone     String
-  coverLetter String
+  id               Int       @id @default(autoincrement())
+  jobId            Int
+  candidateId      Int // Candidate.id
+  companyId        Int // Company.id
+  phone            String
+  coverLetter      String
   availabilityNote String
-  experience String?
-  status    String @default("pending")
-  createdAt DateTime @default(now())
-  decidedAt DateTime?
+  experience       String?
+  status           String    @default("pending")
+  createdAt        DateTime  @default(now())
+  decidedAt        DateTime?
 
-  job       Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  job       Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
   candidate Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
-  company   Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company   Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@unique([jobId, candidateId])
   @@map("applications")

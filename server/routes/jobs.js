@@ -1,110 +1,149 @@
 const express = require('express');
-const db = require('../db');
+const { prisma, mapJob, toJsonArray, parseJsonArray } = require('../db.prisma');
 const { requireAuth, requireRole } = require('../auth');
 
 const router = express.Router();
 
-// Tüm açık iş ilanları (herkese açık)
-router.get('/', (req, res) => {
-  const data = db.load();
-  const jobs = data.jobs.filter(j => j.status === 'open');
-  const withCompany = jobs.map(j => {
-    const company = data.companies.find(c => c.userId === j.companyId);
-    return { ...j, companyName: company ? company.companyName : 'Firma', companySector: company ? company.sector : '' };
-  });
-  res.json(withCompany);
-});
-
-router.post('/', requireAuth, requireRole('company'), (req, res) => {
-  const {
-    title, description, city, category, neededMale, neededFemale, payDaily, eventDate,
-    // Genişletilmiş ilan detayları (tümü isteğe bağlı)
-    venue, address, shiftStart, shiftEnd, shiftHours, transferService,
-    roles, perks, matchMode, minScore, requiredBadges
-  } = req.body;
-
-  if (!title || !city || !category || !eventDate) {
-    return res.status(400).json({ error: 'Başlık, şehir, kategori ve tarih zorunludur.' });
+router.get('/', async (req, res) => {
+  try {
+    const jobs = await prisma.job.findMany({
+      where: { status: 'open' },
+      include: { company: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    res.json(jobs.map(j => mapJob(j, j.company)));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'İlanlar yüklenemedi.' });
   }
-  const data = db.load();
-  const id = db.nextId(data.jobs);
-  const job = {
-    id, companyId: req.user.id, title, description: description || '', city, category,
-    neededMale: Number(neededMale) || 0, neededFemale: Number(neededFemale) || 0,
-    payDaily: Number(payDaily) || 0, eventDate, status: 'open', createdAt: new Date().toISOString(),
-
-    venue: venue || '',
-    address: address || '',
-    shiftStart: shiftStart || '',
-    shiftEnd: shiftEnd || '',
-    shiftHours: Number(shiftHours) || 0,
-    transferService: Boolean(transferService),
-    roles: Array.isArray(roles) ? roles : [],
-    perks: Array.isArray(perks) ? perks : [],
-    matchMode: matchMode === 'classic' ? 'classic' : 'swipe',
-    minScore: Number(minScore) || 0,
-    requiredBadges: Array.isArray(requiredBadges) ? requiredBadges : []
-  };
-  data.jobs.push(job);
-  db.save(data);
-  res.json(job);
 });
 
-router.get('/mine', requireAuth, requireRole('company'), (req, res) => {
-  const data = db.load();
-  const jobs = data.jobs.filter(j => j.companyId === req.user.id);
-  const withCounts = jobs.map(j => ({
-    ...j,
-    matchCount: data.matches.filter(m => m.jobId === j.id).length,
-    applicationCount: data.applications.filter(a => a.jobId === j.id).length,
-    pendingApplicationCount: data.applications.filter(a => a.jobId === j.id && a.status === 'pending').length
-  }));
-  res.json(withCounts);
-});
+router.post('/', requireAuth, requireRole('company'), async (req, res) => {
+  try {
+    const {
+      title, description, city, category, neededMale, neededFemale, payDaily, eventDate,
+      venue, address, shiftStart, shiftEnd, shiftHours, transferService,
+      roles, perks, matchMode, minScore, requiredBadges
+    } = req.body;
 
-// Adayın kaydırması için, profiline uyan ve henüz kaydırmadığı ilanlar
-router.get('/feed', requireAuth, requireRole('candidate'), (req, res) => {
-  const data = db.load();
-  const profile = data.candidates.find(c => c.userId === req.user.id);
-  const alreadySwiped = new Set(
-    data.swipes.filter(s => s.actorRole === 'candidate' && s.actorId === req.user.id)
-      .map(s => s.targetId)
-  );
+    if (!title || !city || !category || !eventDate) {
+      return res.status(400).json({ error: 'Başlık, şehir, kategori ve tarih zorunludur.' });
+    }
 
-  let jobs = data.jobs.filter(j => j.status === 'open' && !alreadySwiped.has(j.id));
+    const company = await prisma.company.findUnique({ where: { userId: req.user.id } });
+    if (!company) return res.status(404).json({ error: 'Firma profili bulunamadı.' });
 
-  if (profile && profile.city) {
-    const cityMatches = jobs.filter(j => j.city === profile.city);
-    if (cityMatches.length) jobs = cityMatches;
+    const job = await prisma.job.create({
+      data: {
+        companyId: company.id,
+        title,
+        description: description || '',
+        city,
+        category,
+        neededMale: Number(neededMale) || 0,
+        neededFemale: Number(neededFemale) || 0,
+        payDaily: Number(payDaily) || 0,
+        eventDate,
+        status: 'open',
+        venue: venue || '',
+        address: address || '',
+        shiftStart: shiftStart || '',
+        shiftEnd: shiftEnd || '',
+        shiftHours: Number(shiftHours) || 0,
+        transferService: Boolean(transferService),
+        roles: toJsonArray(roles),
+        perks: toJsonArray(perks),
+        matchMode: matchMode === 'classic' ? 'classic' : 'swipe',
+        minScore: Number(minScore) || 0,
+        requiredBadges: toJsonArray(requiredBadges)
+      },
+      include: { company: true }
+    });
+
+    res.json(mapJob(job, job.company));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'İlan oluşturulamadı.' });
   }
-  if (profile && profile.categories && profile.categories.length) {
-    const catMatches = jobs.filter(j => profile.categories.includes(j.category));
-    if (catMatches.length) jobs = catMatches;
-  }
-
-  const withCompany = jobs.map(j => {
-    const company = data.companies.find(c => c.userId === j.companyId);
-    return { ...j, companyName: company ? company.companyName : 'Firma', companySector: company ? company.sector : '' };
-  });
-
-  res.json(withCompany);
 });
 
-// Tek ilan detayı — /feed ve /mine ile çakışmaması için en sonda dursun
-router.get('/:id', (req, res) => {
-  const data = db.load();
-  const job = data.jobs.find(j => j.id === Number(req.params.id));
-  if (!job) return res.status(404).json({ error: 'İlan bulunamadı.' });
+router.get('/mine', requireAuth, requireRole('company'), async (req, res) => {
+  try {
+    const company = await prisma.company.findUnique({ where: { userId: req.user.id } });
+    if (!company) return res.json([]);
 
-  const company = data.companies.find(c => c.userId === job.companyId);
-  res.json({
-    ...job,
-    companyName: company ? company.companyName : 'Firma',
-    companySector: company ? company.sector : '',
-    companyCity: company ? company.city : '',
-    companyDescription: company ? company.description : '',
-    applicantCount: data.applications.filter(a => a.jobId === job.id).length
-  });
+    const jobs = await prisma.job.findMany({
+      where: { companyId: company.id },
+      include: {
+        company: true,
+        _count: {
+          select: {
+            matches: true,
+            applications: true
+          }
+        },
+        applications: { where: { status: 'pending' }, select: { id: true } }
+      },
+      orderBy: { createdAt: 'desc' }
+    });
+
+    res.json(jobs.map(j => ({
+      ...mapJob(j, j.company),
+      matchCount: j._count.matches,
+      applicationCount: j._count.applications,
+      pendingApplicationCount: j.applications.length
+    })));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'İlanlar yüklenemedi.' });
+  }
+});
+
+router.get('/feed', requireAuth, requireRole('candidate'), async (req, res) => {
+  try {
+    const profile = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
+    const swiped = await prisma.swipe.findMany({
+      where: { actorRole: 'candidate', actorId: req.user.id },
+      select: { targetId: true }
+    });
+    const alreadySwiped = new Set(swiped.map(s => s.targetId));
+
+    let jobs = await prisma.job.findMany({
+      where: { status: 'open' },
+      include: { company: true },
+      orderBy: { createdAt: 'desc' }
+    });
+    jobs = jobs.filter(j => !alreadySwiped.has(j.id));
+
+    if (profile?.city) {
+      const cityMatches = jobs.filter(j => j.city === profile.city);
+      if (cityMatches.length) jobs = cityMatches;
+    }
+    const cats = parseJsonArray(profile?.categories);
+    if (cats.length) {
+      const catMatches = jobs.filter(j => cats.includes(j.category));
+      if (catMatches.length) jobs = catMatches;
+    }
+
+    res.json(jobs.map(j => mapJob(j, j.company)));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Feed yüklenemedi.' });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const job = await prisma.job.findUnique({
+      where: { id: Number(req.params.id) },
+      include: { company: true }
+    });
+    if (!job) return res.status(404).json({ error: 'İlan bulunamadı.' });
+    res.json(mapJob(job, job.company));
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'İlan yüklenemedi.' });
+  }
 });
 
 module.exports = router;

@@ -9,7 +9,6 @@ her iki taraf da birbirini beğenirse **eşleşme** oluşur.
 Node.js (v18+) yüklü olmalı.
 
 ```bash
-cd server
 npm install
 npm start
 ```

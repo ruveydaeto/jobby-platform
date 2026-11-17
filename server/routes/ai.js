@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const fetch = require('node-fetch');
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY || 'sk-test';
 

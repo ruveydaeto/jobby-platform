@@ -1,7 +1,11 @@
 const fs = require('fs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, 'data', 'db.json');
+const SEED_DB_PATH = path.join(__dirname, 'data', 'db.json');
+// Vercel'de dosya sistemi salt okunur; yazılabilir alan /tmp
+const DB_PATH = process.env.VERCEL
+  ? path.join('/tmp', 'jobby-db.json')
+  : SEED_DB_PATH;
 
 const EMPTY = {
   users: [],           // {id, email, passwordHash, role, createdAt}
@@ -13,11 +17,19 @@ const EMPTY = {
   applications: []     // {id, jobId, candidateId, companyId, phone, coverLetter, availabilityNote, experience, status:'pending'|'accepted'|'rejected', createdAt, decidedAt}
 };
 
-function load() {
-  if (!fs.existsSync(DB_PATH)) {
-    save(EMPTY);
-    return JSON.parse(JSON.stringify(EMPTY));
+function ensureDbFile() {
+  if (fs.existsSync(DB_PATH)) return;
+  if (process.env.VERCEL && fs.existsSync(SEED_DB_PATH)) {
+    fs.copyFileSync(SEED_DB_PATH, DB_PATH);
+    return;
   }
+  const dir = path.dirname(DB_PATH);
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+  fs.writeFileSync(DB_PATH, JSON.stringify(EMPTY, null, 2));
+}
+
+function load() {
+  ensureDbFile();
   const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf-8'));
   // Şema sonradan büyüdüyse eski kayıtta eksik kalan koleksiyonları tamamla
   Object.keys(EMPTY).forEach(key => {
@@ -27,6 +39,7 @@ function load() {
 }
 
 function save(data) {
+  ensureDbFile();
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2));
 }
 

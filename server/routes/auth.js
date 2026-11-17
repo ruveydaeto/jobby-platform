@@ -19,15 +19,19 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ error: 'Şifre en az 6 karakter olmalı.' });
     }
 
+    const normalizedEmail = String(email).trim().toLowerCase();
+    if (!normalizedEmail) {
+      return res.status(400).json({ error: 'E-posta zorunludur.' });
+    }
+
     const existing = await prisma.user.findUnique({
-      where: { email: String(email).toLowerCase() }
+      where: { email: normalizedEmail }
     });
     if (existing) {
       return res.status(409).json({ error: 'Bu e-posta ile zaten bir hesap var.' });
     }
 
     const passwordHash = bcrypt.hashSync(password, 8);
-    const normalizedEmail = String(email).toLowerCase();
 
     const user = await prisma.user.create({
       data: {
@@ -61,6 +65,9 @@ router.post('/register', async (req, res) => {
     res.json({ token, role, id: user.id });
   } catch (e) {
     console.error(e);
+    if (e && e.code === 'P2002') {
+      return res.status(409).json({ error: 'Bu e-posta ile zaten bir hesap var.' });
+    }
     res.status(500).json({ error: 'Kayıt sırasında bir hata oluştu.' });
   }
 });
@@ -69,7 +76,7 @@ router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await prisma.user.findUnique({
-      where: { email: String(email || '').toLowerCase() }
+      where: { email: String(email || '').trim().toLowerCase() }
     });
     if (!user || !bcrypt.compareSync(password || '', user.passwordHash)) {
       return res.status(401).json({ error: 'E-posta veya şifre hatalı.' });

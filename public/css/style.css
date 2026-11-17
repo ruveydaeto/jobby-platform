@@ -439,6 +439,8 @@ textarea{resize:vertical;min-height:96px;line-height:1.55;}
   font-size:12px;font-weight:600;color:var(--on-surface);cursor:pointer;transition:background .15s ease;
 }
 .fast-tag:hover{background:var(--surface-high);}
+.fast-tag.active{background:var(--primary-fixed);color:var(--primary);border-color:var(--primary);font-weight:700;}
+button.fast-tag{font:inherit;cursor:pointer;}
 
 /* --- Güven istatistik şeridi --- */
 .stats-bar{

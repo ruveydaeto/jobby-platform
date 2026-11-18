@@ -77,10 +77,10 @@
 
     <div class="hero-cta">
       <a href="/register.html?role=candidate" class="btn btn-primary btn-lg">
-        <span class="mi mi-sm">flash_on</span><span data-i18n="cta.candidate">İş arıyorum / Günlük işe katıl</span>
+        <span class="mi mi-sm">flash_on</span><span data-i18n="cta.candidate">İş arıyorum</span>
       </a>
       <a href="/register.html?role=company" class="btn btn-light btn-lg">
-        <span class="mi mi-sm">groups</span><span data-i18n="cta.company">Firma / Ekip topla</span>
+        <span class="mi mi-sm">groups</span><span data-i18n="cta.company">İşverenim — işe alıyorum</span>
       </a>
     </div>
 
@@ -359,24 +359,6 @@
 </section>
 
 <!-- ============================================================
-     ADAY HAVUZUNDAN ÖNE ÇIKANLAR
-     ============================================================ -->
-<section class="section" id="aday-havuzu">
-  <div class="wrap">
-    <div class="section-head">
-      <div>
-        <span class="eyebrow"><span class="mi mi-xs">workspace_premium</span><span data-i18n="talent.kicker">Doğrulanmış genç yetenekler</span></span>
-        <h2 data-i18n="talent.title">Aday havuzundan öne çıkanlar</h2>
-        <p data-i18n="talent.subtitle">Yüksek puanlı, tecrübeli ve profilini tamamlamış saha profesyonelleri.</p>
-      </div>
-      <a href="/register.html?role=company" class="section-link" data-i18n="talent.link">Tüm aday havuzunu incele →</a>
-    </div>
-
-    <div class="talent-grid" id="talent-grid"></div>
-  </div>
-</section>
-
-<!-- ============================================================
      CTA BANNER
      ============================================================ -->
 <section class="section-tight">
@@ -388,8 +370,8 @@
         <p data-i18n="cta.desc">JOBBY ile etkinlik ve genç yetenek arasındaki tüm bürokrasiyi kaldırıyoruz. Güvenceli ödeme, doğrulanmış profiller, tam zamanında kadro.</p>
       </div>
       <div class="cta-actions">
-        <a href="/register.html?role=candidate" class="btn btn-light btn-lg btn-block" data-i18n="cta.candidateShort">Genç yetenek girişi yap</a>
-        <a href="/register.html?role=company" class="btn btn-coral btn-lg btn-block" data-i18n="cta.companyShort">Firma olarak ilan aç</a>
+        <a href="/register.html?role=candidate" class="btn btn-light btn-lg btn-block" data-i18n="cta.candidateShort">İş arıyorum</a>
+        <a href="/register.html?role=company" class="btn btn-coral btn-lg btn-block" data-i18n="cta.companyShort">İşverenim — işe alıyorum</a>
       </div>
     </div>
   </div>
@@ -413,8 +395,8 @@ const i18n = {
     'hero.title2': 'bir kaydırma uzağında.',
     'hero.subtitle': 'Festival, fuar, lansman ve gastronomi etkinlikleri için doğrulanmış genç yeteneklerle organizatörleri saniyeler içinde buluşturan yeni nesil iş ağı.',
     'hero.badgeSub': 'Bugün yeni vardiyalar açıldı',
-    'cta.candidate': 'İş arıyorum / Günlük işe katıl',
-    'cta.company': 'Firma / Ekip topla',
+    'cta.candidate': 'İş arıyorum',
+    'cta.company': 'İşverenim — işe alıyorum',
     'search.role': 'Etkinlik rolü',
     'search.location': 'Lokasyon',
     'search.pay': 'Günlük taban ücret',
@@ -498,8 +480,8 @@ const i18n = {
     'cta.badge': 'Ücretsiz kayıt • Komisyonsuz ilk ay',
     'cta.title': 'Hafta sonu ilk vardiyana başla ya da 10 dakikada ekibini kur.',
     'cta.desc': 'JOBBY ile etkinlik ve genç yetenek arasındaki tüm bürokrasiyi kaldırıyoruz. Güvenceli ödeme, doğrulanmış profiller, tam zamanında kadro.',
-    'cta.candidateShort': 'Genç yetenek girişi yap',
-    'cta.companyShort': 'Firma olarak ilan aç',
+    'cta.candidateShort': 'İş arıyorum',
+    'cta.companyShort': 'İşverenim — işe alıyorum',
     'matching.kicker': 'Sana özel akış',
     'matching.title': 'Sana uygun vardiyalar',
     'matching.subtitle': 'Kaydır, beğen, eşleş — firma da seni beğenirse anında eşleşme kurulur.',
@@ -513,8 +495,8 @@ const i18n = {
     'hero.title2': 'one swipe away.',
     'hero.subtitle': 'A new-generation work network connecting festivals, expos, launches and hospitality events with verified young talent in seconds.',
     'hero.badgeSub': 'New shifts opened today',
-    'cta.candidate': 'Looking for work / Join a shift',
-    'cta.company': 'Company / Build a crew',
+    'cta.candidate': 'Looking for work',
+    'cta.company': 'I am an employer — hiring',
     'search.role': 'Event role',
     'search.location': 'Location',
     'search.pay': 'Minimum daily pay',
@@ -598,8 +580,8 @@ const i18n = {
     'cta.badge': 'Free sign-up • No commission for the first month',
     'cta.title': 'Start your first weekend shift, or build your crew in 10 minutes.',
     'cta.desc': 'JOBBY removes the bureaucracy between events and young talent: secured payments, verified profiles, crews that show up on time.',
-    'cta.candidateShort': 'Enter as young talent',
-    'cta.companyShort': 'Post a listing as a company',
+    'cta.candidateShort': 'Looking for work',
+    'cta.companyShort': 'I am an employer — hiring',
     'matching.kicker': 'Your personal feed',
     'matching.title': 'Shifts picked for you',
     'matching.subtitle': 'Swipe, like, match — when the company likes you back, the match is instant.',
@@ -848,38 +830,6 @@ function restartStageLoop() {
 }
 
 /* ============================================================
-   ADAY HAVUZU (tanıtım kartları)
-   ============================================================ */
-const TALENTS = [
-  { n: 'Bensu D.', a: 22, r: 'Boğaziçi Üni. · Sosyoloji', tags: ['Karşılama & Protokol', 'İngilizce C1'], city: 'Beşiktaş', rate: 2400, score: 4.9, gigs: 17, bg: 'linear-gradient(140deg,#A78BFA,#4C1D95)' },
-  { n: 'Caner V.', a: 24, r: 'Marmara Üni. · İşletme', tags: ['Barmen & Servis', 'Sahne arkası'], city: 'Kadıköy', rate: 2100, score: 4.8, gigs: 24, bg: 'linear-gradient(140deg,#38BDF8,#075985)' },
-  { n: 'Lara S.', a: 21, r: 'Yıldız Teknik · Endüstri', tags: ['Tadım & Marka elçisi', 'Almanca B1'], city: 'Şişli', rate: 2300, score: 4.95, gigs: 13, bg: 'linear-gradient(140deg,#FB7185,#9F1239)' },
-  { n: 'Kerem A.', a: 25, r: 'Saha operasyon & Lojistik', tags: ['Fuar kayıt masası', 'B sınıfı ehliyet'], city: 'Ataşehir', rate: 2600, score: 4.85, gigs: 31, bg: 'linear-gradient(140deg,#34D399,#065F46)' }
-];
-
-function renderTalents() {
-  const grid = document.getElementById('talent-grid');
-  if (!grid) return;
-  grid.innerHTML = TALENTS.map(p => `
-    <article class="talent-card">
-      <div class="talent-photo" style="background:${p.bg}">
-        ${initialsOf(p.n)}
-        <span class="rating"><span class="mi mi-xs mi-fill">star</span>${p.score}</span>
-      </div>
-      <div class="talent-body">
-        <div class="talent-name">${p.n}, ${p.a}<span class="mi mi-xs mi-fill" style="color:var(--teal)">verified</span></div>
-        <div class="talent-role">${p.r}</div>
-        <div class="talent-tags">${p.tags.map(t => `<span class="talent-tag">${t}</span>`).join('')}</div>
-        <div class="talent-foot">
-          <span class="talent-rate">₺${p.rate.toLocaleString('tr-TR')}<span class="t-bsm muted"> /gün</span></span>
-          <span class="t-bsm muted">${p.gigs} vardiya</span>
-        </div>
-        <a href="/register.html?role=company" class="btn btn-ghost btn-sm btn-block">Davet gönder</a>
-      </div>
-    </article>`).join('');
-}
-
-/* ============================================================
    VERİ YÜKLEME
    ============================================================ */
 async function loadLiveBoard() {
@@ -1052,7 +1002,6 @@ document.documentElement.lang = window.currentLang;
 updatePageText();
 renderNav('nav-root');
 renderFooter('footer-root');
-renderTalents();
 loadLiveBoard();
 loadMatchingWidget();
 

@@ -31,7 +31,6 @@ function getNavLinks(role) {
   return [
     { href: '/#ilanlar', label: navLabel('nav.discover', 'Keşfet & İlanlar') },
     { href: '/#eslesme', label: navLabel('nav.match', 'Hızlı Eşleşme') },
-    { href: '/#aday-havuzu', label: navLabel('nav.talent', 'Aday Havuzu') },
     { href: '/#nasil-calisir', label: navLabel('nav.how', 'Nasıl Çalışır?') }
   ];
 }
@@ -120,7 +119,7 @@ function renderFooter(rootId) {
             <ul>
               <li><a href="/#ilanlar">Etkinlik ilanları</a></li>
               <li><a href="/#eslesme">Swipe eşleşme</a></li>
-              <li><a href="/#aday-havuzu">Yetenek havuzu</a></li>
+              <li><a href="/#nasil-calisir">Nasıl çalışır?</a></li>
               <li><a href="/company/post-job.html">Etkinlik oluştur</a></li>
             </ul>
           </div>

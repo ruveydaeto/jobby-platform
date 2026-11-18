@@ -196,11 +196,6 @@ function applyZoneHtml(application, profile) {
       </div>
 
       <div class="field">
-        <label for="availabilityNote">Bu iş için müsaitliğin <span style="color:var(--secondary);">*</span></label>
-        <input type="text" id="availabilityNote" placeholder="Örn. Tüm gün müsaitim, 09:00-18:00" required>
-      </div>
-
-      <div class="field">
         <label for="experience">İlgili deneyimin</label>
         <textarea id="experience" placeholder="Bu alanda daha önce çalıştıysan kısaca yaz. Zorunlu değil." style="min-height:72px;"></textarea>
       </div>
@@ -251,7 +246,6 @@ function bindForm(job) {
           jobId: job.id,
           phone: document.getElementById('phone').value,
           coverLetter: cover.value,
-          availabilityNote: document.getElementById('availabilityNote').value,
           experience: document.getElementById('experience').value
         }
       });

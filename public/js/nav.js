@@ -15,7 +15,8 @@ function navLabel(key, fallback) {
 function getNavLinks(role) {
   if (role === 'candidate') {
     return [
-      { href: '/swipe.html', label: 'Hızlı Eşleşme (Swipe)' },
+      { href: '/jobs.html', label: 'İlanlar' },
+      { href: '/swipe.html', label: 'Hızlı Eşleşme' },
       { href: '/dashboard.html', label: 'Panelim' },
       { href: '/onboarding.html', label: 'Profilim' }
     ];
@@ -24,6 +25,7 @@ function getNavLinks(role) {
     return [
       { href: '/company/post-job.html', label: 'Etkinlik Oluştur' },
       { href: '/company/dashboard.html', label: 'İlanlarım' },
+      { href: '/company/dashboard.html#drafts', label: 'Taslaklar' },
       { href: '/company/applications.html', label: 'Başvurular' },
       { href: '/company/matches.html', label: 'Eşleşmeler' }
     ];

@@ -284,6 +284,8 @@
           </div>
         </div>
 
+        <div id="extra-roles"></div>
+
         <button class="add-role-btn" type="button" id="btn-add-role">
           <span class="mi mi-sm">add_circle</span>
           <span>Yeni rol ekle (saha süpervizörü, lojistik vb.)</span>
@@ -362,24 +364,25 @@
           <span class="step-count">Adım 4 / 4</span>
         </div>
 
+        <p class="t-bsm muted" style="margin:0 0 10px;">İkisini birden seçebilirsin — adaylar hem swipe hem başvuru formundan gelsin.</p>
         <div class="mode-grid" id="mode-grid">
           <label class="mode-card active">
-            <input type="radio" name="matchMode" value="swipe" checked>
+            <input type="checkbox" name="matchModeSwipe" value="swipe" checked>
             <span class="mode-top">
               <b>Hızlı eşleşme (swipe havuzu)</b>
-              <span class="mi mi-sm">radio_button_checked</span>
+              <span class="mi mi-sm">check_box</span>
             </span>
-            <p>En uyumlu adaylar anlık kart ekranına düşer; kabul ettiklerin doğrudan kadroya katılır.</p>
-            <span class="mode-eta"><span class="mi mi-xs">speed</span>Ortalama tamamlanma: 18 dakika</span>
+            <p>Adaylar anlık kart ekranına düşer; beğendiklerin kadroya ilerler.</p>
+            <span class="mode-eta"><span class="mi mi-xs">speed</span>Hızlı doluluk</span>
           </label>
-          <label class="mode-card">
-            <input type="radio" name="matchMode" value="classic">
+          <label class="mode-card active">
+            <input type="checkbox" name="matchModeClassic" value="classic" checked>
             <span class="mode-top">
               <b>Klasik başvuru listesi</b>
-              <span class="mi mi-sm">radio_button_unchecked</span>
+              <span class="mi mi-sm">check_box</span>
             </span>
-            <p>Adaylar ilana başvuru gönderir, ekibin profilleri tek tek inceler ve onaylar.</p>
-            <span class="mode-eta"><span class="mi mi-xs">hourglass_empty</span>Ortalama tamamlanma: 4-8 saat</span>
+            <p>Adaylar ilana formla başvurur; Başvurular kutusundan incelersin.</p>
+            <span class="mode-eta"><span class="mi mi-xs">inbox</span>Detaylı değerlendirme</span>
           </label>
         </div>
 
@@ -408,6 +411,9 @@
           <button class="btn btn-ghost" type="button" id="btn-draft">
             <span class="mi mi-sm">save</span><span>Taslak olarak kaydet</span>
           </button>
+          <a href="/company/dashboard.html#drafts" class="btn btn-ghost" id="btn-view-drafts">
+            <span class="mi mi-sm">folder_open</span><span>Taslaklarım</span>
+          </a>
           <button class="btn btn-primary btn-lg" type="submit" id="submit-btn">
             <span class="mi mi-sm">rocket_launch</span>
             <span id="submit-label">İlanı yayınla &amp; eşleşmeyi başlat</span>
@@ -578,9 +584,9 @@ if (Api.requireAuth('company')) {
     $('venue-photo').style.backgroundImage = `url('${st.img}')`;
     $('venue-pin').textContent = $('venue').value.trim() || $('city').value.trim() || 'Mekân';
   }
-  $('category').addEventListener('change', () => { updateVenue(); refreshRadar(); });
+  $('category').addEventListener('change', updateVenue);
   $('venue').addEventListener('input', updateVenue);
-  $('city').addEventListener('input', () => { updateVenue(); refreshRadar(); });
+  $('city').addEventListener('input', updateVenue);
   updateVenue();
 
   /* ---------- Canlı bütçe hesabı ---------- */
@@ -608,102 +614,247 @@ if (Api.requireAuth('company')) {
     $('row-fee').textContent = money(fee);
     $('row-total').textContent = money(net + fee);
 
-    $('total-crew').textContent = `Toplam: ${nf + nm} kişilik ekip`;
-    $('submit-label').textContent = (nf + nm)
-      ? `İlanı yayınla & eşleşmeyi başlat (${nf + nm} kişi)`
+    const extraCount = [...document.querySelectorAll('#extra-roles [data-count]')]
+      .reduce((s, el) => s + (Number(el.value) || 0), 0);
+    const total = nf + nm + extraCount;
+    $('total-crew').textContent = `Toplam: ${total} kişilik ekip`;
+    $('submit-label').textContent = total
+      ? `İlanı yayınla & eşleşmeyi başlat (${total} kişi)`
       : 'İlanı yayınla & eşleşmeyi başlat';
   }
   ['payFemale', 'payMale'].forEach(id => $(id).addEventListener('input', recalc));
   recalc();
 
-  /* ---------- Eşleşme modu ---------- */
+  /* ---------- Eşleşme modu (ikisini birden) ---------- */
+  function syncModeCards() {
+    document.querySelectorAll('.mode-card').forEach(card => {
+      const input = card.querySelector('input[type=checkbox]');
+      const on = input && input.checked;
+      card.classList.toggle('active', on);
+      const icon = card.querySelector('.mode-top .mi');
+      if (icon) icon.textContent = on ? 'check_box' : 'check_box_outline_blank';
+    });
+  }
   document.querySelectorAll('.mode-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.mode-card').forEach(c => {
-        const on = c === card;
-        c.classList.toggle('active', on);
-        c.querySelector('.mode-top .mi').textContent = on ? 'radio_button_checked' : 'radio_button_unchecked';
-      });
+    card.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') { syncModeCards(); return; }
+      const input = card.querySelector('input[type=checkbox]');
+      if (input) {
+        input.checked = !input.checked;
+        syncModeCards();
+      }
     });
   });
+  syncModeCards();
 
-  /* ---------- Yan haklar & rozet filtreleri (görsel durum) ---------- */
   document.querySelectorAll('.perk input').forEach(cb =>
     cb.addEventListener('change', () => cb.closest('.perk').classList.toggle('off', !cb.checked))
   );
   document.querySelectorAll('.badge-filter input').forEach(cb =>
-    cb.addEventListener('change', () => {
-      cb.closest('.badge-filter').classList.toggle('on', cb.checked);
-      refreshRadar();
-    })
+    cb.addEventListener('change', () => cb.closest('.badge-filter').classList.toggle('on', cb.checked))
   );
 
-  /* ---------- Canlı aday radarı (gerçek aday havuzundan) ---------- */
-  const AV_BG = [
-    'linear-gradient(135deg,#3b4bf7,#182ae0)',
-    'linear-gradient(135deg,#FF5C38,#b52705)',
-    'linear-gradient(135deg,#10B981,#00573a)'
-  ];
-  let radarPool = [];
-
-  async function loadRadar() {
-    try {
-      // Firmanın mevcut ilanlarından biri üzerinden uygun aday havuzunu örnekle
-      const mine = await Api.request('/jobs/mine');
-      if (mine && mine.length) {
-        radarPool = await Api.request('/candidates/candidates-for-job/' + mine[0].id);
-      }
-    } catch (e) { radarPool = []; }
-    refreshRadar();
+  /* ---------- Yeni rol ekle ---------- */
+  let extraRoleSeq = 0;
+  function bindExtraCounters(root) {
+    root.querySelectorAll('.counter button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = root.querySelector('[data-count]');
+        const next = Math.max(0, Number(input.value) + Number(btn.dataset.step));
+        input.value = next;
+        root.querySelector('[data-count-val]').textContent = next;
+        recalc();
+      });
+    });
+    root.querySelector('[data-rate]')?.addEventListener('input', recalc);
   }
 
-  function refreshRadar() {
-    const ready = radarPool.length;
-
-    $('radar-count').textContent = ready + ' aday hazır';
-    $('pool-count').textContent = `Canlı kadro radarı: ${radarPool.length} müsait aday`;
-    $('radar-note-text').textContent = ready
-      ? `İlan yayınlandığı anda bu ${ready} aday havuzda görünür.`
-      : 'İlk ilanı yayınladıktan sonra aday havuzu burada listelenir.';
-
-    const list = $('radar-list');
-    if (!radarPool.length) {
-      list.innerHTML = `<div class="radar-note" style="background:rgba(255,255,255,.06);">
-        <span class="mi mi-sm">info</span>
-        <span>Aday havuzu ilk ilanını yayınladıktan sonra burada canlı listelenir.</span></div>`;
-      return;
-    }
-    list.innerHTML = radarPool.slice(0, 3).map((c, i) => `
-        <div class="radar-row">
-          <div class="radar-who">
-            <span class="radar-av" style="background:${AV_BG[i % 3]}">${initialsOf(c.fullName)}</span>
-            <div style="min-width:0;">
-              <div class="radar-name">${c.fullName}${c.age ? ' (' + c.age + ')' : ''}</div>
-              <div class="radar-sub">${c.city} • ${(c.categories || [])[0] || 'Saha ekibi'}</div>
+  $('btn-add-role').addEventListener('click', () => {
+    extraRoleSeq += 1;
+    const wrap = document.createElement('div');
+    wrap.className = 'role-card';
+    wrap.dataset.extraRole = 'extra-' + extraRoleSeq;
+    wrap.innerHTML = `
+      <div class="role-top">
+        <div class="role-ident">
+          <span class="role-ico indigo"><span class="mi">badge</span></span>
+          <div style="min-width:0;flex:1;">
+            <div class="role-title" style="gap:8px;flex-wrap:wrap;">
+              <input type="text" data-label placeholder="Rol adı (örn. Saha süpervizörü)" style="font-size:16px;font-weight:700;border:none;background:transparent;width:100%;max-width:280px;">
+              <select data-gender style="font-size:12px;">
+                <option value="kadın">Kadın</option>
+                <option value="erkek">Erkek</option>
+                <option value="farketmez">Fark etmez</option>
+              </select>
             </div>
           </div>
-        </div>`).join('');
-  }
-  loadRadar();
-
-  /* ---------- Şablon ---------- */
-  $('btn-template').addEventListener('click', () => {
-    $('title').value = 'Yeni Rakı — Boğaz Tadım Gecesi & Lansman';
-    $('category').value = 'Tadım & Promosyon';
-    $('venue').value = 'Kuruçeşme Arena';
-    $('address').value = 'Muallim Naci Cad. No:64, özel iskele girişi';
-    $('description').value = 'Boğaz kıyısında düzenlenecek tadım ve lansman gecesi için karşılama ve bar ekibi arıyoruz. Güler yüzlü, dakik ve protokol deneyimli adaylar tercih sebebidir.';
-    $('template-name').textContent = 'Gastronomi & Tadım';
-    updateVenue();
+        </div>
+        <div class="counter">
+          <span class="lbl">Kontenjan:</span>
+          <button class="minus" type="button" data-step="-1">−</button>
+          <span class="val" data-count-val>1</span>
+          <button class="plus" type="button" data-step="1">+</button>
+          <input type="hidden" data-count value="1">
+        </div>
+      </div>
+      <div class="role-foot">
+        <div class="dress-box">
+          <span class="mi mi-sm">checkroom</span>
+          <div style="min-width:0;flex:1;">
+            <span class="k">Kıyafet kodu</span>
+            <input type="text" data-dress placeholder="Opsiyonel">
+          </div>
+        </div>
+        <div class="pay-box">
+          <div>
+            <span class="k">Net kişi başı hakediş</span>
+            <span class="pay-input"><span class="cur">₺</span><input type="number" data-rate min="0" step="50" value="2000"></span>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" data-remove>Kaldır</button>
+        </div>
+      </div>`;
+    $('extra-roles').appendChild(wrap);
+    bindExtraCounters(wrap);
+    wrap.querySelector('[data-remove]').addEventListener('click', () => {
+      wrap.remove();
+      recalc();
+    });
+    recalc();
   });
 
-  /* ---------- Taslak (yerel) ---------- */
+  function readExtraRoles() {
+    return [...document.querySelectorAll('#extra-roles .role-card')].map((card, i) => ({
+      key: 'extra-' + (i + 1),
+      label: (card.querySelector('[data-label]')?.value || '').trim() || ('Ek rol ' + (i + 1)),
+      gender: card.querySelector('[data-gender]')?.value || 'farketmez',
+      count: Number(card.querySelector('[data-count]')?.value) || 0,
+      rate: Number(card.querySelector('[data-rate]')?.value) || 0,
+      dressCode: (card.querySelector('[data-dress]')?.value || '').trim()
+    })).filter(r => r.count > 0);
+  }
+
+  function getDrafts() {
+    try { return JSON.parse(localStorage.getItem('jobby_job_drafts') || '[]'); }
+    catch { return []; }
+  }
+  function saveDrafts(list) {
+    localStorage.setItem('jobby_job_drafts', JSON.stringify(list));
+  }
+  function resolveMatchMode() {
+    const swipe = document.querySelector('input[name=matchModeSwipe]')?.checked;
+    const classic = document.querySelector('input[name=matchModeClassic]')?.checked;
+    if (swipe && classic) return 'both';
+    if (classic) return 'classic';
+    if (swipe) return 'swipe';
+    return 'both';
+  }
+  function showFormError(msg, focusId) {
+    showError(errorBox, msg);
+    const target = (focusId && $(focusId)) || errorBox;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (focusId && $(focusId)) $(focusId).focus();
+  }
+
+  /* ---------- Şablon ---------- */
+  if ($('btn-template')) {
+    $('btn-template').addEventListener('click', () => {
+      $('title').value = 'Yeni Rakı — Boğaz Tadım Gecesi & Lansman';
+      $('category').value = 'Tadım & Promosyon';
+      $('venue').value = 'Kuruçeşme Arena';
+      $('address').value = 'Muallim Naci Cad. No:64, özel iskele girişi';
+      $('description').value = 'Boğaz kıyısında düzenlenecek tadım ve lansman gecesi için karşılama ve bar ekibi arıyoruz.';
+      if ($('template-name')) $('template-name').textContent = 'Gastronomi & Tadım';
+      updateVenue();
+    });
+  }
+
+  /* ---------- Taslak ---------- */
+  let editingDraftId = null;
   $('btn-draft').addEventListener('click', () => {
-    localStorage.setItem('jobby_job_draft', JSON.stringify(collect()));
+    const payload = collect();
+    const drafts = getDrafts();
+    const id = editingDraftId || ('d_' + Date.now());
+    const entry = {
+      id,
+      savedAt: new Date().toISOString(),
+      title: payload.title || 'İsimsiz taslak',
+      payload
+    };
+    const idx = drafts.findIndex(d => d.id === id);
+    if (idx >= 0) drafts[idx] = entry;
+    else drafts.unshift(entry);
+    saveDrafts(drafts);
+    editingDraftId = id;
+    localStorage.removeItem('jobby_job_draft');
     const b = $('btn-draft');
     b.innerHTML = '<span class="mi mi-sm">check</span><span>Taslak kaydedildi</span>';
     setTimeout(() => { b.innerHTML = '<span class="mi mi-sm">save</span><span>Taslak olarak kaydet</span>'; }, 1800);
   });
+
+  function applyDraft(payload) {
+    if (!payload) return;
+    if (payload.title != null) $('title').value = payload.title;
+    if (payload.description != null) $('description').value = payload.description;
+    if (payload.city != null) $('city').value = payload.city;
+    if (payload.eventDate) $('eventDate').value = payload.eventDate;
+    if (payload.category) $('category').value = payload.category;
+    if (payload.venue != null) $('venue').value = payload.venue;
+    if (payload.address != null) $('address').value = payload.address;
+    if (payload.shiftStart) $('shiftStart').value = payload.shiftStart;
+    if (payload.shiftEnd) $('shiftEnd').value = payload.shiftEnd;
+    if (payload.transferService != null) $('transferService').checked = Boolean(payload.transferService);
+    if (payload.neededFemale != null) {
+      $('neededFemale').value = payload.neededFemale;
+      $('neededFemale-val').textContent = payload.neededFemale;
+    }
+    if (payload.neededMale != null) {
+      $('neededMale').value = payload.neededMale;
+      $('neededMale-val').textContent = payload.neededMale;
+    }
+    const femaleRole = (payload.roles || []).find(r => r.key === 'female');
+    const maleRole = (payload.roles || []).find(r => r.key === 'male');
+    if (femaleRole?.rate != null) $('payFemale').value = femaleRole.rate;
+    if (femaleRole?.dressCode != null) $('dressFemale').value = femaleRole.dressCode;
+    if (maleRole?.rate != null) $('payMale').value = maleRole.rate;
+    if (maleRole?.dressCode != null) $('dressMale').value = maleRole.dressCode;
+    const mode = payload.matchMode || 'both';
+    const swipeCb = document.querySelector('input[name=matchModeSwipe]');
+    const classicCb = document.querySelector('input[name=matchModeClassic]');
+    if (swipeCb) swipeCb.checked = mode === 'swipe' || mode === 'both';
+    if (classicCb) classicCb.checked = mode === 'classic' || mode === 'both';
+    syncModeCards();
+    $('extra-roles').innerHTML = '';
+    (payload.roles || []).filter(r => r.key && String(r.key).startsWith('extra')).forEach(r => {
+      $('btn-add-role').click();
+      const card = $('extra-roles').lastElementChild;
+      if (!card) return;
+      if (card.querySelector('[data-label]')) card.querySelector('[data-label]').value = r.label || '';
+      if (card.querySelector('[data-gender]')) card.querySelector('[data-gender]').value = r.gender || 'farketmez';
+      if (card.querySelector('[data-count]')) {
+        card.querySelector('[data-count]').value = r.count || 0;
+        card.querySelector('[data-count-val]').textContent = r.count || 0;
+      }
+      if (card.querySelector('[data-rate]')) card.querySelector('[data-rate]').value = r.rate || 0;
+      if (card.querySelector('[data-dress]')) card.querySelector('[data-dress]').value = r.dressCode || '';
+    });
+    updateVenue();
+    updateShift();
+    recalc();
+  }
+
+  const draftParam = new URLSearchParams(location.search).get('draft');
+  if (draftParam) {
+    const found = getDrafts().find(d => d.id === draftParam);
+    if (found) {
+      editingDraftId = found.id;
+      applyDraft(found.payload);
+    }
+  } else {
+    try {
+      const legacy = JSON.parse(localStorage.getItem('jobby_job_draft') || 'null');
+      if (legacy) applyDraft(legacy);
+    } catch { /* ignore */ }
+  }
 
   /* ---------- Gönderim ---------- */
   function collect() {
@@ -711,6 +862,7 @@ if (Api.requireAuth('company')) {
     const nm = Number($('neededMale').value) || 0;
     const pf = Number($('payFemale').value) || 0;
     const pm = Number($('payMale').value) || 0;
+    const extras = readExtraRoles();
     return {
       title: $('title').value.trim(),
       description: $('description').value.trim(),
@@ -719,8 +871,7 @@ if (Api.requireAuth('company')) {
       category: $('category').value,
       neededFemale: nf,
       neededMale: nm,
-      // Kartlarda tek bir rakam gösterildiği için en yüksek rol ücreti taban kabul edilir
-      payDaily: Math.max(pf, pm),
+      payDaily: Math.max(pf, pm, ...extras.map(r => r.rate), 0),
       venue: $('venue').value.trim(),
       address: $('address').value.trim(),
       shiftStart: $('shiftStart').value,
@@ -729,10 +880,11 @@ if (Api.requireAuth('company')) {
       transferService: $('transferService').checked,
       roles: [
         { key: 'female', label: 'Karşılama & tadım hostesi', gender: 'kadın', count: nf, rate: pf, dressCode: $('dressFemale').value.trim() },
-        { key: 'male', label: 'Miksolojist & barmen', gender: 'erkek', count: nm, rate: pm, dressCode: $('dressMale').value.trim() }
+        { key: 'male', label: 'Miksolojist & barmen', gender: 'erkek', count: nm, rate: pm, dressCode: $('dressMale').value.trim() },
+        ...extras
       ].filter(r => r.count > 0),
       perks: [...document.querySelectorAll('.perk input:checked')].map(i => i.value),
-      matchMode: document.querySelector('input[name=matchMode]:checked').value,
+      matchMode: resolveMatchMode(),
       minScore: 0,
       requiredBadges: [...document.querySelectorAll('.badge-filter input:checked')].map(i => i.value)
     };
@@ -746,19 +898,28 @@ if (Api.requireAuth('company')) {
     hideError(errorBox);
 
     const payload = collect();
-    if (payload.neededFemale + payload.neededMale === 0) {
-      showError(errorBox, 'En az bir rol için kontenjan girmelisin.');
-      return;
+    if (!payload.title) return showFormError('Etkinlik başlığı zorunludur.', 'title');
+    if (!payload.city) return showFormError('Şehir zorunludur.', 'city');
+    if (!payload.eventDate) return showFormError('Etkinlik tarihi zorunludur.', 'eventDate');
+    if (!payload.category) return showFormError('Kategori zorunludur.', 'category');
+    const extraCount = readExtraRoles().reduce((s, r) => s + r.count, 0);
+    if (payload.neededFemale + payload.neededMale + extraCount === 0) {
+      return showFormError('En az bir rol için kontenjan girmelisin.');
+    }
+    if (!document.querySelector('input[name=matchModeSwipe]')?.checked &&
+        !document.querySelector('input[name=matchModeClassic]')?.checked) {
+      return showFormError('En az bir eşleşme yöntemi seçmelisin.');
     }
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<span class="mi mi-sm">sync</span><span>Yayınlanıyor...</span>';
     try {
       await Api.request('/jobs', { method: 'POST', body: payload });
+      if (editingDraftId) saveDrafts(getDrafts().filter(d => d.id !== editingDraftId));
       localStorage.removeItem('jobby_job_draft');
       window.location.href = '/company/dashboard.html';
     } catch (err) {
-      showError(errorBox, err.message);
+      showFormError(err.message);
       submitBtn.disabled = false;
       submitBtn.innerHTML = '<span class="mi mi-sm">rocket_launch</span><span>İlanı yayınla &amp; eşleşmeyi başlat</span>';
     }

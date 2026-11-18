@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>İlanlar — JOBBY</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div id="nav-root"></div>
+
+<div class="app-shell" style="max-width:1100px;">
+  <div class="app-header">
+    <span class="eyebrow"><span class="live-dot"></span>Liste görünümü</span>
+    <h1>Açık etkinlik ilanları</h1>
+    <p>Hızlı eşleşmeden bağımsız olarak tüm açık ilanları burada liste olarak görebilirsin.</p>
+    <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a href="/swipe.html" class="btn btn-ghost btn-sm"><span class="mi mi-sm">swipe</span>Hızlı eşleşmeye geç</a>
+    </div>
+  </div>
+
+  <div id="jobs-grid" class="gig-grid" style="margin-top:8px;"></div>
+</div>
+
+<div id="footer-root"></div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script>
+renderNav('nav-root');
+renderFooter('footer-root');
+
+function cardHtml(job) {
+  const st = catStyle(job.category);
+  const spots = (job.neededMale || 0) + (job.neededFemale || 0);
+  return `
+    <article class="gig-card" data-id="${job.id}">
+      <div class="gig-cover" style="background-image:url('${st.img}')">
+        <span class="badge-tl"><span class="badge-cat">${job.category}</span></span>
+      </div>
+      <div class="gig-body">
+        <div class="gig-head">
+          <div style="min-width:0;">
+            <div class="gig-title">${job.title}</div>
+            <div class="gig-company">${job.companyName || 'Firma'}</div>
+          </div>
+          <div class="gig-pay">${money(job.payDaily)}<small>GÜNLÜK</small></div>
+        </div>
+        <div class="gig-chips">
+          <span class="gig-chip"><span class="mi mi-xs">location_on</span>${job.city}</span>
+          <span class="gig-chip"><span class="mi mi-xs">event</span>${dateLabel(job)}</span>
+          <span class="gig-chip"><span class="mi mi-xs">groups</span>${spots || '—'} kişi</span>
+        </div>
+        <a class="gig-apply" href="${Api.isLoggedIn() && Api.role() === 'candidate' ? '/job.html?id=' + job.id : '/register.html?role=candidate'}" style="display:block;text-align:center;text-decoration:none;">Detay / başvur</a>
+      </div>
+    </article>`;
+}
+
+(async () => {
+  const grid = document.getElementById('jobs-grid');
+  try {
+    const jobs = await Api.request('/jobs');
+    if (!jobs.length) {
+      grid.innerHTML = `<div class="empty-state">Şu an açık ilan yok.</div>`;
+      return;
+    }
+    grid.innerHTML = jobs.map(cardHtml).join('');
+  } catch (e) {
+    grid.innerHTML = `<div class="empty-state">İlanlar yüklenemedi.</div>`;
+  }
+})();
+</script>
+</body>
+</html>

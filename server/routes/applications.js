@@ -32,9 +32,6 @@ router.post('/', requireAuth, requireRole('candidate'), async (req, res) => {
     if (!coverLetter || String(coverLetter).trim().length < 20) {
       return res.status(400).json({ error: 'Ön yazı en az 20 karakter olmalıdır.' });
     }
-    if (!availabilityNote || !String(availabilityNote).trim()) {
-      return res.status(400).json({ error: 'Müsaitlik bilgisi zorunludur.' });
-    }
 
     const candidate = await prisma.candidate.findUnique({ where: { userId: req.user.id } });
     if (!candidate) return res.status(404).json({ error: 'Aday profili bulunamadı.' });
@@ -50,7 +47,9 @@ router.post('/', requireAuth, requireRole('candidate'), async (req, res) => {
     const payload = {
       phone: String(phone).trim(),
       coverLetter: String(coverLetter).trim(),
-      availabilityNote: String(availabilityNote).trim(),
+      availabilityNote: availabilityNote
+        ? String(availabilityNote).trim()
+        : (candidate.availability || 'Belirtilmedi'),
       experience: experience ? String(experience).trim() : '',
       companyId: job.companyId
     };

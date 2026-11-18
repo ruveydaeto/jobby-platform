@@ -13,23 +13,9 @@
   <div class="app-header">
     <span class="eyebrow"><span class="live-dot coral"></span>Canlı kadro yönetimi</span>
     <h1>İlanlarım</h1>
-    <p>Yayındaki ilanlarını listeden yönet. Hızlı eşleşme için "Adayları incele", klasik başvurular için "Başvurular" kullan.</p>
-    <div style="margin-top:12px;">
-      <a href="/company/post-job.html" class="btn btn-primary btn-sm"><span class="mi mi-sm">add</span>Yeni ilan</a>
-    </div>
+    <p>Bir ilana uygun adayları incelemek için "Adayları incele" butonuna tıkla. Kadro doluluğunu her ilanda canlı takip edebilirsin.</p>
   </div>
 
-  <section class="panel-section" id="drafts-section" style="display:none;margin-bottom:24px;">
-    <div class="section-head" style="margin-bottom:12px;">
-      <div>
-        <h2 style="margin:0;font-size:18px;">Taslaklarım</h2>
-        <p class="muted" style="margin:4px 0 0;">Kaydettiğin ama henüz yayınlamadığın ilanlar.</p>
-      </div>
-    </div>
-    <div id="drafts-list" style="display:flex;flex-direction:column;gap:10px;"></div>
-  </section>
-
-  <h2 style="margin:0 0 12px;font-size:18px;">Yayındaki ilanlar</h2>
   <div id="list" style="display:flex;flex-direction:column;gap:14px;"></div>
 </div>
 
@@ -41,25 +27,16 @@
 renderNav('nav-root');
 renderFooter('footer-root');
 
-function modeLabel(mode) {
-  if (mode === 'classic') return 'Klasik başvuru';
-  if (mode === 'both') return 'Swipe + başvuru';
-  return 'Hızlı eşleşme';
-}
-
 function jobRow(j) {
   const need = (j.neededFemale || 0) + (j.neededMale || 0);
   const filled = Math.min(j.matchCount || 0, need);
   const pct = need ? Math.round((filled / need) * 100) : 0;
-  const mode = j.matchMode || 'swipe';
-  const showSwipe = mode === 'swipe' || mode === 'both';
-  const showApps = mode === 'classic' || mode === 'both' || true;
   return `
     <div class="job-card">
       <div class="job-card-top">
         <div>
           <h3>${j.title}</h3>
-          <div class="job-meta"><span>${j.city}</span><span>${j.category}</span><span>${dateLabel(j)}</span><span>${modeLabel(mode)}</span></div>
+          <div class="job-meta"><span>${j.city}</span><span>${j.category}</span><span>${dateLabel(j)}</span></div>
         </div>
         <span class="pay-badge">${money(j.payDaily)}<small style="display:block;font-size:10px;font-weight:600;color:var(--on-surface-var);text-align:right;">GÜNLÜK</small></span>
       </div>
@@ -75,27 +52,10 @@ function jobRow(j) {
         <div class="meter"><i style="width:${pct}%"></i></div>
       </div>` : ''}
       <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-        ${showSwipe ? `<a href="/company/review.html?job=${j.id}" class="btn btn-primary btn-sm"><span class="mi mi-sm">swipe</span>Adayları incele</a>` : ''}
-        ${showApps ? `<a href="/company/applications.html?job=${j.id}" class="btn btn-ghost btn-sm">
+        <a href="/company/review.html?job=${j.id}" class="btn btn-primary btn-sm"><span class="mi mi-sm">swipe</span>Adayları incele</a>
+        <a href="/company/applications.html?job=${j.id}" class="btn btn-ghost btn-sm">
           <span class="mi mi-sm">inbox</span>Başvurular${j.pendingApplicationCount ? ` (${j.pendingApplicationCount})` : ''}
-        </a>` : ''}
-      </div>
-    </div>`;
-}
-
-function draftRow(d) {
-  const when = d.savedAt ? new Date(d.savedAt).toLocaleString('tr-TR') : '';
-  return `
-    <div class="job-card" style="border-style:dashed;">
-      <div class="job-card-top">
-        <div>
-          <h3>${d.title || 'İsimsiz taslak'}</h3>
-          <div class="job-meta"><span>Taslak</span>${when ? `<span>${when}</span>` : ''}</div>
-        </div>
-      </div>
-      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
-        <a href="/company/post-job.html?draft=${encodeURIComponent(d.id)}" class="btn btn-primary btn-sm">Devam et</a>
-        <button type="button" class="btn btn-ghost btn-sm" data-del-draft="${d.id}">Sil</button>
+        </a>
       </div>
     </div>`;
 }
@@ -103,34 +63,10 @@ function draftRow(d) {
 if (Api.requireAuth('company')) {
   (async () => {
     const list = document.getElementById('list');
-    const draftsSection = document.getElementById('drafts-section');
-    const draftsList = document.getElementById('drafts-list');
-
-    function loadDrafts() {
-      let drafts = [];
-      try { drafts = JSON.parse(localStorage.getItem('jobby_job_drafts') || '[]'); } catch { drafts = []; }
-      if (!drafts.length) {
-        draftsSection.style.display = 'none';
-        draftsList.innerHTML = '';
-        return;
-      }
-      draftsSection.style.display = 'block';
-      draftsList.innerHTML = drafts.map(draftRow).join('');
-      draftsList.querySelectorAll('[data-del-draft]').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const id = btn.getAttribute('data-del-draft');
-          const next = drafts.filter(d => d.id !== id);
-          localStorage.setItem('jobby_job_drafts', JSON.stringify(next));
-          loadDrafts();
-        });
-      });
-    }
-    loadDrafts();
-
     try {
       const jobs = await Api.request('/jobs/mine');
       if (jobs.length === 0) {
-        list.innerHTML = `<div class="empty-state"><span class="mi mi-lg" style="color:var(--primary)">campaign</span><h3 style="margin:8px 0;">Henüz yayınlanmış ilanın yok</h3><p style="margin:0 0 16px;">İlk ilanını oluştur veya taslağını tamamla.</p><a href="/company/post-job.html" class="btn btn-primary">İlan oluştur</a></div>`;
+        list.innerHTML = `<div class="empty-state"><span class="mi mi-lg" style="color:var(--primary)">campaign</span><h3 style="margin:8px 0;">Henüz ilanın yok</h3><p style="margin:0 0 16px;">İlk ilanını oluşturarak adaylarla eşleşmeye başla.</p><a href="/company/post-job.html" class="btn btn-primary">İlan oluştur</a></div>`;
       } else {
         list.innerHTML = jobs.map(jobRow).join('');
       }

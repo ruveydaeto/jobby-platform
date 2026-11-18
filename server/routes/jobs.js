@@ -53,7 +53,7 @@ router.post('/', requireAuth, requireRole('company'), async (req, res) => {
         transferService: Boolean(transferService),
         roles: toJsonArray(roles),
         perks: toJsonArray(perks),
-        matchMode: ['classic', 'swipe', 'both'].includes(matchMode) ? matchMode : 'both',
+        matchMode: matchMode === 'classic' ? 'classic' : 'swipe',
         minScore: 0,
         requiredBadges: toJsonArray(requiredBadges)
       },

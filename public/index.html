@@ -179,21 +179,21 @@
       <!-- Sol: firma talebi -->
       <div class="stage-panel">
         <div class="stage-panel-head">
-          <span class="chip chip-coral"><span class="live-dot coral"></span>Canlı firma talebi</span>
-          <span class="t-lsm muted upper" id="demand-countdown">42 dk önce</span>
+          <span class="chip chip-coral"><span class="live-dot coral"></span><span data-i18n="stage.liveDemand">Canlı firma talebi</span></span>
+          <span class="t-lsm muted upper" id="demand-countdown" data-i18n="stage.ago">42 dk önce</span>
         </div>
         <h3 id="demand-title" style="margin-bottom:2px;">Yeni etkinlik ekibi</h3>
         <p class="t-bsm" style="margin-bottom:12px;" id="demand-company">Organizasyon firması</p>
 
-        <div class="demand-row"><span class="k">Aranan kadro</span><span class="v" id="demand-roles">6 hostes / 2 barmen</span></div>
-        <div class="demand-row"><span class="k">Lokasyon</span><span class="v" id="demand-city">İstanbul</span></div>
-        <div class="demand-row"><span class="k">Günlük ücret</span><span class="v text-teal" id="demand-pay">₺2.400</span></div>
-        <div class="demand-row"><span class="k">Kıyafet</span><span class="v">Siyah smart casual</span></div>
+        <div class="demand-row"><span class="k" data-i18n="stage.roles">Aranan kadro</span><span class="v" id="demand-roles">6 hostes / 2 barmen</span></div>
+        <div class="demand-row"><span class="k" data-i18n="stage.location">Lokasyon</span><span class="v" id="demand-city">İstanbul</span></div>
+        <div class="demand-row"><span class="k" data-i18n="stage.pay">Günlük ücret</span><span class="v text-teal" id="demand-pay">₺2.400</span></div>
+        <div class="demand-row"><span class="k" data-i18n="stage.dress">Kıyafet</span><span class="v" data-i18n="stage.dressVal">Siyah smart casual</span></div>
 
         <div style="margin-top:16px;">
-          <div class="t-lsm upper muted" style="margin-bottom:4px;">Kadro doluluk durumu</div>
+          <div class="t-lsm upper muted" style="margin-bottom:4px;" data-i18n="stage.fill">Kadro doluluk durumu</div>
           <div class="meter"><i style="width:66%"></i></div>
-          <div class="t-bsm" style="margin-top:6px;">6 kişiden <b>4</b>'ü onaylandı</div>
+          <div class="t-bsm" style="margin-top:6px;" data-i18n="stage.fillHint">6 kişiden 4'ü onaylandı</div>
         </div>
       </div>
 
@@ -205,7 +205,7 @@
           <div class="match-card-top">
             <div style="display:flex;flex-direction:column;gap:6px;">
               <span class="pill-glass teal"><span class="mi mi-xs">bolt</span><span id="match-score">%98 eşleşme uyumu</span></span>
-              <span class="pill-glass dark">JOBBY onaylı ilan</span>
+              <span class="pill-glass dark" data-i18n="stage.approved">JOBBY onaylı ilan</span>
             </div>
             <span class="pill-glass amber"><span class="mi mi-xs mi-fill" style="color:var(--amber)">star</span>4.9</span>
           </div>
@@ -214,8 +214,8 @@
             <span class="loc"><span class="mi mi-xs">location_on</span><span id="match-loc">İstanbul</span></span>
             <div class="micro-badges" id="match-badges"></div>
             <div class="match-card-dock">
-              <div class="rate" id="match-pay">₺—<small>GÜNLÜK TABAN ÜCRET</small></div>
-              <a href="/register.html?role=candidate" class="btn btn-sm btn-primary">Başvur</a>
+              <div class="rate" id="match-pay">₺—<small data-i18n="stage.dailyBase">GÜNLÜK TABAN ÜCRET</small></div>
+              <a href="/register.html?role=candidate" class="btn btn-sm btn-primary" data-i18n="stage.apply">Başvur</a>
             </div>
           </div>
         </div>
@@ -228,22 +228,22 @@
 
       <!-- Sağ: eşleşme bildirimi + referans -->
       <div class="stage-panel">
-        <span class="chip chip-teal" style="margin-bottom:12px;"><span class="mi mi-xs">celebration</span>Anlık eşleşme sağlandı</span>
+        <span class="chip chip-teal" style="margin-bottom:12px;"><span class="mi mi-xs">celebration</span><span data-i18n="stage.instant">Anlık eşleşme sağlandı</span></span>
         <div class="avatar-stack" style="margin-bottom:12px;">
           <span style="background:linear-gradient(135deg,#3b4bf7,#182ae0)">SK</span>
           <span style="background:linear-gradient(135deg,#FF5C38,#b52705)">YR</span>
           <span style="background:linear-gradient(135deg,#10B981,#00573a)">+4</span>
         </div>
-        <h3 style="margin-bottom:4px;">Tebrikler! Karşılıklı eşleşme</h3>
-        <p class="t-bsm">Yeni ilan organizasyon ekibiyle eşleştin. Vardiya detayları ve güvenceli ödeme bilgisi panelinde hazır.</p>
+        <h3 style="margin-bottom:4px;" data-i18n="stage.congrats">Tebrikler! Karşılıklı eşleşme</h3>
+        <p class="t-bsm" data-i18n="stage.congratsDesc">Yeni ilan organizasyon ekibiyle eşleştin. Vardiya detayları ve güvenceli ödeme bilgisi panelinde hazır.</p>
         <a href="/register.html?role=candidate" class="btn btn-primary btn-block btn-sm" style="margin-bottom:16px;">
-          <span class="mi mi-sm">description</span>Vardiya detayını incele
+          <span class="mi mi-sm">description</span><span data-i18n="stage.reviewShift">Vardiya detayını incele</span>
         </a>
 
         <div class="quote-card">
           <div class="stars">★★★★★</div>
-          "Gecenin ortasında iki kişi eksik kalmıştık, 40 dakikada doğrulanmış yeni ekip sahadaydı."
-          <div style="margin-top:8px;font-weight:700;color:var(--on-surface);">— Mert T., Etkinlik Operasyon Müdürü</div>
+          <span data-i18n="stage.quote">"Gecenin ortasında iki kişi eksik kalmıştık, 40 dakikada doğrulanmış yeni ekip sahadaydı."</span>
+          <div style="margin-top:8px;font-weight:700;color:var(--on-surface);" data-i18n="stage.quoteBy">— Mert T., Etkinlik Operasyon Müdürü</div>
         </div>
       </div>
 
@@ -270,7 +270,7 @@
     <div id="board-lock" class="empty-state" style="display:none;margin-top:24px;padding:24px;">
       <span class="mi" style="color:var(--primary)">lock</span>
       <span data-i18n="board.lock" style="margin:0 8px;">İlan detaylarını görmek için ücretsiz hesap oluştur.</span>
-      <a href="/register.html?role=candidate" class="btn btn-primary btn-sm" style="margin-top:12px;">Aday olarak katıl</a>
+      <a href="/register.html?role=candidate" class="btn btn-primary btn-sm" style="margin-top:12px;" data-i18n="footer.link.joinCandidate">Aday olarak katıl</a>
     </div>
   </div>
 </section>
@@ -439,6 +439,49 @@ const i18n = {
     'footer.categories': 'Kategoriler',
     'footer.corp': 'Kurumsal & Destek',
     'footer.copy': '© 2026 JOBBY. Demo veriler ile hazırlanmıştır.',
+    'footer.link.listings': 'Etkinlik ilanları',
+    'footer.link.swipe': 'Swipe eşleşme',
+    'footer.link.how': 'Nasıl çalışır?',
+    'footer.link.create': 'Etkinlik oluştur',
+    'footer.link.joinCandidate': 'Aday olarak katıl',
+    'footer.link.forCompanies': 'Firmalar için',
+    'footer.cat.concert': 'Konser & Festival',
+    'footer.cat.tasting': 'Tadım & Promosyon',
+    'footer.cat.host': 'Kongre & Fuar hostesi',
+    'footer.cat.logistics': 'Saha operasyon & Lojistik',
+    'footer.privacy': 'Gizlilik politikası',
+    'footer.terms': 'Kullanım koşulları',
+    'footer.kvkk': 'KVKK aydınlatma',
+    'cat.Depo & Lojistik': 'Depo & Lojistik',
+    'cat.Tadım & Promosyon': 'Tadım & Promosyon',
+    'cat.Anket & Saha': 'Anket & Saha',
+    'cat.Hostes/Host': 'Hostes/Host',
+    'cat.Konser & Etkinlik': 'Konser & Etkinlik',
+    'cat.Fuar Standı': 'Fuar Standı',
+    'cat.Konser & Festival': 'Konser & Festival',
+    'stage.liveDemand': 'Canlı firma talebi',
+    'stage.ago': '42 dk önce',
+    'stage.roles': 'Aranan kadro',
+    'stage.location': 'Lokasyon',
+    'stage.pay': 'Günlük ücret',
+    'stage.dress': 'Kıyafet',
+    'stage.dressVal': 'Siyah smart casual',
+    'stage.fill': 'Kadro doluluk durumu',
+    'stage.fillHint': "6 kişiden 4'ü onaylandı",
+    'stage.approved': 'JOBBY onaylı ilan',
+    'stage.dailyBase': 'GÜNLÜK TABAN ÜCRET',
+    'stage.apply': 'Başvur',
+    'stage.instant': 'Anlık eşleşme sağlandı',
+    'stage.congrats': 'Tebrikler! Karşılıklı eşleşme',
+    'stage.congratsDesc': 'Yeni ilan organizasyon ekibiyle eşleştin. Vardiya detayları ve güvenceli ödeme bilgisi panelinde hazır.',
+    'stage.reviewShift': 'Vardiya detayını incele',
+    'stage.quote': '"Gecenin ortasında iki kişi eksik kalmıştık, 40 dakikada doğrulanmış yeni ekip sahadaydı."',
+    'stage.quoteBy': '— Mert T., Etkinlik Operasyon Müdürü',
+    'stage.matchScore': '%{n} eşleşme uyumu',
+    'stage.crewSpots': '{n} kişilik kadro',
+    'stage.rolesVal': '{f} kadın / {m} erkek',
+    'stage.companyFallback': 'Organizasyon firması',
+    'stage.loading': 'Vardiya yükleniyor…',
     'stats.candidates': 'Doğrulanmış genç aday',
     'stats.jobs': 'Açık etkinlik ilanı',
     'stats.score': 'Vardiya tamamlama skoru',
@@ -539,6 +582,49 @@ const i18n = {
     'footer.categories': 'Categories',
     'footer.corp': 'Company & Support',
     'footer.copy': '© 2026 JOBBY. Built with demo data.',
+    'footer.link.listings': 'Event listings',
+    'footer.link.swipe': 'Swipe matching',
+    'footer.link.how': 'How it works?',
+    'footer.link.create': 'Create an event',
+    'footer.link.joinCandidate': 'Join as a candidate',
+    'footer.link.forCompanies': 'For companies',
+    'footer.cat.concert': 'Concert & Festival',
+    'footer.cat.tasting': 'Tasting & Promotion',
+    'footer.cat.host': 'Congress & Expo host',
+    'footer.cat.logistics': 'Field ops & Logistics',
+    'footer.privacy': 'Privacy policy',
+    'footer.terms': 'Terms of use',
+    'footer.kvkk': 'Privacy notice (KVKK)',
+    'cat.Depo & Lojistik': 'Warehouse & Logistics',
+    'cat.Tadım & Promosyon': 'Tasting & Promotion',
+    'cat.Anket & Saha': 'Survey & Field',
+    'cat.Hostes/Host': 'Host / Hostess',
+    'cat.Konser & Etkinlik': 'Concert & Event',
+    'cat.Fuar Standı': 'Expo Booth',
+    'cat.Konser & Festival': 'Concert & Festival',
+    'stage.liveDemand': 'Live company request',
+    'stage.ago': '42 min ago',
+    'stage.roles': 'Crew needed',
+    'stage.location': 'Location',
+    'stage.pay': 'Daily pay',
+    'stage.dress': 'Dress code',
+    'stage.dressVal': 'Black smart casual',
+    'stage.fill': 'Crew fill status',
+    'stage.fillHint': '4 of 6 confirmed',
+    'stage.approved': 'JOBBY-approved listing',
+    'stage.dailyBase': 'DAILY BASE RATE',
+    'stage.apply': 'Apply',
+    'stage.instant': 'Instant match secured',
+    'stage.congrats': 'Congrats! Mutual match',
+    'stage.congratsDesc': 'You matched with the new listing organisation team. Shift details and secured payment info are ready in your panel.',
+    'stage.reviewShift': 'Review shift details',
+    'stage.quote': '"We were short two people in the middle of the night; a verified new crew was on site in 40 minutes."',
+    'stage.quoteBy': '— Mert T., Event Operations Manager',
+    'stage.matchScore': '{n}% match fit',
+    'stage.crewSpots': '{n}-person crew',
+    'stage.rolesVal': '{f} women / {m} men',
+    'stage.companyFallback': 'Organisation company',
+    'stage.loading': 'Loading shift…',
     'stats.candidates': 'Verified young candidates',
     'stats.jobs': 'Open event listings',
     'stats.score': 'Shift completion score',
@@ -593,10 +679,21 @@ const i18n = {
 
 window.currentLang = localStorage.getItem('jobby_lang') || 'tr';
 
-function t(key) {
-  return (i18n[window.currentLang] && i18n[window.currentLang][key]) || key;
+function t(key, vars) {
+  let s = (i18n[window.currentLang] && i18n[window.currentLang][key])
+    || (i18n.tr && i18n.tr[key])
+    || key;
+  if (vars) Object.keys(vars).forEach(k => { s = s.replace(new RegExp('\\{' + k + '\\}', 'g'), vars[k]); });
+  return s;
 }
 window.t = t;
+
+function catLabel(cat) {
+  if (!cat) return '';
+  const key = 'cat.' + cat;
+  const translated = i18n[window.currentLang] && i18n[window.currentLang][key];
+  return translated || cat;
+}
 
 function updatePageText() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
@@ -617,10 +714,25 @@ function setLanguage(lang) {
   renderNav('nav-root');
   renderFooter('footer-root');
   renderFilters();
-  // Aktif filtre kaynağını koruyarak board'u yeniden çiz
   if (boardSource === 'hero') applyHeroSearch(false);
   else if (boardSource === 'popular') applyPopularFilter(false);
   else renderBoard();
+  if (allJobs.length) {
+    fillStage(allJobs[stageIndex] || allJobs[0]);
+    const openToday = allJobs.filter(j => daysUntil(j.eventDate) >= 0 && daysUntil(j.eventDate) <= 7).length;
+    const heroNew = document.getElementById('hero-new-count');
+    if (heroNew) {
+      heroNew.textContent = lang === 'en'
+        ? `${openToday} new shifts opened this week`
+        : `Bu hafta ${openToday} yeni vardiya açıldı`;
+    }
+    const livePool = document.getElementById('live-pool');
+    if (livePool) {
+      livePool.textContent = lang === 'en'
+        ? `Live pool · ${allJobs.length} listings`
+        : `Canlı havuz · ${allJobs.length} ilan`;
+    }
+  }
 }
 
 /* ============================================================
@@ -643,7 +755,7 @@ function jobCardHtml(job) {
   return `
     <article class="gig-card" data-job="${job.id}">
       <div class="gig-cover" style="background-image:url('${st.img}')">
-        <span class="badge-tl"><span class="badge-cat">${job.category}</span></span>
+        <span class="badge-tl"><span class="badge-cat">${catLabel(job.category)}</span></span>
         ${urgent ? `<span class="badge-tr"><span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? today : left + days}</span></span>` : ''}
       </div>
       <div class="gig-body">
@@ -704,7 +816,7 @@ function renderFilters() {
   if (!box) return;
   const cats = [...new Set(allJobs.map(j => j.category))].slice(0, 4);
   box.innerHTML = [{ k: 'all', l: `${t('board.all')} (${allJobs.length})` }]
-    .concat(cats.map(c => ({ k: c, l: c })))
+    .concat(cats.map(c => ({ k: c, l: catLabel(c) })))
     .map(f => `<button class="filter-tab${f.k === activeFilter ? ' active' : ''}" data-cat="${f.k}">${f.l}</button>`)
     .join('');
   box.querySelectorAll('.filter-tab').forEach(b =>
@@ -783,32 +895,33 @@ let stageTimer = null;
 function fillStage(job) {
   if (!job) return;
   const st = catStyle(job.category);
+  const loc = window.currentLang === 'en' ? 'en-US' : 'tr-TR';
   const card = document.getElementById('match-card');
   const bgEl = card.querySelector('.match-card-bg');
   bgEl.style.backgroundImage = `url('${st.img}')`;
   bgEl.style.backgroundSize = 'cover';
   bgEl.style.backgroundPosition = 'center';
   card.querySelector('.match-card-emoji').style.display = 'none';
-  document.getElementById('match-score').textContent = '%' + matchScore(job) + ' eşleşme uyumu';
+  document.getElementById('match-score').textContent = t('stage.matchScore', { n: matchScore(job) });
   document.getElementById('match-title').textContent = job.title;
-  document.getElementById('match-loc').textContent = `${job.city} • ${job.companyName || 'Firma'}`;
+  document.getElementById('match-loc').textContent =
+    `${job.city} • ${job.companyName || (window.currentLang === 'en' ? 'Company' : 'Firma')}`;
   document.getElementById('match-pay').innerHTML =
-    `₺${(job.payDaily || 0).toLocaleString('tr-TR')}<small>GÜNLÜK TABAN ÜCRET</small>`;
+    `₺${(job.payDaily || 0).toLocaleString(loc)}<small>${t('stage.dailyBase')}</small>`;
 
   const spots = (job.neededMale || 0) + (job.neededFemale || 0);
   document.getElementById('match-badges').innerHTML = [
-    `<span class="micro-badge">${job.category}</span>`,
+    `<span class="micro-badge">${catLabel(job.category)}</span>`,
     `<span class="micro-badge">${dateLabel(job)}</span>`,
-    spots ? `<span class="micro-badge">${spots} kişilik kadro</span>` : ''
+    spots ? `<span class="micro-badge">${t('stage.crewSpots', { n: spots })}</span>` : ''
   ].join('');
 
-  // Sol paneldeki firma talebi de aynı ilanı yansıtır
   document.getElementById('demand-title').textContent = job.title;
-  document.getElementById('demand-company').textContent = job.companyName || 'Organizasyon firması';
+  document.getElementById('demand-company').textContent = job.companyName || t('stage.companyFallback');
   document.getElementById('demand-city').textContent = job.city;
-  document.getElementById('demand-pay').textContent = '₺' + (job.payDaily || 0).toLocaleString('tr-TR');
+  document.getElementById('demand-pay').textContent = '₺' + (job.payDaily || 0).toLocaleString(loc);
   document.getElementById('demand-roles').textContent =
-    `${job.neededFemale || 0} kadın / ${job.neededMale || 0} erkek`;
+    t('stage.rolesVal', { f: job.neededFemale || 0, m: job.neededMale || 0 });
 }
 
 function stageSwipe() {

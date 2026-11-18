@@ -119,27 +119,27 @@ function renderFooter(rootId) {
           <div class="footer-col">
             <h4>${navLabel('footer.platform', 'Platform')}</h4>
             <ul>
-              <li><a href="/#ilanlar">Etkinlik ilanları</a></li>
-              <li><a href="/#eslesme">Swipe eşleşme</a></li>
-              <li><a href="/#nasil-calisir">Nasıl çalışır?</a></li>
-              <li><a href="/company/post-job.html">Etkinlik oluştur</a></li>
+              <li><a href="/#ilanlar">${navLabel('footer.link.listings', 'Etkinlik ilanları')}</a></li>
+              <li><a href="/#eslesme">${navLabel('footer.link.swipe', 'Swipe eşleşme')}</a></li>
+              <li><a href="/#nasil-calisir">${navLabel('footer.link.how', 'Nasıl çalışır?')}</a></li>
+              <li><a href="/company/post-job.html">${navLabel('footer.link.create', 'Etkinlik oluştur')}</a></li>
             </ul>
           </div>
           <div class="footer-col">
             <h4>${navLabel('footer.categories', 'Kategoriler')}</h4>
             <ul>
-              <li><a href="/#ilanlar">Konser &amp; Festival</a></li>
-              <li><a href="/#ilanlar">Tadım &amp; Promosyon</a></li>
-              <li><a href="/#ilanlar">Kongre &amp; Fuar hostesi</a></li>
-              <li><a href="/#ilanlar">Saha operasyon &amp; Lojistik</a></li>
+              <li><a href="/#ilanlar">${navLabel('footer.cat.concert', 'Konser &amp; Festival')}</a></li>
+              <li><a href="/#ilanlar">${navLabel('footer.cat.tasting', 'Tadım &amp; Promosyon')}</a></li>
+              <li><a href="/#ilanlar">${navLabel('footer.cat.host', 'Kongre &amp; Fuar hostesi')}</a></li>
+              <li><a href="/#ilanlar">${navLabel('footer.cat.logistics', 'Saha operasyon &amp; Lojistik')}</a></li>
             </ul>
           </div>
           <div class="footer-col">
             <h4>${navLabel('footer.corp', 'Kurumsal &amp; Destek')}</h4>
             <ul>
-              <li><a href="/#nasil-calisir">Nasıl çalışır?</a></li>
-              <li><a href="/register.html">Aday olarak katıl</a></li>
-              <li><a href="/register.html?role=company">Firmalar için</a></li>
+              <li><a href="/#nasil-calisir">${navLabel('footer.link.how', 'Nasıl çalışır?')}</a></li>
+              <li><a href="/register.html">${navLabel('footer.link.joinCandidate', 'Aday olarak katıl')}</a></li>
+              <li><a href="/register.html?role=company">${navLabel('footer.link.forCompanies', 'Firmalar için')}</a></li>
               <li><a href="/login.html">${navLabel('nav.login', 'Giriş yap')}</a></li>
             </ul>
           </div>
@@ -147,9 +147,9 @@ function renderFooter(rootId) {
         <div class="footer-bottom">
           <span>${navLabel('footer.copy', '© 2026 JOBBY. Demo veriler ile hazırlanmıştır.')}</span>
           <span class="links">
-            <a href="#">Gizlilik politikası</a>
-            <a href="#">Kullanım koşulları</a>
-            <a href="#">KVKK aydınlatma</a>
+            <a href="#">${navLabel('footer.privacy', 'Gizlilik politikası')}</a>
+            <a href="#">${navLabel('footer.terms', 'Kullanım koşulları')}</a>
+            <a href="#">${navLabel('footer.kvkk', 'KVKK aydınlatma')}</a>
           </span>
         </div>
       </div>

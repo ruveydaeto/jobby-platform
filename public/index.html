@@ -90,25 +90,25 @@
         <div class="search-field">
           <label><span class="mi mi-xs">category</span><span data-i18n="search.role">Etkinlik rolü</span></label>
           <select id="search-category">
-            <option value="">Tümü (Host, Tadım, Barista)</option>
-            <option value="Fuar Standı">Fuar standı host/hostes</option>
-            <option value="Tadım &amp; Promosyon">Tadım &amp; marka elçiliği</option>
-            <option value="Konser &amp; Etkinlik">Konser &amp; müzik festivali</option>
-            <option value="Hostes/Host">Kongre &amp; karşılama</option>
-            <option value="Anket &amp; Saha">Anket &amp; saha ekibi</option>
-            <option value="Depo &amp; Lojistik">Depo &amp; lojistik</option>
+            <option value="" data-i18n-option="search.opt.allRoles">Tümü (Host, Tadım, Barista)</option>
+            <option value="Fuar Standı" data-i18n-option="search.opt.fair">Fuar standı host/hostes</option>
+            <option value="Tadım &amp; Promosyon" data-i18n-option="search.opt.tasting">Tadım &amp; marka elçiliği</option>
+            <option value="Konser &amp; Etkinlik" data-i18n-option="search.opt.concert">Konser &amp; müzik festivali</option>
+            <option value="Hostes/Host" data-i18n-option="search.opt.host">Kongre &amp; karşılama</option>
+            <option value="Anket &amp; Saha" data-i18n-option="search.opt.survey">Anket &amp; saha ekibi</option>
+            <option value="Depo &amp; Lojistik" data-i18n-option="search.opt.warehouse">Depo &amp; lojistik</option>
           </select>
         </div>
         <div class="search-field">
           <label><span class="mi mi-xs">location_on</span><span data-i18n="search.location">Lokasyon</span></label>
           <select id="search-city">
-            <option value="">Tüm şehirler</option>
+            <option value="" data-i18n-option="search.opt.allCities">Tüm şehirler</option>
           </select>
         </div>
         <div class="search-field">
           <label><span class="mi mi-xs">payments</span><span data-i18n="search.pay">Günlük taban ücret</span></label>
           <select id="search-pay">
-            <option value="0">Fark etmez</option>
+            <option value="0" data-i18n-option="search.opt.anyPay">Fark etmez</option>
             <option value="1000">₺1.000+ / günlük</option>
             <option value="1500">₺1.500+ / günlük</option>
             <option value="2000">₺2.000+ / günlük</option>
@@ -119,22 +119,22 @@
           <div class="search-field">
             <label><span class="mi mi-xs">event</span><span data-i18n="search.date">Tarih</span></label>
             <select id="search-date">
-              <option value="0">Tüm tarihler</option>
-              <option value="3">Önümüzdeki 3 gün</option>
-              <option value="7">Bu hafta</option>
-              <option value="30">Bu ay</option>
+              <option value="0" data-i18n-option="search.opt.allDates">Tüm tarihler</option>
+              <option value="3" data-i18n-option="search.opt.next3">Önümüzdeki 3 gün</option>
+              <option value="7" data-i18n-option="search.opt.week">Bu hafta</option>
+              <option value="30" data-i18n-option="search.opt.month">Bu ay</option>
             </select>
           </div>
           <button class="search-go" type="submit" title="Filtrele"><span class="mi mi-lg">search</span></button>
         </div>
       </form>
 
-      <div class="fast-tags">
+      <div class="fast-tags" id="popular-tags">
         <span class="label" data-i18n="search.popular">Popüler aramalar:</span>
-        <span class="fast-tag" onclick="quickTag('Konser &amp; Etkinlik')">🎤 Konser sahası</span>
-        <span class="fast-tag" onclick="quickTag('Tadım &amp; Promosyon')">🍸 Tadım hostesi</span>
-        <span class="fast-tag" onclick="quickTag('Fuar Standı')">🏛️ Fuar standı</span>
-        <span class="fast-tag" onclick="quickTag('Anket &amp; Saha')">📋 Saha & akreditasyon</span>
+        <button type="button" class="fast-tag" data-popular="Konser &amp; Etkinlik" data-i18n="search.tag.concert">🎤 Konser sahası</button>
+        <button type="button" class="fast-tag" data-popular="Tadım &amp; Promosyon" data-i18n="search.tag.tasting">🍸 Tadım hostesi</button>
+        <button type="button" class="fast-tag" data-popular="Fuar Standı" data-i18n="search.tag.fair">🏛️ Fuar standı</button>
+        <button type="button" class="fast-tag" data-popular="Anket &amp; Saha" data-i18n="search.tag.survey">📋 Saha &amp; akreditasyon</button>
       </div>
     </div>
 
@@ -412,6 +412,7 @@ const i18n = {
     'hero.title1': 'Etkinliklerin yıldız ekibi,',
     'hero.title2': 'bir kaydırma uzağında.',
     'hero.subtitle': 'Festival, fuar, lansman ve gastronomi etkinlikleri için doğrulanmış genç yeteneklerle organizatörleri saniyeler içinde buluşturan yeni nesil iş ağı.',
+    'hero.badgeSub': 'Bugün yeni vardiyalar açıldı',
     'cta.candidate': 'İş arıyorum / Günlük işe katıl',
     'cta.company': 'Firma / Ekip topla',
     'search.role': 'Etkinlik rolü',
@@ -419,6 +420,43 @@ const i18n = {
     'search.pay': 'Günlük taban ücret',
     'search.date': 'Tarih',
     'search.popular': 'Popüler aramalar:',
+    'search.opt.allRoles': 'Tümü (Host, Tadım, Barista)',
+    'search.opt.fair': 'Fuar standı host/hostes',
+    'search.opt.tasting': 'Tadım & marka elçiliği',
+    'search.opt.concert': 'Konser & müzik festivali',
+    'search.opt.host': 'Kongre & karşılama',
+    'search.opt.survey': 'Anket & saha ekibi',
+    'search.opt.warehouse': 'Depo & lojistik',
+    'search.opt.allCities': 'Tüm şehirler',
+    'search.opt.anyPay': 'Fark etmez',
+    'search.opt.allDates': 'Tüm tarihler',
+    'search.opt.next3': 'Önümüzdeki 3 gün',
+    'search.opt.week': 'Bu hafta',
+    'search.opt.month': 'Bu ay',
+    'search.tag.concert': '🎤 Konser sahası',
+    'search.tag.tasting': '🍸 Tadım hostesi',
+    'search.tag.fair': '🏛️ Fuar standı',
+    'search.tag.survey': '📋 Saha & akreditasyon',
+    'board.all': 'Tüm ilanlar',
+    'board.empty': 'Bu kritere uyan açık ilan bulunamadı.',
+    'board.heroEmpty': 'Aramanla eşleşen ilan bulunamadı. Filtreleri genişletmeyi dene.',
+    'board.apply': 'Hemen başvur / detay',
+    'board.verified': 'Doğrulanmış',
+    'board.daily': 'GÜNLÜK',
+    'board.crewOpen': 'Kadro açık',
+    'board.crewSpots': 'kişilik kadro',
+    'nav.discover': 'Keşfet & İlanlar',
+    'nav.match': 'Hızlı Eşleşme',
+    'nav.talent': 'Aday Havuzu',
+    'nav.how': 'Nasıl Çalışır?',
+    'nav.login': 'Giriş yap',
+    'nav.start': 'Ücretsiz başla',
+    'footer.about': 'Yeni nesil etkinlik, festival, konser ve kongre yetenek eşleştirme platformu. Doğrulanmış ekipler, anlık vardiya teklifleri ve güvenceli ödemeler.',
+    'footer.live': 'Aktif vardiyalar canlı',
+    'footer.platform': 'Platform',
+    'footer.categories': 'Kategoriler',
+    'footer.corp': 'Kurumsal & Destek',
+    'footer.copy': '© 2026 JOBBY. Demo veriler ile hazırlanmıştır.',
     'stats.candidates': 'Doğrulanmış genç aday',
     'stats.jobs': 'Açık etkinlik ilanı',
     'stats.score': 'Vardiya tamamlama skoru',
@@ -474,6 +512,7 @@ const i18n = {
     'hero.title1': 'The star crew of every event,',
     'hero.title2': 'one swipe away.',
     'hero.subtitle': 'A new-generation work network connecting festivals, expos, launches and hospitality events with verified young talent in seconds.',
+    'hero.badgeSub': 'New shifts opened today',
     'cta.candidate': 'Looking for work / Join a shift',
     'cta.company': 'Company / Build a crew',
     'search.role': 'Event role',
@@ -481,6 +520,43 @@ const i18n = {
     'search.pay': 'Minimum daily pay',
     'search.date': 'Date',
     'search.popular': 'Popular searches:',
+    'search.opt.allRoles': 'All (Host, Tasting, Barista)',
+    'search.opt.fair': 'Expo booth host/hostess',
+    'search.opt.tasting': 'Tasting & brand ambassador',
+    'search.opt.concert': 'Concert & music festival',
+    'search.opt.host': 'Congress & greeting',
+    'search.opt.survey': 'Survey & field team',
+    'search.opt.warehouse': 'Warehouse & logistics',
+    'search.opt.allCities': 'All cities',
+    'search.opt.anyPay': 'Any',
+    'search.opt.allDates': 'All dates',
+    'search.opt.next3': 'Next 3 days',
+    'search.opt.week': 'This week',
+    'search.opt.month': 'This month',
+    'search.tag.concert': '🎤 Concert stage',
+    'search.tag.tasting': '🍸 Tasting hostess',
+    'search.tag.fair': '🏛️ Expo booth',
+    'search.tag.survey': '📋 Field & accreditation',
+    'board.all': 'All listings',
+    'board.empty': 'No open listings match this filter.',
+    'board.heroEmpty': 'No listings match your search. Try widening the filters.',
+    'board.apply': 'Apply / details',
+    'board.verified': 'Verified',
+    'board.daily': 'DAILY',
+    'board.crewOpen': 'Crew open',
+    'board.crewSpots': 'crew slots',
+    'nav.discover': 'Explore & Listings',
+    'nav.match': 'Quick Match',
+    'nav.talent': 'Talent Pool',
+    'nav.how': 'How it works',
+    'nav.login': 'Log in',
+    'nav.start': 'Start free',
+    'footer.about': 'Next-gen talent matching for events, festivals, concerts and conferences. Verified crews, instant shift offers and secured payments.',
+    'footer.live': 'Live shifts active',
+    'footer.platform': 'Platform',
+    'footer.categories': 'Categories',
+    'footer.corp': 'Company & Support',
+    'footer.copy': '© 2026 JOBBY. Built with demo data.',
     'stats.candidates': 'Verified young candidates',
     'stats.jobs': 'Open event listings',
     'stats.score': 'Shift completion score',
@@ -538,10 +614,15 @@ window.currentLang = localStorage.getItem('jobby_lang') || 'tr';
 function t(key) {
   return (i18n[window.currentLang] && i18n[window.currentLang][key]) || key;
 }
+window.t = t;
 
 function updatePageText() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
+    if (i18n[window.currentLang] && i18n[window.currentLang][key]) el.textContent = t(key);
+  });
+  document.querySelectorAll('[data-i18n-option]').forEach(el => {
+    const key = el.getAttribute('data-i18n-option');
     if (i18n[window.currentLang] && i18n[window.currentLang][key]) el.textContent = t(key);
   });
 }
@@ -552,59 +633,68 @@ function setLanguage(lang) {
   document.documentElement.lang = lang;
   updatePageText();
   renderNav('nav-root');
+  renderFooter('footer-root');
+  renderFilters();
+  // Aktif filtre kaynağını koruyarak board'u yeniden çiz
+  if (boardSource === 'hero') applyHeroSearch(false);
+  else if (boardSource === 'popular') applyPopularFilter(false);
+  else renderBoard();
 }
 
 /* ============================================================
-   İLAN GRID'İ + FİLTRELER
+   İLAN GRID'İ + FİLTRELER (bağımsız katmanlar)
    ============================================================ */
 let allJobs = [];
 let boardJobs = [];
-let activeFilter = 'all';
+let activeFilter = 'all';     // board kategori tabları
+let popularCategory = null;  // popüler aramalar (üst formdan bağımsız)
+let boardSource = 'board';    // 'board' | 'hero' | 'popular'
 
 function jobCardHtml(job) {
   const st = catStyle(job.category);
   const left = daysUntil(job.eventDate);
   const urgent = left <= 3;
   const spots = (job.neededMale || 0) + (job.neededFemale || 0);
+  const loc = window.currentLang === 'en' ? 'en-US' : 'tr-TR';
+  const today = window.currentLang === 'en' ? 'Today' : 'Bugün';
+  const days = window.currentLang === 'en' ? 'd' : ' gün';
   return `
     <article class="gig-card" data-job="${job.id}">
       <div class="gig-cover" style="background-image:url('${st.img}')">
         <span class="badge-tl"><span class="badge-cat">${job.category}</span></span>
-        ${urgent ? `<span class="badge-tr"><span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? 'Bugün' : left + ' gün'}</span></span>` : ''}
+        ${urgent ? `<span class="badge-tr"><span class="badge-live"><span class="mi mi-xs">local_fire_department</span>${left <= 0 ? today : left + days}</span></span>` : ''}
       </div>
       <div class="gig-body">
         <div class="gig-head">
           <div style="min-width:0;">
             <div class="gig-title">${job.title}</div>
             <div class="gig-company">
-              ${job.companyName || 'Firma'}
-              <span class="gig-verified"><span class="mi mi-xs mi-fill">verified</span>Doğrulanmış</span>
+              ${job.companyName || (window.currentLang === 'en' ? 'Company' : 'Firma')}
+              <span class="gig-verified"><span class="mi mi-xs mi-fill">verified</span>${t('board.verified')}</span>
             </div>
           </div>
-          <div class="gig-pay">₺${(job.payDaily || 0).toLocaleString('tr-TR')}<small>GÜNLÜK</small></div>
+          <div class="gig-pay">₺${(job.payDaily || 0).toLocaleString(loc)}<small>${t('board.daily')}</small></div>
         </div>
         <div class="gig-chips">
           <span class="gig-chip"><span class="mi mi-xs">location_on</span>${job.city}</span>
           <span class="gig-chip"><span class="mi mi-xs">event</span>${dateLabel(job)}</span>
-          <span class="gig-chip"><span class="mi mi-xs">schedule</span>8 saat</span>
+          <span class="gig-chip"><span class="mi mi-xs">schedule</span>8h</span>
         </div>
         <div class="gig-foot">
-          <span class="gig-quota">${spots ? `<b>${spots} kişilik</b> kadro` : 'Kadro açık'}</span>
+          <span class="gig-quota">${spots ? `<b>${spots}</b> ${t('board.crewSpots')}` : t('board.crewOpen')}</span>
           <span class="gig-views"><span class="mi mi-xs">visibility</span> ${viewCount(job)}</span>
         </div>
-        <button class="gig-apply" type="button">Hemen başvur / detay</button>
+        <button class="gig-apply" type="button">${t('board.apply')}</button>
       </div>
     </article>`;
 }
 
-function renderBoard() {
+function paintBoard(list, emptyMsg) {
   const grid = document.getElementById('board-items');
   if (!grid) return;
-
-  boardJobs = (activeFilter === 'all' ? allJobs : allJobs.filter(j => j.category === activeFilter)).slice(0, 8);
-
+  boardJobs = list.slice(0, 8);
   if (!boardJobs.length) {
-    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">Bu kritere uyan açık ilan bulunamadı.</div>`;
+    grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;">${emptyMsg}</div>`;
     return;
   }
   grid.innerHTML = boardJobs.map(jobCardHtml).join('');
@@ -613,31 +703,51 @@ function renderBoard() {
   );
 }
 
+function syncPopularChips() {
+  document.querySelectorAll('#popular-tags .fast-tag').forEach(btn => {
+    btn.classList.toggle('active', Boolean(popularCategory) && btn.dataset.popular === popularCategory);
+  });
+}
+
+function renderBoard() {
+  boardSource = 'board';
+  popularCategory = null;
+  syncPopularChips();
+  const list = activeFilter === 'all' ? allJobs : allJobs.filter(j => j.category === activeFilter);
+  paintBoard(list, t('board.empty'));
+}
+
 function renderFilters() {
   const box = document.getElementById('board-filters');
   if (!box) return;
   const cats = [...new Set(allJobs.map(j => j.category))].slice(0, 4);
-  box.innerHTML = [{ k: 'all', l: `Tüm ilanlar (${allJobs.length})` }]
+  box.innerHTML = [{ k: 'all', l: `${t('board.all')} (${allJobs.length})` }]
     .concat(cats.map(c => ({ k: c, l: c })))
     .map(f => `<button class="filter-tab${f.k === activeFilter ? ' active' : ''}" data-cat="${f.k}">${f.l}</button>`)
     .join('');
   box.querySelectorAll('.filter-tab').forEach(b =>
     b.addEventListener('click', () => {
       activeFilter = b.dataset.cat;
+      boardSource = 'board';
+      popularCategory = null;
+      syncPopularChips();
       renderFilters();
       renderBoard();
     })
   );
 }
 
-/* Hero arama kutusu -> ilan grid'ini filtreler */
-function applyHeroSearch() {
+/* Üst form — popüler chip'leri değiştirmez */
+function applyHeroSearch(scroll = true) {
+  popularCategory = null;
+  syncPopularChips();
+  boardSource = 'hero';
+
   const cat = document.getElementById('search-category').value;
   const city = document.getElementById('search-city').value;
   const pay = Number(document.getElementById('search-pay').value) || 0;
   const within = Number(document.getElementById('search-date').value) || 0;
 
-  const grid = document.getElementById('board-items');
   const filtered = allJobs.filter(j =>
     (!cat || j.category === cat) &&
     (!city || j.city === city) &&
@@ -645,22 +755,31 @@ function applyHeroSearch() {
     (!within || (daysUntil(j.eventDate) >= 0 && daysUntil(j.eventDate) <= within))
   );
 
-  activeFilter = 'all';
-  renderFilters();
-  boardJobs = filtered.slice(0, 8);
-  grid.innerHTML = boardJobs.length
-    ? boardJobs.map(jobCardHtml).join('')
-    : `<div class="empty-state" style="grid-column:1/-1;">Aramanla eşleşen ilan bulunamadı. Filtreleri genişletmeyi dene.</div>`;
-  grid.querySelectorAll('.gig-card').forEach(card =>
-    card.addEventListener('click', () => openJob(card.dataset.job))
-  );
-  document.getElementById('ilanlar').scrollIntoView({ behavior: 'smooth' });
+  paintBoard(filtered, t('board.heroEmpty'));
+  if (scroll) document.getElementById('ilanlar').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* Popüler aramalar — üst select'leri değiştirmez */
+function applyPopularFilter(scroll = true) {
+  boardSource = 'popular';
+  syncPopularChips();
+  const filtered = popularCategory
+    ? allJobs.filter(j => j.category === popularCategory)
+    : allJobs;
+  paintBoard(filtered, t('board.empty'));
+  if (scroll) document.getElementById('ilanlar').scrollIntoView({ behavior: 'smooth' });
 }
 
 function quickTag(cat) {
-  document.getElementById('search-category').value = cat;
-  applyHeroSearch();
+  popularCategory = popularCategory === cat ? null : cat;
+  applyPopularFilter(true);
 }
+
+document.getElementById('popular-tags')?.addEventListener('click', (e) => {
+  const btn = e.target.closest('.fast-tag');
+  if (!btn) return;
+  quickTag(btn.dataset.popular);
+});
 
 /* Giriş yapmayan kullanıcı detayı göremez */
 function openJob(id) {
